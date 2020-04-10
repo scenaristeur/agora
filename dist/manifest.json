@@ -1,0 +1,26 @@
+{
+  "name": "Agora",
+  "short_name": "Agora",
+  "start_url": "./",
+  "background_color": "aliceblue",
+  "theme_color": "aliceblue",
+  "description": "Agora !",
+  "display": "fullscreen",
+  "orientation": "portrait-primary",
+  "related_applications": [{
+    "platform": "web",
+    "url": "https://scenaristeur.github.io/agora/"
+    }],
+    "icons": [
+      {
+        "src": "favicon.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ],
+    "permissions": {
+      "desktop-notification": {
+        "description": "Needed for creating system notifications."
+      }
+    }
+  }
