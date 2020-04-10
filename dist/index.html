@@ -8,18 +8,24 @@
   <link rel="manifest" href="/manifest.json">
 </head>
 <body>
-  <app-element name="App">
+  <app-element name="App" agoraPod="https://agora.solid.community/profile/card#me">
     <div style="position:absolute; top:50%; left:50%; margin-top:-100px; margin-left: -64px; width:140px; height:128px; text-align:center">
       <br> <span style="font-size:9px">L O A D I N G <br> A G O R A</span>
     </div>
   </app-element>
-  <script src="app-element.js"></script>
+
+
+  <script src="app-element.js" type="module"></script>
   <footer>
     <a href="https://github.com/scenaristeur/agora" target="_blank">source</a>
   </footer>
 </body>
+
 <script>
 //https://stackoverflow.com/questions/31512504/html5-notification-not-working-in-mobile-chrome
 navigator.serviceWorker.register('sw.js');
 </script>
+<!--
+  <script src="./vendor/rdf-easy.bundle.js"></script>
+<script src="./vendor/rdflib.min.js"></script>-->
 </html>
