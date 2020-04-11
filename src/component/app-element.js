@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
-import './agora-messages-element.js'
+import './agora-inbox-element.js'
 import './login-element.js'
 import './friends-element.js'
 import './config-element.js'
@@ -29,7 +29,7 @@ class AppElement extends LitElement {
 
 
 
-<agora-messages-element name="AgoraMessages" agoraPod="${this.agoraPod}">Loading Agora Messages</agora-messages-element>
+<agora-inbox-element name="AgoraInbox" agoraPod="${this.agoraPod}">Loading Agora Inbox</agora-inbox-element>
 <login-element name="Login">Loading Login</login-element>
 
 
