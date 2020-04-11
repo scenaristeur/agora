@@ -23,15 +23,17 @@ class ObjectElement extends LitElement {
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
+    <div class="container">
     Name : ${this.object.name}<br>
     Content: ${this.object.content}
+    </div>
     `;
   }
 
   firstUpdated(){
     var app = this;
     this.agent = new HelloAgent(this.name);
-  //  console.log(this.agent)
+    //  console.log(this.agent)
     this.agent.receive = function(from, message) {
       //  console.log("messah",message)
       if (message.hasOwnProperty("action")){

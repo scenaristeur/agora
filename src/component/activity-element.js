@@ -25,6 +25,8 @@ class ActivityElement extends LitElement {
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
+    <div class="container">
+
     <div class="row" id="${this.url}">
     Summary : ${this.activity.summary} /     Target : <a href="${this.activity.target}"
     target="_blank">${this.localName(this.activity.target)}</a>
@@ -34,14 +36,14 @@ class ActivityElement extends LitElement {
     <object-element name="${this.name+'_object'}" url="${this.activity.object}">
     Loading object {this.activity.object}...</object-element>
     </div>
-
+    </div>
     `;
   }
 
   firstUpdated(){
     var app = this;
     this.agent = new HelloAgent(this.name);
-  //  console.log(this.agent)
+    //  console.log(this.agent)
     this.agent.receive = function(from, message) {
       //  console.log("messah",message)
       if (message.hasOwnProperty("action")){

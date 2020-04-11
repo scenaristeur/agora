@@ -4,6 +4,10 @@ import './agora-inbox-element.js'
 import './login-element.js'
 import './friends-element.js'
 import './config-element.js'
+import './post-panel-element.js'
+import './inbox-element.js'
+import './outbox-element.js'
+import './info-element.js'
 
 class AppElement extends LitElement {
 
@@ -24,48 +28,49 @@ class AppElement extends LitElement {
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
+    <info-element name="Info">Loading Login</info-element>
+
     <div class="container">
-    Hello <b>${this.name}</b> from app-element
 
-
-
-<agora-inbox-element name="AgoraInbox" agoraPod="${this.agoraPod}">Loading Agora Inbox</agora-inbox-element>
-<login-element name="Login">Loading Login</login-element>
-
-
+    <agora-inbox-element name="AgoraInbox" agoraPod="${this.agoraPod}">Loading Agora Inbox</agora-inbox-element>
+    <config-element name="Config">Loading Config...</config-element>
+    <post-panel-element name="PostPanel">Loading Post Panel</post-panel-element>
+    <inbox-element name="Inbox">Loading Inbox</inbox-element>
+    <outbox-element name="Outbox">Loading Outbox</outbox-element>
+    <login-element name="Login">Loading Login</login-element>
     </div>
     `;
   }
 
   firstUpdated(){
-  var app = this;
-  this.agent = new HelloAgent(this.name);
-  console.log(this.agent)
-  this.agent.receive = function(from, message) {
-    //  console.log("messah",message)
-    if (message.hasOwnProperty("action")){
-      //  console.log(message)
-      switch(message.action) {
-        case "webIdChanged":
-        app.webIdChanged(message.webId)
-        break;
-        default:
-        console.log("Unknown action ",message)
+    var app = this;
+    this.agent = new HelloAgent(this.name);
+    console.log(this.agent)
+    this.agent.receive = function(from, message) {
+      //  console.log("messah",message)
+      if (message.hasOwnProperty("action")){
+        //  console.log(message)
+        switch(message.action) {
+          case "webIdChanged":
+          app.webIdChanged(message.webId)
+          break;
+          default:
+          console.log("Unknown action ",message)
+        }
       }
+    };
+    //  this.init()
+  }
+
+  async init(){
+    console.log(this.agoraPod)
+    const rdf = new RDFeasy(auth)
+    console.log(rdf)
+    let nom =   await rdf.value(this.agoraPod,`
+      SELECT ?name WHERE { <> vcard:fn ?name. }`)
+      console.log("TEST accès POD, NOM :",nom)
     }
-  };
-//  this.init()
-}
 
-async init(){
-  console.log(this.agoraPod)
-  const rdf = new RDFeasy(auth)
-  console.log(rdf)
-  let nom =   await rdf.value(this.agoraPod,`
-    SELECT ?name WHERE { <> vcard:fn ?name. }`)
-  console.log("TEST accès POD, NOM :",nom)
-}
+  }
 
-}
-
-customElements.define('app-element', AppElement);
+  customElements.define('app-element', AppElement);

@@ -45,4 +45,4 @@ class InboxElement extends LitElement {
 
 }
 
-customElements.define('inbox-element', OnboxElement);
+customElements.define('inbox-element', InboxElement);
