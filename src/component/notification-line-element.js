@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
 import data from "@solid/query-ldflex";
+import './activity-element.js'
 
 class NotificationLineElement extends LitElement {
 
@@ -47,7 +48,9 @@ class NotificationLineElement extends LitElement {
     </div>
 
     <div class="col">
-    ${this.notification.link}
+    <activity-element name="${this.name+'_activity'}"
+    url="${this.notification.link}">Loading activity ${this.notification.link}...
+    </activity-element>
     </div>
     </div>
 
@@ -59,7 +62,7 @@ class NotificationLineElement extends LitElement {
   firstUpdated(){
     var app = this;
     this.agent = new HelloAgent(this.name);
-    console.log(this.agent)
+  //  console.log(this.agent)
     this.agent.receive = function(from, message) {
       //  console.log("messah",message)
       if (message.hasOwnProperty("action")){
@@ -81,11 +84,13 @@ class NotificationLineElement extends LitElement {
     this.notification.attributedTo = await data[this.notification.url].as$attributedTo
     this.notification.summary = await data[this.notification.url].as$summary
     this.notification.type = await data[this.notification.url].as$type
-    this.notification.link = await data[this.notification.url].as$link
+    let link = await data[this.notification.url].as$link
+    this.notification.link = `${link}`
     this.notification.creatorName = await data[this.notification.attributedTo].vcard$fn
-    //  console.log(this.notification)
+  //  console.log(this.notification)
     this.requestUpdate()
   }
+
 
   localName(strPromise){
     let str = `${strPromise}`
