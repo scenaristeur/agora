@@ -6,19 +6,24 @@ class InfoElement extends LitElement {
   static get properties() {
     return {
       name: {type: String},
+      hidden: {type: Boolean}
     };
   }
 
   constructor() {
     super();
     this.name = "Info"
+    this.hidden = true
   }
 
   render(){
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
-    <div class="container fluid">
+
+    <button class="btn btn-primary" ?hidden="${!this.hidden}" @click="${this.toggleHidden}">Help</button>
+    <div class="container fluid" ?hidden="${this.hidden}">
+    <button class="btn btn-primary" @click="${this.toggleHidden}">Toggle Help</button>
     Hi, <b>Agora</b> is an POC to use ActivityPub system
     on top of the Solid Platform.<br><br>
     <ul>
@@ -69,11 +74,15 @@ class InfoElement extends LitElement {
     <a href="./img/trustedApps.png" target="_blank"><img src="./img/trustedApps.png"  class="img-fluid img-thumbnail" alt="Add https://scenaristeur.github.io to trustedApps"/>
     </a>
     <br>
+    <b>
     If you are afraid that Agora or other https://scenaristeur.github.io/ apps can control your POD,
-    please create another test POD that is less sensible.<br>
+    please create another test POD that is less sensible.</b><br>
     </li>
     </ul>
     <hr>
+
+    <button class="btn btn-primary" @click="${this.toggleHidden}">Toggle Help</button>
+
     </div>
     `;
   }
@@ -95,6 +104,10 @@ class InfoElement extends LitElement {
         }
       }
     };
+  }
+
+  toggleHidden(){
+    this.hidden = !this.hidden
   }
 
 }

@@ -32,12 +32,16 @@ class AppElement extends LitElement {
 
     <div class="container">
 
-    <agora-inbox-element name="AgoraInbox" agoraPod="${this.agoraPod}">Loading Agora Inbox</agora-inbox-element>
+    <login-element name="Login">Loading Login</login-element>
     <config-element name="Config">Loading Config...</config-element>
+    <br>
+
+    <agora-inbox-element name="AgoraInbox" agoraPod="${this.agoraPod}">Loading Agora Inbox</agora-inbox-element>
+
     <post-panel-element name="PostPanel">Loading Post Panel</post-panel-element>
     <inbox-element name="Inbox">Loading Inbox</inbox-element>
     <outbox-element name="Outbox">Loading Outbox</outbox-element>
-    <login-element name="Login">Loading Login</login-element>
+
     </div>
     `;
   }
