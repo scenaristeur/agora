@@ -30,27 +30,30 @@ class InfoElement extends LitElement {
     To conform to ActivityPub, one user (you) must have two folders : <br>
     <ul>
     <li>
-    <b>/inbox/</b> folder where you receive notification of other user actions.
+    <b>/inbox/</b> folder where you receive notifications of other users actions.
     </li>
     <li>
     <b>/outbox/</b> folder where <b>activities</b> & <b>objects</b> that you create are stored.
     </li>
     </ul>
-    We decided to put them in your /public/ folder in a /shighl_test/ sub-folder (arbitrary for the moment). You can change that directory in the <b>Config Panel</b><br>
-    In that /shighl_test/ folder there is an "index.ttl" that is referenced in your <b>publicTypeIndex</b> as a <b>Shighl</b> instance.<br><br>
-    Some special authorization are set to the /inbox & /outbox/ folders: <br>
+    We decided to put them in your /public/ folder in a /shighl_test/ sub-folder (arbitrary for the moment).
+    <br>
+    You can change that directory in the <b>Config Panel</b><br>
+    In that /shighl_test/ folder there is an "index.ttl" that reference "inbox" & "outbox" folder & that is referenced in your <b>publicTypeIndex</b> as a <b>Shighl</b> instance.<br><br>
+    Some specials authorizations are set to the /inbox/ & /outbox/ folders: <br>
     <ul>
     <li>
     /inbox/ : You keep full CONTROL and Authenticated Agent (Everyone with a POD) as a Submitter to your /inbox/
     </li>
     <li>
-    /outbox/ : You keep full CONTROL and authorization of sub-folders /activities/ & /objects/ are set when you create that activities/objects,
-    according to who you choose to authorize (Public, or a POD)<br>
+    /outbox/ : You keep full CONTROL and authorization of files stored in /activities/ & /objects/ sub-folders
+    are set when you create that activities/objects,
+    according to the recipient of that activity (Public, or a specific POD)<br>
     </li>
 
     </ul>
 
-
+    <br>
 
     If you want, Agora can configure your POD for you.<br>
     To use the automatic configuration,
@@ -62,27 +65,15 @@ class InfoElement extends LitElement {
     <br>
     If you miss it or if you have already logged on https://scenaristeur.github.io/ app but did not allow "CONTROL"
     you can add it in the preference of your POD. <br>
-    If you are afraid that Agora or other https://scenaristeur.github.io/ apps can control your POD,
-    please create another test POD that is less sensible.<br>
-
     (check your POD preferences).<br>
     <a href="./img/trustedApps.png" target="_blank"><img src="./img/trustedApps.png"  class="img-fluid img-thumbnail" alt="Add https://scenaristeur.github.io to trustedApps"/>
     </a>
     <br>
-
-    <ol>
-    <li>
-
+    If you are afraid that Agora or other https://scenaristeur.github.io/ apps can control your POD,
+    please create another test POD that is less sensible.<br>
     </li>
-
-    </ol>
-    </li>
-
-
     </ul>
-
-
-
+    <hr>
     </div>
     `;
   }
