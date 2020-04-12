@@ -8,6 +8,8 @@ import './post-panel-element.js'
 import './inbox-element.js'
 import './outbox-element.js'
 import './info-element.js'
+import  './fab-element.js';
+import  './post-element.js';
 
 class AppElement extends LitElement {
 
@@ -34,13 +36,16 @@ class AppElement extends LitElement {
 
     <login-element name="Login">Loading Login</login-element>
     <config-element name="Config">Loading Config...</config-element>
+      <post-element name="Post"></post-element>
     <br>
 
     <agora-inbox-element name="AgoraInbox" agoraPod="${this.agoraPod}">Loading Agora Inbox</agora-inbox-element>
 
-    <post-panel-element name="PostPanel">Loading Post Panel</post-panel-element>
+<!--    <post-panel-element name="PostPanel">Loading Post Panel</post-panel-element>-->
     <inbox-element name="Inbox">Loading Inbox</inbox-element>
     <outbox-element name="Outbox">Loading Outbox</outbox-element>
+
+  <fab-element name="Fab"></fab-element>
 
     </div>
     `;

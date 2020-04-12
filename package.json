@@ -29,8 +29,10 @@
     "evejs": "github:scenaristeur/evejs",
     "lit-element": "^2.3.1",
     "rdf-easy": "github:jeff-zucker/rdf-easy",
+    "rdf-namespaces": "^1.8.0",
     "rdflib": "^1.1.0",
     "solid-auth-client": "^2.4.1",
-    "solid-file-client": "^1.0.2"
+    "solid-file-client": "^1.0.2",
+    "tripledoc": "^4.3.4"
   }
 }
