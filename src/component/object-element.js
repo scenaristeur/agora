@@ -25,9 +25,16 @@ class ObjectElement extends LitElement {
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
     <div class="container">
     Name : ${this.object.name}<br>
-    Content: ${this.object.content}
+    Content: ${this.object.content}<br>
+    <button class="btn btn-outline-primary"  @click="${this.replyTo}">Reply</button>
     </div>
     `;
+  }
+
+  replyTo(){
+    console.log(this.url)
+    this.agent.send("Post", {action: "toggleWrite"})
+    this.agent.send("PostTabs", {action:"setReplyTo", replyTo: this.url })
   }
 
   firstUpdated(){

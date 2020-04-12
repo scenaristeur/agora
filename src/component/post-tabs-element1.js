@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
 
-//import { PodHelper } from '../tools/pod-helper.js';
+import { PodHelper } from '../tools/pod-helper.js';
 /*import { fetchDocument } from 'tripledoc';*/
 import { solid, schema, rdf, rdfs } from 'rdf-namespaces';
 import { namedNode } from '@rdfjs/data-model';
@@ -27,6 +27,7 @@ class PostTabsElement extends LitElement {
       agoraNotesListUrl: { type: String},
       webId: {type: String},
       info: {type: String},
+      folders: {type: Array},
       replyTo: {type: String}
     };
   }
@@ -35,11 +36,18 @@ class PostTabsElement extends LitElement {
     super();
     this.fileClient = new SolidFileClient(auth)
     this.webId = null
-    this.subelements = ["Note", "Media", "Triple"] //, "Media", "Triple"] , "Graph"
+    this.subelements = ["Note", "Media", "Triple"] //, "Media", "Triple"]
     this.requetes = {}
     this.responses = []
     this.info = ""
-      this.replyTo = null
+    this.folders = ["public/spoggy/",
+    "public/spoggy/Note/",
+    "public/spoggy/Image/",
+    "public/spoggy/Video/",
+    "public/spoggy/Audio/",
+    "public/spoggy/Document/",
+    "public/spoggy/Tag/"],
+    this.replyTo = null
 
     //  this.agoraNotesListUrl = "https://agora.solid.community/public/notes.ttl"
   }
@@ -89,6 +97,10 @@ class PostTabsElement extends LitElement {
       width: 100%;
     }
     </style>
+
+    OK POST TABS
+
+
     <div class="container">
     <div class="row">
     ${this.replyTo != null ?
@@ -111,6 +123,9 @@ class PostTabsElement extends LitElement {
 
     </div>
     </div>
+
+
+
 
 
     <div class="row"><!--style="height:50vh"-->
@@ -195,6 +210,7 @@ class PostTabsElement extends LitElement {
 
 
   addNote(){
+
     var title = this.shadowRoot.getElementById('title').value.trim();
     if (title.length == 0){
       alert ("Don't you want to provide a  beautiful title to your wonder post ?")
@@ -204,11 +220,15 @@ class PostTabsElement extends LitElement {
       console.log(this.requetes)
       var mess = {action: "askContent", id : id}
       this.agent.sendMulti(this.subelements, mess)
+      //  this.dispatchEvent(new CustomEvent('dialog.accept'))}
       this.toggleWrite()
+
     }
+
   }
 
   toggleWrite(){
+    //  console.log("toggleWrite")
     this.agent.send("Post", {action: "toggleWrite"})
   }
 
@@ -216,6 +236,7 @@ class PostTabsElement extends LitElement {
   openTab(e) {
     var node = e.target
     if (node.nodeName == "I"){
+      // gestion des icones
       node = e.target.parentNode
     }
     var tabName = node.getAttribute('tabName')
@@ -234,7 +255,7 @@ class PostTabsElement extends LitElement {
 
   firstUpdated(){
     var app = this;
-  //  this.ph = new PodHelper();
+    this.ph = new PodHelper();
     this.agent = new HelloAgent(this.name);
     this.agent.receive = function(from, message) {
       if (message.hasOwnProperty("action")){
@@ -253,6 +274,7 @@ class PostTabsElement extends LitElement {
         }
       }
     };
+    this.checkFolders()
   }
 
 
@@ -278,7 +300,10 @@ class PostTabsElement extends LitElement {
   }
 
   async preparePost(){
-      var app = this
+    //  this.getUserProp()
+    var app = this
+    app.webId = this.ph.getPod("webId")
+    //  console.log(this.webId)
     console.log(this.responses)
     var date = new Date(Date.now())
     var id = date.getTime()
@@ -370,7 +395,7 @@ class PostTabsElement extends LitElement {
 
   async preparePost1(){
     var app = this
-  //  app.webId = this.ph.getPod("webId")
+    app.webId = this.ph.getPod("webId")
     //  console.log(this.webId)
     console.log(this.responses)
     var date = new Date(Date.now())
@@ -490,6 +515,58 @@ class PostTabsElement extends LitElement {
         console.log(err)
       });
     }
+
+
+
+    async getUserProp(){
+      for await (const subject of  data.user.subjects){
+        console.log(`  - ${subject}`);
+        for await (const pred of subject.properties) {
+          var p = await pred;
+          console.log(p)
+        }
+      }
+    }
+
+
+
+    async checkFolders(){
+      var app = this
+      this.folders.forEach(async function(f){
+        await app.checkFolder(f)
+      })
+      //console.log(app.info)
+    }
+
+
+    async checkFolder(f){
+      var app = this
+      this.storage = await data.user.storage
+
+      var folder = this.storage+f
+      //    console.log(folder)
+      this.fileClient.readFolder(folder).then(
+        success => {
+          app.info+="\nOK :"+folder+" exist"
+        },
+        err => {
+          console.log("error read",err.message)
+          app.info+="\nWarning :"+folder+" does not exist"
+          if (err.message.indexOf("404") > -1){
+            //  console.log("CREATE")
+            app.info+="\nCreating :"+folder
+            app.fileClient.createFolder(folder).then(
+              success => {
+                //  console.log("SUCCESS : create",success)
+                app.info+="\nOK : "+folder+" created"
+              },
+              err => {
+                //  console.log("ERROR create",err)
+                app.info+="\nError : can not create "+folder+" "+err
+              })
+            }
+          })
+        }
 
       }
 
