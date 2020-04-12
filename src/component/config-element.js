@@ -158,11 +158,20 @@ class ConfigElement extends LitElement {
       let instance  = await data[`${subject}`].solid$instance
       this.config.instance = `${instance}`
       this.log = "Checking Inbox"
-      let inbox = await data[this.config.instance].solid$inbox
+      let inbox = await data[this.config.instance].as$inbox
       this.config.inbox = `${inbox}`
       this.log = "Checking Outbox"
-      let outbox = await data[this.config.instance].solid$outbox
+      let outbox = await data[this.config.instance].as$outbox
       this.config.outbox = `${outbox}`
+      this.log = "Checking Followers"
+      let followers = await data[this.config.instance].as$followers
+      this.config.followers = `${followers}`
+      this.log = "Checking Following"
+      let following = await data[this.config.instance].as$following
+      this.config.following = `${following}`
+      this.log = "Checking Liked"
+      let liked = await data[this.config.instance].as$liked
+      this.config.liked = `${liked}`
     }
   }
 
@@ -274,6 +283,38 @@ async createFolders(){
       alert(e)
     }
 
+
+    try{
+      if( !(await fc.itemExists(root+"followers/")) ) {
+        await fc.createFolder(root+"followers/") // only create if it doesn't already exist
+      }
+    }catch(e){
+      this.log=e
+      alert(e)
+    }
+
+    try{
+      if( !(await fc.itemExists(root+"following/")) ) {
+        await fc.createFolder(root+"following/") // only create if it doesn't already exist
+      }
+    }catch(e){
+      this.log=e
+      alert(e)
+    }
+
+    try{
+      if( !(await fc.itemExists(root+"liked/")) ) {
+        await fc.createFolder(root+"liked/") // only create if it doesn't already exist
+      }
+    }catch(e){
+      this.log=e
+      alert(e)
+    }
+
+
+
+
+
     try{
 
       let id = "#Shighl"
@@ -284,8 +325,11 @@ async createFolders(){
       await data[inst_uri].solid$instance.set(namedNode(inst_index))
       //  await data[inst_uri].rdfs$label.add("Activity Streams Collection")
       this.log = "Index Creation : ",inst_index
-      await data[inst_index].solid$inbox.add(namedNode(inbox))
-      await data[inst_index].solid$outbox.set(namedNode(outbox))
+      await data[inst_index].as$inbox.add(namedNode(inbox))
+      await data[inst_index].as$outbox.set(namedNode(outbox))
+      await data[inst_index].as$following.set(namedNode(root+'following/'))
+      await data[inst_index].as$followers.set(namedNode(root+'followers/'))
+      await data[inst_index].as$liked.set(namedNode(root+'liked/'))
       this.log = "YAHOOOOOOOOOOO, AGORA IS READY, AND WELL CONFIGURED !!!"
     }
     catch(e){

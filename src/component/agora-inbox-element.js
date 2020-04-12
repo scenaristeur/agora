@@ -86,7 +86,7 @@ class AgoraInboxElement extends LitElement {
       let instance = await data[pti_url+"#Shighl"].solid$instance
       this.log = 'Instance url : '+instance
       //    console.log(`${instance}`)
-      let inbox = await data[instance].solid$inbox
+      let inbox = await data[instance].as$inbox
       this.log = 'Inbox : '+inbox
       //    console.log(`${inbox}`)
 

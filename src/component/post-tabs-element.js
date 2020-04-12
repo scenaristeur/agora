@@ -94,11 +94,14 @@ class PostTabsElement extends LitElement {
     </style>
     <div class="container">
     <div class="row">
-    replyTo url  ${this.replyTo.url}
-    replyTo attributedTo  ${this.replyTo.attributedTo} </br>
-    replyTo name  ${this.replyTo.name} </br>
+
     ${this.replyTo.url != null ?
       html `
+      TODO<br>
+      replyTo url  ${this.replyTo.url}<br>
+      replyTo attributedTo  ${this.replyTo.attributedTo} <br>
+      replyTo name  ${this.replyTo.name} <br>
+
       <label class="sr-only" for="title">Reply to</label>
       <div class="input-group mb-2">
       <div class="input-group-append">
