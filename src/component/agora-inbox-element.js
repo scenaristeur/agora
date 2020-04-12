@@ -106,7 +106,7 @@ class AgoraInboxElement extends LitElement {
       //  console.log(notifications)
       this.log = "Sort Notifications"
       notifications.sort(function(a, b){
-        return a.timestamp > b.timestamp;
+        return a.timestamp < b.timestamp;
       });
       this.notifications = notifications
       this.log = "Ready"

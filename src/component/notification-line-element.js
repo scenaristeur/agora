@@ -86,7 +86,7 @@ class NotificationLineElement extends LitElement {
     this.notification.type = await data[this.notification.url].as$type
     let link = await data[this.notification.url].as$link
     this.notification.link = `${link}`
-    this.notification.creatorName = await data[this.notification.attributedTo].vcard$fn
+    this.notification.creatorName = await data[this.notification.attributedTo].vcard$fn || `${this.notification.attributedTo}`.split("/")[2].split('.')[0];
   //  console.log(this.notification)
     this.requestUpdate()
   }
