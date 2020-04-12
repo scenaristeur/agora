@@ -83,7 +83,7 @@ class FabElement extends LitElement {
       <button type="button"
        class="btn btn-write btn-info has-tooltip"
         data-placement="left"
-         @click="${this.toggleWrite}"
+        @click="${this.toggleWrite}"
          title="Write"> <i class="fa fa-pen"></i> </button>
       `
       :html``

@@ -9,6 +9,8 @@ import  data  from "@solid/query-ldflex";
 
 import * as auth from 'solid-auth-client';
 import * as SolidFileClient from "solid-file-client"
+import { v4 as uuidv4 } from 'uuid';
+
 
 import './note-element.js'
 import './media-element.js'
@@ -39,7 +41,7 @@ class PostTabsElement extends LitElement {
     this.requetes = {}
     this.responses = []
     this.info = ""
-      this.replyTo = null
+    this.replyTo = null
 
     //  this.agoraNotesListUrl = "https://agora.solid.community/public/notes.ttl"
   }
@@ -234,7 +236,7 @@ class PostTabsElement extends LitElement {
 
   firstUpdated(){
     var app = this;
-  //  this.ph = new PodHelper();
+    //  this.ph = new PodHelper();
     this.agent = new HelloAgent(this.name);
     this.agent.receive = function(from, message) {
       if (message.hasOwnProperty("action")){
@@ -248,6 +250,9 @@ class PostTabsElement extends LitElement {
           case "setReplyTo":
           app.setReplyTo(message);
           break;
+          case "configChanged":
+          app.configChanged(message.config);
+          break;
           default:
           console.log("Unknown action ",message)
         }
@@ -255,6 +260,9 @@ class PostTabsElement extends LitElement {
     };
   }
 
+  configChanged(config){
+    this.config = config
+  }
 
   setReplyTo(message){
     message.replyTo != undefined? this.replyTo = message.replyTo : this.replyTo = null
@@ -277,8 +285,91 @@ class PostTabsElement extends LitElement {
     }
   }
 
+
+
   async preparePost(){
-      var app = this
+    var app = this
+      console.log("CONFIG",this.config)
+    console.log("OUTBOX", this.config.outbox)
+    console.log(this.responses)
+    var title = this.shadowRoot.getElementById('title').value.trim();
+    var tags = this.shadowRoot.getElementById('tags').value.split(',');
+    var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
+    var inReplyTo = null;
+    if (this.shadowRoot.getElementById('reply') != null){
+      inReplyTo = this.shadowRoot.getElementById('reply').value.trim();
+    }
+    this.shadowRoot.getElementById('title').value = ""
+    this.shadowRoot.getElementById('tags').value = ""
+    this.storage = await data.user.storage
+
+    // TREAT OBJECTS
+    let dateObj = new Date();
+    let date = dateObj.toISOString()
+    //    let to = act.object.target == "Public" ? "https://www.w3.org/ns/activitystreams#Public" : act.object.target;
+    console.log("MUST CHECK RECIPIENT")
+
+    let objects = []
+
+    this.responses.forEach(async function(r){
+      //object create
+
+      let object_Id = uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+      //    let object_uri = outbox+"objects/"+object_Id+"/index.ttl#this"
+      let object_file = app.config.outbox+"objects/"+object_Id+".ttl"
+      let object_uri = object_file+"#this"
+      switch (r.message.type) {
+        case "Note":
+        if(r.message.content.length >0){
+          objects.push(object_uri)
+          console.log("CREATE NOTE WITH", r.message.content, object_uri)
+          await data[object_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Note'))
+          await data[object_uri]['https://www.w3.org/ns/activitystreams#name'].add(title)
+          await data[object_uri]['https://www.w3.org/ns/activitystreams#content'].add(r.message.content)
+          await data[object_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+          //  await data[object_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(to))
+          await data[object_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
+
+        }
+        break;
+        case "Image":
+        case "Video":
+        case "Audio":
+        case "Document":
+        if(r.message.content != undefined){
+          objects.push(object_uri)
+          var file = r.message.content
+          var contentType = file.contentType
+          var newFilename = r.message.newFilename
+          var classe = r.message.type
+          console.log("CREATE DOCUMENT WITH",r.message, object_uri)
+        }
+        break;
+        case "Triple":
+        if(r.message.content.length > 0){
+          objects.push(object_uri)
+          content = r.message.content
+          console.log("CREATE DOCUMENT WITH",r.message, object_uri)
+        }
+
+        break;
+        default:
+        console.log(r.message.type , "non traite")
+      }
+
+    })
+
+    this.responses = []
+    console.log("OBJECTS",objects)
+
+  }
+
+
+
+
+
+  async preparePost2(){
+    var app = this
     console.log(this.responses)
     var date = new Date(Date.now())
     var id = date.getTime()
@@ -311,13 +402,10 @@ class PostTabsElement extends LitElement {
       inReplyTo!= null &&  inReplyTo.length > 0 ? await data[agoraActivity].as$inReplyTo.add(namedNode(inReplyTo)) : "";
     }
 
-
-
     this.responses.forEach(async function(r){
       switch (r.message.type) {
         case "Note":
         if (r.message.content.length > 0){
-
           var userNote = app.storage+"public/Notes/"+id+".ttl"
           var content = r.message.content
           await data[userNote].schema$text.add(content);
@@ -330,7 +418,6 @@ class PostTabsElement extends LitElement {
             await data[agoraActivity].as$object.add(namedNode(userNote))
           }
         }
-
         break;
         case "Image":
         case "Video":
@@ -348,29 +435,21 @@ class PostTabsElement extends LitElement {
           await  data[agoraActivity].as$object.add(namedNode(userMedia))
         }
         break;
-
-
         case "Triple":
         if(r.message.content.length >0){
           content = r.message.content
-
         }
-
         break;
-
-
         default:
         console.log(r.message.type , "non traite")
       }
     })
     this.responses = []
-
-
   }
 
   async preparePost1(){
     var app = this
-  //  app.webId = this.ph.getPod("webId")
+    //  app.webId = this.ph.getPod("webId")
     //  console.log(this.webId)
     console.log(this.responses)
     var date = new Date(Date.now())
@@ -491,6 +570,6 @@ class PostTabsElement extends LitElement {
       });
     }
 
-      }
+  }
 
-      customElements.define('post-tabs-element', PostTabsElement);
+  customElements.define('post-tabs-element', PostTabsElement);

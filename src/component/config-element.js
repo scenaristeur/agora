@@ -158,14 +158,13 @@ class ConfigElement extends LitElement {
       let instance  = await data[`${subject}`].solid$instance
       this.config.instance = `${instance}`
       this.log = "Checking Inbox"
-      this.config.inbox = await data[this.config.instance].solid$inbox
+      let inbox = await data[this.config.instance].solid$inbox
+      this.config.inbox = `${inbox}`
       this.log = "Checking Outbox"
-      this.config.outbox = await data[this.config.instance].solid$outbox
-
+      let outbox = await data[this.config.instance].solid$outbox
+      this.config.outbox = `${outbox}`
     }
   }
-
-
 
   if(this.config.instance == null){
     this.log = "No Shighl Instance Found in your PublicTypeIndex"
@@ -174,7 +173,7 @@ class ConfigElement extends LitElement {
   console.log("CONFIG",this.config)
   this.requestUpdate()
 
-
+  this.agent.send("PostTabs", {action: "configChanged", config: this.config})
 }
 
 async openConfigBox(){
@@ -263,7 +262,7 @@ async createFolders(){
     }
 
     try{
-      
+
       let id = "#Shighl"
       let inst_uri = this.config.pti+id
       let inst_index = root+'index.ttl#this'
