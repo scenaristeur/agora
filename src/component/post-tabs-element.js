@@ -165,13 +165,13 @@ class PostTabsElement extends LitElement {
 
     <select id="recipients" class="custom-select" > <!--multiple-->
     <option disabled>Select Multi Recipient</option>
-    <option  value="#me">Personnal (Me)</option>
-    <option selected value="https://www.w3.org/ns/activitystreams#Public">Public (Agora)</option>
+    <!--  <option  value="#me">Personnal (Me)</option>
+    <option selected value="https://www.w3.org/ns/activitystreams#Public">Public (Agora)</option>-->
     ${this.friends.map(f =>
       html `
       <option value="${f.webId}"> ${f.name} </option>
       `)}
-      <option value="someone" disabled>Someone Else (todo)</option>
+      <!--      <option value="someone" disabled>Someone Else (todo)</option>-->
       </select>
 
 
@@ -181,14 +181,14 @@ class PostTabsElement extends LitElement {
 
       <div class="buttons">
       <div class="row">
-      <!--  <div class="col-8">
+      <div class="col-8">
       <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="agora_pub" name="agora_pub" checked>
       <label class="text-primary" for="agora_pub">
       Push to Agora
       </label>
       </div>
-      </div>-->
+      </div>
       <div class="col">
       <button type="button" class="btn btn-primary" primary @click=${this.addNote}>
       Send <i class="far fa-paper-plane"></i></button>
@@ -339,7 +339,7 @@ class PostTabsElement extends LitElement {
       console.log(this.responses)
       var title = this.shadowRoot.getElementById('title').value.trim();
       var tags = this.shadowRoot.getElementById('tags').value.split(',');
-      //  var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
+      var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
       var inReplyTo = null;
       if (this.shadowRoot.getElementById('reply') != null){
         inReplyTo = this.shadowRoot.getElementById('reply').value.trim();
@@ -423,34 +423,73 @@ class PostTabsElement extends LitElement {
     await data[activity_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
     await data[activity_uri].rdfs$label.add(title)
 
+    if (recipients.length== 0){
+      await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(app.config.webId))
+      await data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(app.config.webId))
+    }
+
     objects.forEach(async function(o, i) {
       await data[activity_uri]['https://www.w3.org/ns/activitystreams#object'].add(namedNode(o.uri))
       recipients.forEach(async function(to, i) {
-        console.log("TO",to)
-        if (to == "#me"){
-          await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(app.config.webId))
-        }else{
-          await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(to))
-        }
-        if (to == "https://www.w3.org/ns/activitystreams#Public"){
-          await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
-        }
-      });
+        await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(to))
+      })
+      if (agora_pub == true){
+        await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
+        await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://www.w3.org/ns/activitystreams#Public"))
+      }
     });
+
+
+    console.log("Activity OK",activity_uri)
+
+    if (agora_pub == true){
+      console.log("PUBLIC",agora_pub)
+      await data[activity_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
+      await data[activity_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://www.w3.org/ns/activitystreams#Public"))
+      recipients.push("https://agora.solid.community/profile/card#me")
+    }
+
+
 
     recipients.forEach(async function(to, i) {
       console.log("TO",to)
-      if (to == "#me"){
-        await data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(app.config.webId))
-      }else{
-        await data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(to))
+      await data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(to))
+
+      // recipient notification
+      let notification_Id = uuidv4();
+      let pti = await data[to].publicTypeIndex
+      for await (const subject of data[pti].subjects){
+        if(pti != `${subject}`)
+        /*let s = `${subject}`
+        console.log(s)*/
+        if (`${subject}`.endsWith('#Shighl')){
+          let instance  = await data[`${subject}`].solid$instance
+          let ib = await data[`${instance}`].as$inbox
+          let recip_inbox = `${ib}`
+          let notification_uri = recip_inbox+notification_Id+".ttl#this"
+
+          console.log(notification_uri)
+
+          await data[notification_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
+          await data[notification_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
+          await data[notification_uri]['https://www.w3.org/ns/activitystreams#summary'].add(title)
+          await data[notification_uri].rdfs$label.add(title)
+          await data[notification_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+          await data[notification_uri]['https://www.w3.org/ns/activitystreams#link'].add(namedNode(activity_uri))
+
+
+        }
       }
-      if (to == "https://www.w3.org/ns/activitystreams#Public"){
-        await data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode("https://agora.solid.community/profile/card#me"))
-      }
+
     });
 
-    console.log("Activity OK",activity_uri)
+
+
+
+
+
+
+
 
 
 
