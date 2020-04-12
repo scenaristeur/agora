@@ -1,6 +1,9 @@
 import { fetchDocument, createDocument } from 'tripledoc';
 import { solid, schema, rdf, rdfs, space, foaf } from 'rdf-namespaces';
 
+import * as auth from 'solid-auth-client';
+import * as SolidFileClient from "solid-file-client"
+
 let pod = {}
 let count = 0
 
@@ -9,7 +12,7 @@ function PodHelper(name,age){
   this.age = age
   count = count+age
   this.count = count
-  this.fileClient = SolidFileClient;
+  this.fileClient = new SolidFileClient(auth)
 }
 
 PodHelper.prototype.setWebId = function (_webId){

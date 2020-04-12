@@ -7,6 +7,9 @@ import { solid, schema, rdf, rdfs } from 'rdf-namespaces';
 import { namedNode } from '@rdfjs/data-model';
 import  data  from "@solid/query-ldflex";
 
+import * as auth from 'solid-auth-client';
+import * as SolidFileClient from "solid-file-client"
+
 import './note-element.js'
 import './media-element.js'
 import './graph-element.js'
@@ -31,7 +34,7 @@ class PostTabsElement extends LitElement {
 
   constructor() {
     super();
-    this.fileClient = SolidFileClient;
+    this.fileClient = new SolidFileClient(auth)
     this.webId = null
     this.subelements = ["Note", "Media", "Triple"] //, "Media", "Triple"]
     this.requetes = {}
@@ -94,6 +97,10 @@ class PostTabsElement extends LitElement {
       width: 100%;
     }
     </style>
+
+    OK POST TABS
+
+
     <div class="container">
     <div class="row">
     ${this.replyTo != null ?
@@ -249,7 +256,6 @@ class PostTabsElement extends LitElement {
   firstUpdated(){
     var app = this;
     this.ph = new PodHelper();
-    this.fileClient = SolidFileClient;
     this.agent = new HelloAgent(this.name);
     this.agent.receive = function(from, message) {
       if (message.hasOwnProperty("action")){
@@ -544,9 +550,9 @@ class PostTabsElement extends LitElement {
           app.info+="\nOK :"+folder+" exist"
         },
         err => {
-          //  console.log("error read",err)
+          console.log("error read",err.message)
           app.info+="\nWarning :"+folder+" does not exist"
-          if (err.startsWith("404")){
+          if (err.message.indexOf("404") > -1){
             //  console.log("CREATE")
             app.info+="\nCreating :"+folder
             app.fileClient.createFolder(folder).then(

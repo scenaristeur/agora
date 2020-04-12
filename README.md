@@ -1,5 +1,7 @@
 # agora
 
+# todo
+[ ] remove pod-helper & review post,post-tabs... 
 
 
 

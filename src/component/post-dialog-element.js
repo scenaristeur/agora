@@ -24,10 +24,6 @@ class PostDialogElement extends LitElement {
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <style>
 
-
-
-
-
     /* The Modal (background) */
     .modal {
       display: none; /* Hidden by default */
@@ -106,8 +102,6 @@ class PostDialogElement extends LitElement {
         width: 100%;
       }
     }
-
-
     </style>
 
 
