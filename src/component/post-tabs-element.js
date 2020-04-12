@@ -163,9 +163,10 @@ class PostTabsElement extends LitElement {
 
     <div class="row">
 
-    <select id="recipients" class="custom-select" multiple>
+    <select id="recipients" class="custom-select" > <!--multiple-->
     <option disabled>Select Multi Recipient</option>
-    <option selected value="https://agora.solid.community/profile/card#me">Public (Agora)</option>
+    <option  value="#me">Personnal (Me)</option>
+    <option selected value="https://www.w3.org/ns/activitystreams#Public">Public (Agora)</option>
     ${this.friends.map(f =>
       html `
       <option value="${f.webId}"> ${f.name} </option>
@@ -180,14 +181,14 @@ class PostTabsElement extends LitElement {
 
       <div class="buttons">
       <div class="row">
-      <div class="col-8">
+      <!--  <div class="col-8">
       <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="agora_pub" name="agora_pub" checked>
       <label class="text-primary" for="agora_pub">
       Push to Agora
       </label>
       </div>
-      </div>
+      </div>-->
       <div class="col">
       <button type="button" class="btn btn-primary" primary @click=${this.addNote}>
       Send <i class="far fa-paper-plane"></i></button>
@@ -334,11 +335,11 @@ class PostTabsElement extends LitElement {
         }
         return acc;
       }, []);
-      console.log("RECIPIENTS",recipients)
+      //  console.log("RECIPIENTS",recipients)
       console.log(this.responses)
       var title = this.shadowRoot.getElementById('title').value.trim();
       var tags = this.shadowRoot.getElementById('tags').value.split(',');
-      var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
+      //  var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
       var inReplyTo = null;
       if (this.shadowRoot.getElementById('reply') != null){
         inReplyTo = this.shadowRoot.getElementById('reply').value.trim();
@@ -351,7 +352,6 @@ class PostTabsElement extends LitElement {
       let dateObj = new Date();
       let date = dateObj.toISOString()
       //    let to = act.object.target == "Public" ? "https://www.w3.org/ns/activitystreams#Public" : act.object.target;
-      console.log("MUST CHECK RECIPIENT")
 
       let objects = []
 
@@ -365,13 +365,12 @@ class PostTabsElement extends LitElement {
         switch (r.message.type) {
           case "Note":
           if(r.message.content.length >0){
-            objects.push(object_uri)
+            objects.push({uri: object_uri})
             console.log("CREATE NOTE WITH", r.message.content, object_uri)
             await data[object_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Note'))
             await data[object_uri]['https://www.w3.org/ns/activitystreams#name'].add(title)
             await data[object_uri]['https://www.w3.org/ns/activitystreams#content'].add(r.message.content)
             await data[object_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
-            //  await data[object_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(to))
             await data[object_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
 
           }
@@ -381,7 +380,7 @@ class PostTabsElement extends LitElement {
           case "Audio":
           case "Document":
           if(r.message.content != undefined){
-            objects.push(object_uri)
+            objects.push({uri: object_uri})
             var file = r.message.content
             var contentType = file.contentType
             var newFilename = r.message.newFilename
@@ -391,7 +390,7 @@ class PostTabsElement extends LitElement {
           break;
           case "Triple":
           if(r.message.content.length > 0){
-            objects.push(object_uri)
+            objects.push({uri: object_uri})
             content = r.message.content
             console.log("CREATE DOCUMENT WITH",r.message, object_uri)
           }
@@ -404,216 +403,265 @@ class PostTabsElement extends LitElement {
       })
 
       this.responses = []
+      console.log("TODO : ACL FILES & REPLYTO")
       console.log("OBJECTS",objects)
-
+      /*
+      if (to == "https://www.w3.org/ns/activitystreams#Public"){
+      console.log("Send to Agora")
+      to = "https://agora.solid.community/profile/card#me"
     }
+    */
 
+    //activity create
+    let activity_Id = uuidv4();
+    //      let activity_uri = outbox+"activities/"+activity_Id+"/index.ttl#this"
+    let activity_file = app.config.outbox+"activities/"+activity_Id+".ttl"
+    let activity_uri = activity_file+"#this"
 
+    await data[activity_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
+    await data[activity_uri]['https://www.w3.org/ns/activitystreams#summary'].add(title)
+    await data[activity_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+    await data[activity_uri].rdfs$label.add(title)
 
-
-
-    async preparePost2(){
-      var app = this
-      console.log(this.responses)
-      var date = new Date(Date.now())
-      var id = date.getTime()
-      var title = this.shadowRoot.getElementById('title').value.trim();
-      var tags = this.shadowRoot.getElementById('tags').value.split(',');
-      var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
-      var inReplyTo = null;
-      if (this.shadowRoot.getElementById('reply') != null){
-        inReplyTo = this.shadowRoot.getElementById('reply').value.trim();
-      }
-      this.shadowRoot.getElementById('title').value = ""
-      this.shadowRoot.getElementById('tags').value = ""
-      this.storage = await data.user.storage
-      var userActivity = this.storage+"public/spoggy/activity.ttl#"+id
-      console.log("Creation ", userActivity)
-      await data[userActivity].as$name.set(title)
-      await data[userActivity].rdfs$label.set(title)
-      await data[userActivity].schema$dateCreated.set(date.toISOString())
-      await data[userActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
-      inReplyTo!= null && inReplyTo.length > 0 ? await data[userActivity].as$inReplyTo.add(namedNode(inReplyTo)) : "";
-
-      if (agora_pub == true){
-        var agoraActivity = "https://agora.solid.community/public/spoggy/activity.ttl#"+id
-        await data[agoraActivity].as$name.add(title)
-        await data[agoraActivity].rdfs$label.add(title)
-        await data[agoraActivity].schema$dateCreated.add(date.toISOString())
-        await data[agoraActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
-        await data[agoraActivity].as$actor.add(namedNode(app.webId))
-        await data[agoraActivity].as$target.add(namedNode(userActivity))
-        inReplyTo!= null &&  inReplyTo.length > 0 ? await data[agoraActivity].as$inReplyTo.add(namedNode(inReplyTo)) : "";
-      }
-
-      this.responses.forEach(async function(r){
-        switch (r.message.type) {
-          case "Note":
-          if (r.message.content.length > 0){
-            var userNote = app.storage+"public/Notes/"+id+".ttl"
-            var content = r.message.content
-            await data[userNote].schema$text.add(content);
-            await data[userNote].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Note'))
-            await data[userActivity].schema$text.add(content);
-            await data[userActivity].as$object.add(namedNode(userNote))
-
-            if (agora_pub == true){
-              await data[agoraActivity].schema$text.add(content);
-              await data[agoraActivity].as$object.add(namedNode(userNote))
-            }
-          }
-          break;
-          case "Image":
-          case "Video":
-          case "Audio":
-          case "Document":
-          if(r.message.content != undefined){
-            var file = r.message.content
-            var contentType = file.contentType
-            var newFilename = r.message.newFilename
-            var classe = r.message.type
-            var userMedia = app.storage+"public/spoggy/"+classe+"/"+newFilename
-            console.log("creation ",userMedia)
-            await app.sendFile(userMedia, file, contentType)
-            await  data[userActivity].as$object.add(namedNode(userMedia))
-            await  data[agoraActivity].as$object.add(namedNode(userMedia))
-          }
-          break;
-          case "Triple":
-          if(r.message.content.length >0){
-            content = r.message.content
-          }
-          break;
-          default:
-          console.log(r.message.type , "non traite")
+    objects.forEach(async function(o, i) {
+      await data[activity_uri]['https://www.w3.org/ns/activitystreams#object'].add(namedNode(o.uri))
+      recipients.forEach(async function(to, i) {
+        console.log("TO",to)
+        if (to == "#me"){
+          await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(app.config.webId))
+        }else{
+          await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(to))
         }
-      })
-      this.responses = []
+        if (to == "https://www.w3.org/ns/activitystreams#Public"){
+          await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
+        }
+      });
+    });
+
+    recipients.forEach(async function(to, i) {
+      console.log("TO",to)
+      if (to == "#me"){
+        await data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(app.config.webId))
+      }else{
+        await data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(to))
+      }
+      if (to == "https://www.w3.org/ns/activitystreams#Public"){
+        await data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode("https://agora.solid.community/profile/card#me"))
+      }
+    });
+
+    console.log("Activity OK",activity_uri)
+
+
+
+  }
+
+
+
+
+
+  async preparePost2(){
+    var app = this
+    console.log(this.responses)
+    var date = new Date(Date.now())
+    var id = date.getTime()
+    var title = this.shadowRoot.getElementById('title').value.trim();
+    var tags = this.shadowRoot.getElementById('tags').value.split(',');
+    var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
+    var inReplyTo = null;
+    if (this.shadowRoot.getElementById('reply') != null){
+      inReplyTo = this.shadowRoot.getElementById('reply').value.trim();
+    }
+    this.shadowRoot.getElementById('title').value = ""
+    this.shadowRoot.getElementById('tags').value = ""
+    this.storage = await data.user.storage
+    var userActivity = this.storage+"public/spoggy/activity.ttl#"+id
+    console.log("Creation ", userActivity)
+    await data[userActivity].as$name.set(title)
+    await data[userActivity].rdfs$label.set(title)
+    await data[userActivity].schema$dateCreated.set(date.toISOString())
+    await data[userActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
+    inReplyTo!= null && inReplyTo.length > 0 ? await data[userActivity].as$inReplyTo.add(namedNode(inReplyTo)) : "";
+
+    if (agora_pub == true){
+      var agoraActivity = "https://agora.solid.community/public/spoggy/activity.ttl#"+id
+      await data[agoraActivity].as$name.add(title)
+      await data[agoraActivity].rdfs$label.add(title)
+      await data[agoraActivity].schema$dateCreated.add(date.toISOString())
+      await data[agoraActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
+      await data[agoraActivity].as$actor.add(namedNode(app.webId))
+      await data[agoraActivity].as$target.add(namedNode(userActivity))
+      inReplyTo!= null &&  inReplyTo.length > 0 ? await data[agoraActivity].as$inReplyTo.add(namedNode(inReplyTo)) : "";
     }
 
-    async preparePost1(){
-      var app = this
-      //  app.webId = this.ph.getPod("webId")
-      //  console.log(this.webId)
-      console.log(this.responses)
-      var date = new Date(Date.now())
-      var id = date.getTime()
-      var title = this.shadowRoot.getElementById('title').value.trim();
-      var tags = this.shadowRoot.getElementById('tags').value.split(',');
-      this.shadowRoot.getElementById('title').value = ""
-      this.shadowRoot.getElementById('tags').value = ""
-      this.storage = await data.user.storage
-
-
-      var userActivity = this.storage+"public/spoggy/activity.ttl#"+id
-      console.log("Creation ", userActivity)
-      await  data[userActivity].rdfs$label.add(title)
-      await  data[userActivity].schema$dateCreated.add(date.toISOString())
-
-      await data[userActivity].as$name.add(title)
-      await data[userActivity].as$generator.add(window.location.origin)
-      await data[userActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
-      console.log(userActivity+ " -- >created")
-      await data[app.storage+"public/spoggy/tags.ttl"].rdfs$label.add("Tags")
-
-      var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
-      if (agora_pub == true){
-        console.log("Creation ", userActivity)
-        var agoraActivity = "https://agora.solid.community/public/spoggy/activity.ttl#"+id
-        await data[agoraActivity].schema$dateCreated.add(date.toISOString())
-        await data[agoraActivity].rdfs$label.add(title)
-        await data[agoraActivity].as$name.add(title)
-        await data[agoraActivity].as$target.add(namedNode(userActivity))
-        await data[agoraActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Add'))
-        await data[agoraActivity].schema$creator.add(namedNode(app.webId))
-        await data[agoraActivity].as$actor.add(namedNode(app.webId))
-        console.log(agoraActivity+ " -- >created")
-      }
-
-      tags.forEach(async function(t){
-        var taguri = app.storage+"public/spoggy/tags.ttl#"+t.trim();
-        await  data[userActivity].as$tag.add(namedNode(taguri))
-        //    console.log(taguri+ " -- >created")
-      })
-
-      //  var path = this.storage+"public/Notes/"+id+".ttl"
-      //  console.log(data)
-      //  var tit = await  data[path].rdfs$label.add("title ONE")
-      //  var cont = await data[path].schema$text.add("content ONE");
-
-
-      this.responses.forEach(async function(r){
-        switch (r.message.type) {
-          case "Note":
-          var userNote = app.storage+"public/spoggy/Notes/"+id+".ttl"
+    this.responses.forEach(async function(r){
+      switch (r.message.type) {
+        case "Note":
+        if (r.message.content.length > 0){
+          var userNote = app.storage+"public/Notes/"+id+".ttl"
           var content = r.message.content
-          await data[userNote].rdfs$label.add(title)
           await data[userNote].schema$text.add(content);
           await data[userNote].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Note'))
-          //!!! as$Note ne fonctionne pas
-          await  data[userActivity].as$attachment.add(namedNode(userNote))
           await data[userActivity].schema$text.add(content);
+          await data[userActivity].as$object.add(namedNode(userNote))
 
-          var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
+          if (agora_pub == true){
+            await data[agoraActivity].schema$text.add(content);
+            await data[agoraActivity].as$object.add(namedNode(userNote))
+          }
+        }
+        break;
+        case "Image":
+        case "Video":
+        case "Audio":
+        case "Document":
+        if(r.message.content != undefined){
+          var file = r.message.content
+          var contentType = file.contentType
+          var newFilename = r.message.newFilename
+          var classe = r.message.type
+          var userMedia = app.storage+"public/spoggy/"+classe+"/"+newFilename
+          console.log("creation ",userMedia)
+          await app.sendFile(userMedia, file, contentType)
+          await  data[userActivity].as$object.add(namedNode(userMedia))
+          await  data[agoraActivity].as$object.add(namedNode(userMedia))
+        }
+        break;
+        case "Triple":
+        if(r.message.content.length >0){
+          content = r.message.content
+        }
+        break;
+        default:
+        console.log(r.message.type , "non traite")
+      }
+    })
+    this.responses = []
+  }
+
+  async preparePost1(){
+    var app = this
+    //  app.webId = this.ph.getPod("webId")
+    //  console.log(this.webId)
+    console.log(this.responses)
+    var date = new Date(Date.now())
+    var id = date.getTime()
+    var title = this.shadowRoot.getElementById('title').value.trim();
+    var tags = this.shadowRoot.getElementById('tags').value.split(',');
+    this.shadowRoot.getElementById('title').value = ""
+    this.shadowRoot.getElementById('tags').value = ""
+    this.storage = await data.user.storage
+
+
+    var userActivity = this.storage+"public/spoggy/activity.ttl#"+id
+    console.log("Creation ", userActivity)
+    await  data[userActivity].rdfs$label.add(title)
+    await  data[userActivity].schema$dateCreated.add(date.toISOString())
+
+    await data[userActivity].as$name.add(title)
+    await data[userActivity].as$generator.add(window.location.origin)
+    await data[userActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
+    console.log(userActivity+ " -- >created")
+    await data[app.storage+"public/spoggy/tags.ttl"].rdfs$label.add("Tags")
+
+    var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
+    if (agora_pub == true){
+      console.log("Creation ", userActivity)
+      var agoraActivity = "https://agora.solid.community/public/spoggy/activity.ttl#"+id
+      await data[agoraActivity].schema$dateCreated.add(date.toISOString())
+      await data[agoraActivity].rdfs$label.add(title)
+      await data[agoraActivity].as$name.add(title)
+      await data[agoraActivity].as$target.add(namedNode(userActivity))
+      await data[agoraActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Add'))
+      await data[agoraActivity].schema$creator.add(namedNode(app.webId))
+      await data[agoraActivity].as$actor.add(namedNode(app.webId))
+      console.log(agoraActivity+ " -- >created")
+    }
+
+    tags.forEach(async function(t){
+      var taguri = app.storage+"public/spoggy/tags.ttl#"+t.trim();
+      await  data[userActivity].as$tag.add(namedNode(taguri))
+      //    console.log(taguri+ " -- >created")
+    })
+
+    //  var path = this.storage+"public/Notes/"+id+".ttl"
+    //  console.log(data)
+    //  var tit = await  data[path].rdfs$label.add("title ONE")
+    //  var cont = await data[path].schema$text.add("content ONE");
+
+
+    this.responses.forEach(async function(r){
+      switch (r.message.type) {
+        case "Note":
+        var userNote = app.storage+"public/spoggy/Notes/"+id+".ttl"
+        var content = r.message.content
+        await data[userNote].rdfs$label.add(title)
+        await data[userNote].schema$text.add(content);
+        await data[userNote].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Note'))
+        //!!! as$Note ne fonctionne pas
+        await  data[userActivity].as$attachment.add(namedNode(userNote))
+        await data[userActivity].schema$text.add(content);
+
+        var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
+        if (agora_pub == true){
+          //!!! as$Note ne fonctionne pas
+          await  data[agoraActivity].as$object.add(namedNode(userNote))
+          await data[agoraActivity].schema$text.add(content);
+        }
+
+
+        break;
+        case "Image":
+        case "Video":
+        case "Audio":
+        case "Document":
+        if(r.message.content != undefined){
+          var file = r.message.content
+          var contentType = file.contentType
+          var newFilename = r.message.newFilename
+          var classe = r.message.type
+          var userMedia = app.storage+"public/spoggy/"+classe+"/"+newFilename
+          console.log("creation ",userMedia)
+          await app.sendFile(userMedia, file, contentType)
+          await  data[userActivity].as$attachment.add(namedNode(userMedia))
           if (agora_pub == true){
             //!!! as$Note ne fonctionne pas
-            await  data[agoraActivity].as$object.add(namedNode(userNote))
-            await data[agoraActivity].schema$text.add(content);
+            await  data[agoraActivity].as$object.add(namedNode(userMedia))
           }
 
-
-          break;
-          case "Image":
-          case "Video":
-          case "Audio":
-          case "Document":
-          if(r.message.content != undefined){
-            var file = r.message.content
-            var contentType = file.contentType
-            var newFilename = r.message.newFilename
-            var classe = r.message.type
-            var userMedia = app.storage+"public/spoggy/"+classe+"/"+newFilename
-            console.log("creation ",userMedia)
-            await app.sendFile(userMedia, file, contentType)
-            await  data[userActivity].as$attachment.add(namedNode(userMedia))
-            if (agora_pub == true){
-              //!!! as$Note ne fonctionne pas
-              await  data[agoraActivity].as$object.add(namedNode(userMedia))
-            }
-
-          }
-          break;
-          default:
-          console.log(r.message.type , "non traite")
         }
-      })
-
-      await data[app.storage+"public/spoggy/tags.ttl"].rdfs$label.add("Tags")
-      tags.forEach(async function(t){
-        var taguri = app.storage+"public/spoggy/tags.ttl#"+t.trim();
-        await  data[userActivity].as$tag.add(namedNode(taguri))
-        //    console.log(taguri+ " -- >created")
-      })
-
-      this.responses = []
-      //  this.updatePod(data)
-
-    }
-
-
-
-    sendFile(uri, file, contentType){
-      this.fileClient.createFile(uri, file, contentType)
-      .then(
-        success =>{
-          console.log(success)
-          //  this.agent.send("Messages", {action: "info", status: "Save file OK", file: success})
-        },
-        err => {
-          console.log(err)
-        });
+        break;
+        default:
+        console.log(r.message.type , "non traite")
       }
+    })
 
+    await data[app.storage+"public/spoggy/tags.ttl"].rdfs$label.add("Tags")
+    tags.forEach(async function(t){
+      var taguri = app.storage+"public/spoggy/tags.ttl#"+t.trim();
+      await  data[userActivity].as$tag.add(namedNode(taguri))
+      //    console.log(taguri+ " -- >created")
+    })
+
+    this.responses = []
+    //  this.updatePod(data)
+
+  }
+
+
+
+  sendFile(uri, file, contentType){
+    this.fileClient.createFile(uri, file, contentType)
+    .then(
+      success =>{
+        console.log(success)
+        //  this.agent.send("Messages", {action: "info", status: "Save file OK", file: success})
+      },
+      err => {
+        console.log(err)
+      });
     }
 
-    customElements.define('post-tabs-element', PostTabsElement);
+  }
+
+  customElements.define('post-tabs-element', PostTabsElement);

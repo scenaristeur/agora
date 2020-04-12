@@ -172,6 +172,7 @@ class ConfigElement extends LitElement {
       this.log = "Checking Liked"
       let liked = await data[this.config.instance].as$liked
       this.config.liked = `${liked}`
+      this.log = "Cool, your configuration seems OK"
     }
   }
 
