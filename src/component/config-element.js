@@ -172,8 +172,21 @@ class ConfigElement extends LitElement {
   }
   console.log("CONFIG",this.config)
   this.requestUpdate()
-
+  await this.getFriends()
   this.agent.send("PostTabs", {action: "configChanged", config: this.config})
+}
+
+async getFriends(){
+  this.config.friends = []
+  for await (const friend of data[this.config.webId].friends){
+    console.log("FRIEND",`${friend}`)
+    let f = {}
+    let name = await data[`${friend}`].vcard$fn || `${friend}`.split("/")[2].split('.')[0];
+    f.name = `${name}`
+
+    f.webId = `${friend}`
+    this.config.friends = [... this.config.friends, f]
+  }
 }
 
 async openConfigBox(){

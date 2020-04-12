@@ -29,7 +29,8 @@ class PostTabsElement extends LitElement {
       agoraNotesListUrl: { type: String},
       webId: {type: String},
       info: {type: String},
-      replyTo: {type: String}
+      replyTo: {type: Object},
+      friends: {type: Array}
     };
   }
 
@@ -41,8 +42,8 @@ class PostTabsElement extends LitElement {
     this.requetes = {}
     this.responses = []
     this.info = ""
-    this.replyTo = null
-
+    this.replyTo = {}
+    this.friends = []
     //  this.agoraNotesListUrl = "https://agora.solid.community/public/notes.ttl"
   }
 
@@ -93,14 +94,17 @@ class PostTabsElement extends LitElement {
     </style>
     <div class="container">
     <div class="row">
-    ${this.replyTo != null ?
+    replyTo url  ${this.replyTo.url}
+    replyTo attributedTo  ${this.replyTo.attributedTo} </br>
+    replyTo name  ${this.replyTo.name} </br>
+    ${this.replyTo.url != null ?
       html `
       <label class="sr-only" for="title">Reply to</label>
       <div class="input-group mb-2">
       <div class="input-group-append">
       <div class="input-group-text">Reply to</div>
       </div>
-      <input id="reply" class="form-control" type="text" value="${this.replyTo}" style="text-align:right;"  placeholder="ReplyTo">
+      <input id="reply" class="form-control" type="text" value="${this.replyTo.url}" style="text-align:right;"  placeholder="ReplyTo">
       </div>
       `
       :html``
@@ -153,6 +157,14 @@ class PostTabsElement extends LitElement {
     </div>
     </div>
 
+
+    <div class="row">
+    ${this.friends.map(f =>
+      html `
+      ${f.name}, ${f.webId}</br>
+      `
+    )}
+    </div>
 
 
     <div class="buttons">
@@ -262,10 +274,22 @@ class PostTabsElement extends LitElement {
 
   configChanged(config){
     this.config = config
+    this.friends = config.friends || []
   }
 
-  setReplyTo(message){
-    message.replyTo != undefined? this.replyTo = message.replyTo : this.replyTo = null
+  async setReplyTo(message){
+    if (message.replyTo != undefined){
+      this.replyTo ={}
+      this.replyTo.url  = message.replyTo
+      let attributedTo = await data[this.replyTo.url].as$attributedTo
+      let name = await data[`${attributedTo}`].vcard$fn || `${friend}`.split("/")[2].split('.')[0];
+      this.replyTo.attributedTo = `${attributedTo}`
+      this.replyTo.name = `${name}`
+      console.log(this.replyTo)
+      this.requestUpdate()
+    }else{
+      this.replyTo = {}
+    }
   }
 
   webIdChanged(webId){
@@ -289,7 +313,7 @@ class PostTabsElement extends LitElement {
 
   async preparePost(){
     var app = this
-      console.log("CONFIG",this.config)
+    console.log("CONFIG",this.config)
     console.log("OUTBOX", this.config.outbox)
     console.log(this.responses)
     var title = this.shadowRoot.getElementById('title').value.trim();
