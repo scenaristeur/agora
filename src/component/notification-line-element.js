@@ -43,8 +43,8 @@ class NotificationLineElement extends LitElement {
 
     <div class="row">
     <div class="col-3">
-    <a  class="btn btn-outline-primary" href="${this.notification.attributedTo}" target="_blank">
-    ${this.notification.creatorName}</a>
+    <button  class="btn btn-outline-primary" webId="${this.notification.attributedTo}" @click="${this.showProfile}" >
+    ${this.notification.creatorName}</button>
     </div>
 
     <div class="col">
@@ -59,10 +59,19 @@ class NotificationLineElement extends LitElement {
     `;
   }
 
+
+  showProfile(e){
+    let webId = e.target.getAttribute("webId")
+    console.log(webId)
+    this.agent.send("App", {action: "pageChanged", page: "Profile"})
+    this.agent.send("Profile", {action: "profileChanged", webId: webId})
+
+  }
+
   firstUpdated(){
     var app = this;
     this.agent = new HelloAgent(this.name);
-  //  console.log(this.agent)
+    //  console.log(this.agent)
     this.agent.receive = function(from, message) {
       //  console.log("messah",message)
       if (message.hasOwnProperty("action")){
@@ -87,7 +96,7 @@ class NotificationLineElement extends LitElement {
     let link = await data[this.notification.url].as$link
     this.notification.link = `${link}`
     this.notification.creatorName = await data[this.notification.attributedTo].vcard$fn || `${this.notification.attributedTo}`.split("/")[2].split('.')[0];
-  //  console.log(this.notification)
+    //  console.log(this.notification)
     this.requestUpdate()
   }
 

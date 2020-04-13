@@ -183,7 +183,8 @@ class ConfigElement extends LitElement {
   console.log("CONFIG",this.config)
   this.requestUpdate()
   await this.getFriends()
-  this.agent.send("PostTabs", {action: "configChanged", config: this.config})
+  this.agent.sendMulti(["PostTabs", "Profile"], {action: "configChanged", config: this.config})
+
 }
 
 async getFriends(){
@@ -241,20 +242,17 @@ async createFolders(){
     acl:accessTo <./>;
     acl:agentClass acl:AuthenticatedAgent;
     acl:default <./>;
-    acl:defaultForNew <./>;
     acl:mode acl:Append.
     :ControlReadWrite
     a acl:Authorization;
     acl:accessTo <./>;
     acl:agent c:me;
     acl:default <./>;
-    acl:defaultForNew <./>;
     acl:mode acl:Control, acl:Read, acl:Write.
     :Read
     a acl:Authorization;
     acl:accessTo <./>;
     acl:default <./>;
-    acl:defaultForNew <./>;
     acl:mode acl:Read.`
 
     let file = inbox+".acl"

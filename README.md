@@ -1,8 +1,8 @@
 # agora
 
 # todo
-[ ] remove pod-helper & review post,post-tabs... 
-
+[ ]  review post,post-tabs...
+[ ] https://mstdn.fr/web/accounts/146921, https://joinmastodon.org/ , https://fr.mstdn.wiki/Accueil
 
 
 # publish to gh

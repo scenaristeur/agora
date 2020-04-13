@@ -8,15 +8,17 @@ import './post-panel-element.js'
 import './inbox-element.js'
 import './outbox-element.js'
 import './info-element.js'
-import  './fab-element.js';
-import  './post-element.js';
+import './fab-element.js';
+import './post-element.js';
+import './profile-element.js'
 
 class AppElement extends LitElement {
 
   static get properties() {
     return {
       name: {type: String},
-      agoraPod: {type: String}
+      agoraPod: {type: String},
+      page: {type: String}
     };
   }
 
@@ -24,6 +26,7 @@ class AppElement extends LitElement {
     super();
     this.name = "world"
     this.agoraPod = "https://agora.solid.community/profile/card#me"
+    this.page = ""
   }
 
   render(){
@@ -37,7 +40,8 @@ class AppElement extends LitElement {
     <login-element name="Login">Loading Login</login-element>
 
     <br>
-  <post-element name="Post"></post-element>
+    <profile-element name="Profile" ?hidden="${this.page != 'Profile'}">Loading Profile...</profile-element>
+    <post-element name="Post"></post-element>
     <agora-inbox-element name="AgoraInbox" agoraPod="${this.agoraPod}">Loading Agora Inbox</agora-inbox-element>
 
     <!--    <post-panel-element name="PostPanel">Loading Post Panel</post-panel-element>-->
@@ -60,8 +64,8 @@ class AppElement extends LitElement {
       if (message.hasOwnProperty("action")){
         //  console.log(message)
         switch(message.action) {
-          case "webIdChanged":
-          app.webIdChanged(message.webId)
+          case "pageChanged":
+          app.pageChanged(message.page)
           break;
           default:
           console.log("Unknown action ",message)
@@ -69,6 +73,11 @@ class AppElement extends LitElement {
       }
     };
     //  this.init()
+  }
+
+  pageChanged(page){
+    console.log(page)
+    this.page = page
   }
 
   async init(){
