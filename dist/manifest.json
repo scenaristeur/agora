@@ -1,7 +1,7 @@
 {
-  "name": "Agora",
-  "short_name": "Agora",
-  "start_url": "/",
+  "name": "Agora1",
+  "short_name": "Agora1",
+  "start_url": "./",
   "background_color": "#B0BEC5",
   "theme_color": "#37474F",
   "description": "Agora !",
@@ -9,7 +9,7 @@
   "orientation": "portrait-primary",
   "share_target":
   {
-    "action": "share.html",
+    "action": "https://scenaristeur.github.io/agora/share.html",
     "params":
     {
       "title": "name",
