@@ -27,6 +27,8 @@ class ObjectElement extends LitElement {
     Name : ${this.object.name}<br>
     Content: ${this.object.content}<br>
     <button class="btn btn-outline-primary"  @click="${this.replyTo}">Reply</button>
+    <br>
+    <button class="btn btn-outline-primary"><i class="fas fa-share-alt" @click="${this.share}"></i></button>
     </div>
     `;
   }
@@ -77,6 +79,47 @@ class ObjectElement extends LitElement {
     var ln = str.substring(str.lastIndexOf('#')+1);
     ln == str ? ln = str.substring(str.lastIndexOf('/')+1) : "";
     return ln
+  }
+
+
+  share(){
+    console.log("share")
+    if (navigator.share) {
+      alert("share")
+      navigator.share({
+        title: this.object.name,
+        text: this.object.content,
+        url: 'https://scenaristeur.github.io/agora?object='+this.url,
+      })
+      .then(() => console.log('Successful share'))
+      .catch((error) => console.log('Error sharing', error));
+    }else{
+      alert("not share")
+      var to = '';
+      var sub = "Agora : "+this.object.name;
+      var body = 'I want to share this link with you :   \n https://scenaristeur.github.io/agora?object='+this.url+'  \n \n '+this.object.content+' \n \n';
+
+      var mailarr = [];
+
+      if(sub!=""){
+        sub = "subject="+encodeURIComponent(sub);
+        mailarr.push(sub);
+      }
+      if(body!=""){
+        body = "body="+encodeURIComponent(body);
+        mailarr.push(body);
+      }
+
+      var mailstr = mailarr.join("&");
+      if(mailstr!="") { mailstr = "?"+mailstr; }
+
+      window.open("mailto:"+to+mailstr);
+
+
+
+
+
+    }
   }
 
 }
