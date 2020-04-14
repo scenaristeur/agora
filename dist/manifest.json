@@ -1,7 +1,7 @@
 {
   "name": "Agora",
   "short_name": "Agora",
-  "start_url": "./",
+  "start_url": "/",
   "background_color": "#B0BEC5",
   "theme_color": "#37474F",
   "description": "Agora !",
