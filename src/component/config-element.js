@@ -255,6 +255,8 @@ async createFolders(){
     acl:default <./>;
     acl:mode acl:Read.`
 
+
+
     let file = inbox+".acl"
     await fc.createFile (file, aclInboxContent, "text/turtle") .then (success => {
       this.log = "Created "+file
