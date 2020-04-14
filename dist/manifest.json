@@ -10,7 +10,7 @@
   "orientation": "portrait-primary",
   "share_target":
   {
-    "action": "/share",
+    "action": "/share/index.html",
     "method": "GET",
     "params":
     {

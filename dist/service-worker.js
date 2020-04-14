@@ -1,8 +1,11 @@
-self.addEventListener('fetch', function(event) {});
-window.addEventListener('DOMContentLoaded', () => {
-  const parsedUrl = new URL(window.location);
-  // searchParams.get() will properly handle decoding the values.
-  console.log('Title shared: ' + parsedUrl.searchParams.get('title'));
-  console.log('Text shared: ' + parsedUrl.searchParams.get('text'));
-  console.log('URL shared: ' + parsedUrl.searchParams.get('url'));
+self.addEventListener('fetch', event => {
+  event.respondWith((async () => {
+    // Get content from the network.
+    try {
+      return await fetch(event.request);
+    } catch (e) {
+      // Failure. Just return a 200 page, to satisfy Lighthouse.
+      return new Response('You are offline :(', {status: 200});
+    }
+  })());
 });

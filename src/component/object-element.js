@@ -27,7 +27,6 @@ class ObjectElement extends LitElement {
     Name : ${this.object.name}<br>
     Content: ${this.object.content}<br>
     <button class="btn btn-outline-primary"  @click="${this.replyTo}">Reply</button>
-    <br>
     <button class="btn btn-outline-primary"><i class="fas fa-share-alt" @click="${this.share}"></i></button>
     </div>
     `;
