@@ -25,7 +25,16 @@
 
 <script>
 //https://stackoverflow.com/questions/31512504/html5-notification-not-working-in-mobile-chrome
-navigator.serviceWorker.register('sw.js');
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(function(reg){
+        console.log("Service worker registered.");
+     }).catch(function(err) {
+        console.log("Service worker not registered. This happened:", err)
+    });
+ }
+
 </script>
 <!--
   <script src="./vendor/rdf-easy.bundle.js"></script>

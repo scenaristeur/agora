@@ -7,13 +7,23 @@
   "description": "Agora !",
   "display": "fullscreen",
   "orientation": "portrait-primary",
+  "share_target":
+ {
+   "action": "/share",
+   "params":
+   {
+     "title": "Agora",
+     "text": "text",
+     "url": "url"
+   }
+ },
   "related_applications": [{
     "platform": "web",
     "url": "https://scenaristeur.github.io/agora/"
     }],
     "icons": [
       {
-        "src": "favicon.png",
+        "src": "favicon.ico",
         "sizes": "192x192",
         "type": "image/png"
       }

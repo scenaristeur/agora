@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>PubAgora</title>
+  <link rel="manifest" href="/manifest.json">
+  <link href="css/fontawesome/css/all.css" rel="stylesheet">
+
+</head>
+<div id="title"></div>
+<div id="text"></div>
+<div id="url"></div>
+
+<body>
+
+  Share page
+
+</body>
+<script>
+  var parsedUrl = new URL(window.location.toString());
+  let name = parsedUrl.searchParams.get('name')
+  let description = parsedUrl.searchParams.get('description')
+  let link =  parsedUrl.searchParams.get('link')
+  console.log('Title shared: ' + name);
+  console.log('Text shared: ' + description);
+  console.log('URL shared: ' + link);
+  document.getElementById("title").innerHTML = name
+  document.getElementById("text").innerHTML = description
+  document.getElementById("url").innerHTML = link
+</script>
+
+</html>
