@@ -1,22 +1,24 @@
 {
   "name": "Agora",
   "short_name": "Agora",
-  "start_url": "./",
-  "background_color": "aliceblue",
-  "theme_color": "aliceblue",
+  "start_url": "/",
+   "scope": "/",
+  "background_color": "#B0BEC5",
+  "theme_color": "#37474F",
   "description": "Agora !",
   "display": "fullscreen",
   "orientation": "portrait-primary",
   "share_target":
- {
-   "action": "/share",
-   "params":
-   {
-     "title": "Agora",
-     "text": "text",
-     "url": "url"
-   }
- },
+  {
+    "action": "/share",
+    "method": "GET",
+    "params":
+    {
+      "title": "Agora",
+      "text": "text cool",
+      "url": "url cool"
+    }
+  },
   "related_applications": [{
     "platform": "web",
     "url": "https://scenaristeur.github.io/agora/"
@@ -24,7 +26,22 @@
     "icons": [
       {
         "src": "favicon.ico",
+        "sizes": "16x16",
+        "type": "image/png"
+      },
+      {
+        "src": "favicon.ico",
+        "sizes": "32x32",
+        "type": "image/png"
+      },
+      {
+        "src": "favicon.ico",
         "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "favicon.ico",
+        "sizes": "512x512",
         "type": "image/png"
       }
     ],

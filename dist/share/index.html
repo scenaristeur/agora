@@ -9,9 +9,9 @@
   <link href="../css/fontawesome/css/all.css" rel="stylesheet">
 
 </head>
-<div id="title"></div>
-<div id="text"></div>
-<div id="url"></div>
+title :<div id="title"></div>
+text: <div id="text"></div>
+url: <div id="url"></div>
 
 <body>
 
@@ -20,15 +20,15 @@
 </body>
 <script>
   var parsedUrl = new URL(window.location.toString());
-  let name = parsedUrl.searchParams.get('name')
-  let description = parsedUrl.searchParams.get('description')
-  let link =  parsedUrl.searchParams.get('link')
-  console.log('Title shared: ' + name);
-  console.log('Text shared: ' + description);
-  console.log('URL shared: ' + link);
-  document.getElementById("title").innerHTML = name
-  document.getElementById("text").innerHTML = description
-  document.getElementById("url").innerHTML = link
+  let title = parsedUrl.searchParams.get('title')
+  let text = parsedUrl.searchParams.get('text')
+  let url =  parsedUrl.searchParams.get('url')
+  console.log('Title shared: ' + title);
+  console.log('Text shared: ' + text);
+  console.log('URL shared: ' + url);
+  document.getElementById("title").innerHTML = title
+  document.getElementById("text").innerHTML = text
+  document.getElementById("url").innerHTML = url
 </script>
 
 </html>

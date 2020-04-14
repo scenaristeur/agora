@@ -7,3 +7,10 @@
 
 # publish to gh
  git subtree push --prefix dist origin gh-pages
+
+
+# web share
+ https://web.dev/web-share/
+
+# receive-share
+ https://web.dev/web-share-target/

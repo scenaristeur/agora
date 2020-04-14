@@ -83,18 +83,15 @@ class ObjectElement extends LitElement {
 
 
   share(){
-    console.log("share")
     if (navigator.share) {
-      alert("share")
       navigator.share({
-        title: this.object.name,
-        text: this.object.content,
-        url: 'https://scenaristeur.github.io/agora?object='+this.url,
+        title: "Take a look at that Agora Spog : "+this.object.name+"\n\n",
+        text: this.object.content+"\n\n",
+        url: 'https://scenaristeur.github.io/agora?object='+this.url+'\n\n',
       })
       .then(() => console.log('Successful share'))
       .catch((error) => console.log('Error sharing', error));
     }else{
-      alert("not share")
       var to = '';
       var sub = "Agora : "+this.object.name;
       var body = 'I want to share this link with you :   \n https://scenaristeur.github.io/agora?object='+this.url+'  \n \n '+this.object.content+' \n \n';
