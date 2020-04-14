@@ -19,16 +19,19 @@ url: <div id="url"></div>
 
 </body>
 <script>
+function onLoad(){
   var parsedUrl = new URL(window.location.toString());
-  let title = parsedUrl.searchParams.get('title')
-  let text = parsedUrl.searchParams.get('text')
-  let url =  parsedUrl.searchParams.get('url')
+  let title = parsedUrl.searchParams.get('name')
+  let text = parsedUrl.searchParams.get('description')
+  let url =  parsedUrl.searchParams.get('link')
   console.log('Title shared: ' + title);
   console.log('Text shared: ' + text);
   console.log('URL shared: ' + url);
   document.getElementById("title").innerHTML = title
   document.getElementById("text").innerHTML = text
   document.getElementById("url").innerHTML = url
+}
+window.addEventListener('load', onLoad);
 </script>
 
 </html>

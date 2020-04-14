@@ -10,12 +10,11 @@
   "share_target":
   {
     "action": "share.html",
-    "method": "GET",
     "params":
     {
-      "title": "Agora",
-      "text": "text cool",
-      "url": "url cool"
+      "title": "name",
+      "text": "description",
+      "url": "link"
     }
   },
   "related_applications": [{
