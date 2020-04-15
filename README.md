@@ -15,6 +15,8 @@ https://github.com/GoogleChrome/samples
 
 https://github.com/GoogleChrome/samples/tree/gh-pages/web-share
 
+https://bugzilla.mozilla.org/buglist.cgi?quicksearch=web+share+target
+
 # web share
  https://web.dev/web-share/
 

@@ -38,7 +38,8 @@ class AppElement extends LitElement {
     <div class="container">
 
     <login-element name="Login">Loading Login</login-element>
-
+<br>
+<a href="sharetarget.html">share target</a>
     <br>
     <profile-element name="Profile" ?hidden="${this.page != 'Profile'}">Loading Profile...</profile-element>
     <post-element name="Post"></post-element>

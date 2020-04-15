@@ -1,0 +1,90 @@
+<!-- This work is licensed under the W3C Software and Document License
+     (http://www.w3.org/Consortium/Legal/2015/copyright-software-and-document).
+  -->
+<html lang="en">
+<head>
+  <link rel="manifest" href="manifest.json">
+  <title>Web Share Target Test App</title>
+  <link rel="shortcut icon" type="image/png" href="images/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#111111" />
+  <style>
+    .error {
+      color: #d22;
+    }
+  </style>
+</head>
+<body>
+  <h1>Web Share Target Test App</h1>
+  <div id="output"></div>
+  <p>This is a test app for the <a href="https://github.com/WICG/web-share-target">Web
+  Share Target API</a>. It will only work in browsers that have implemented the
+  draft proposal. At the time of writing, this works with:</p>
+  <ul>
+    <li>Google Chrome for Chrome OS, Windows, or Linux, with
+      chrome://flags#enable-experimental-web-platform-features enabled.
+      <ul>
+        <li>To "register" this app with Google Chrome, click the Chrome menu
+          &rarr; More tools &rarr; Add to desktop/shelf (you can cancel the
+          dialog; this just forces the manifest to download). Then it should
+          show up as a target when using <a href="https://github.com/WICG/web-share">Web
+          Share</a> (<a href="https://wicg.github.io/web-share/demos/share.html">demo
+          site</a>).
+        </li>
+      </ul>
+    </li>
+    <li>Google <a
+        href="https://play.google.com/store/apps/details?id=com.chrome.dev">Chrome
+        Dev</a> or <a
+      href="https://play.google.com/store/apps/details?id=com.chrome.canary">Chrome
+      Canary</a> for Android.
+      <ul>
+        <li>To "register" this app with the Android OS, click the Chrome menu
+          &rarr; Add to home screen. Then it should show up as a target when
+          sharing from any other Android app (including Web Share).
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <script>
+    'use strict';
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(registration => {
+        console.log('ServiceWorker registration successful with scope:',
+                    registration.scope);
+      }).catch(err => {
+        console.error('ServiceWorker registration failed:', err);
+      });
+    }
+
+    function logText(message, isError) {
+      if (isError)
+        console.error(message);
+      else
+        console.log(message);
+      var p = document.createElement('p');
+      if (isError)
+        p.setAttribute('class', 'error');
+      document.querySelector('#output').appendChild(p);
+      p.appendChild(document.createTextNode(message));
+    }
+
+    function onLoad() {
+      var parsedUrl = new URL(window.location.toString());
+      logText("Title shared: " + parsedUrl.searchParams.get("title"));
+      logText("Text shared: " + parsedUrl.searchParams.get("text"));
+      logText("URL shared: " + parsedUrl.searchParams.get("url"));
+      // We still have the old "url_template" member in the manifest, which is
+      // how WST was previously specced and implemented in Chrome. If the user
+      // agent uses that method, the "oldapi" parameter will be set.
+      if (parsedUrl.searchParams.get("oldapi")) {
+        logText("Your browser is using the deprecated 'url_template' Web Share "
+                + "Target API.", true);
+      }
+    }
+
+    window.addEventListener('load', onLoad);
+  </script>
+</body>
+</html>
