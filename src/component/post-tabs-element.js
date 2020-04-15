@@ -523,6 +523,9 @@ class PostTabsElement extends LitElement {
     let notification_Id = uuidv4();
     let pti = await data[to].publicTypeIndex
     console.log(pti)
+
+    let instanceTrouvee = false
+
     for await (const subject of data[pti].subjects){
       let s = `${subject}`
       console.log(s)
@@ -530,6 +533,7 @@ class PostTabsElement extends LitElement {
 
         console.log(s)
         if (`${subject}`.endsWith('#Shighl')){
+          instanceTrouvee = true
           console.log(s)
           let instance  = await data[`${subject}`].solid$instance
           let ib = await data[`${instance}`].as$inbox
@@ -548,6 +552,8 @@ class PostTabsElement extends LitElement {
         }
       }
     }
+
+    instanceTrouvee == false ? alert("No Shighl Instance found in "+to+" Public Type Index ") : "";
   });
 
 }
