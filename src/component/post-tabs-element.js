@@ -102,7 +102,7 @@ class PostTabsElement extends LitElement {
       replyTo attributedTo  ${this.replyTo.attributedTo} <br>
       replyTo name  ${this.replyTo.name} <br>
 
-      <label class="sr-only" for="title">Reply to</label>
+      <label class="sr-only" for="reply">Reply to</label>
       <div class="input-group mb-2">
       <div class="input-group-append">
       <div class="input-group-text">Reply to</div>

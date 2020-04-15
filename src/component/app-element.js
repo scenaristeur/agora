@@ -1,115 +1,101 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
-import './agora-inbox-element.js'
+
 import './login-element.js'
-import './friends-element.js'
-import './config-element.js'
-import './post-panel-element.js'
-import './inbox-element.js'
-import './outbox-element.js'
-import './info-element.js'
-import './fab-element.js';
-import './post-element.js';
-import './profile-element.js'
 
 class AppElement extends LitElement {
 
   static get properties() {
     return {
       name: {type: String},
-      agoraPod: {type: String},
-      page: {type: String}
+      share: {type: String}
     };
   }
 
   constructor() {
     super();
-    this.name = "world"
-    this.agoraPod = "https://agora.solid.community/profile/card#me"
-    this.page = ""
+    this.name = "App"
+    this.share = {}
+    this.onLoad()
   }
 
   render(){
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
-    <info-element name="Info">Loading Login</info-element>
+    <div class="container fluid">
 
-    <div class="container">
+    <login-element name="Login">Loading</login-element>
+    ${this.share.show == true ? html`
+      Title : ${this.share.title}<br>
+      Text : ${this.share.text}<br>
+      Url : ${this.share.url}<br>
 
-    <login-element name="Login">Loading Login</login-element>
-<br>
-<a href="sharetarget.html">share target</a>
-    <br>
-    <profile-element name="Profile" ?hidden="${this.page != 'Profile'}">Loading Profile...</profile-element>
-    <post-element name="Post"></post-element>
-    <agora-inbox-element name="AgoraInbox" agoraPod="${this.agoraPod}">Loading Agora Inbox</agora-inbox-element>
+      <label class="sr-only" for="title">Title</label>
+      <div class="input-group mb-2">
 
-    <!--    <post-panel-element name="PostPanel">Loading Post Panel</post-panel-element>-->
-    <!--<inbox-element name="Inbox">Loading Inbox</inbox-element>
-    <outbox-element name="Outbox">Loading Outbox</outbox-element>-->
-    <config-element name="Config">Loading Config...</config-element>
+      <input id="title" class="form-control" type="text" value="${this.share.title}" placeholder="Title">
 
-    <fab-element name="Fab"></fab-element>
+      </div>
 
-  <!--  <button class="btn btn-primary" @click="${this.install}">Install</button> -->
+      <textarea class="form-control"
+       id="notearea"
+        style="width:100%;height:38vh"
+         placeholder="Write a note on your Pod & share it on Agora">
+Text : ${this.share.text}
 
-    </div>
-    `;
-  }
+Url : ${this.share.url}
+</textarea>
 
-/*
-install(){
-//  buttonInstall.addEventListener('click', (e) => {
-  // Hide the app provided install promotion
-  hideMyInstallPromotion();
-  // Show the install prompt
-  deferredPrompt.prompt();
-  // Wait for the user to respond to the prompt
-  deferredPrompt.userChoice.then((choiceResult) => {
-    if (choiceResult.outcome === 'accepted') {
-      console.log('User accepted the install prompt');
-    } else {
-      console.log('User dismissed the install prompt');
+
+      `
+      :html`
+      no share
+      `}
+      </div>
+      `;
     }
-  })
-//});
-}*/
 
-
-  firstUpdated(){
-    var app = this;
-    this.agent = new HelloAgent(this.name);
-    console.log(this.agent)
-    this.agent.receive = function(from, message) {
-      //  console.log("messah",message)
-      if (message.hasOwnProperty("action")){
-        //  console.log(message)
-        switch(message.action) {
-          case "pageChanged":
-          app.pageChanged(message.page)
-          break;
-          default:
-          console.log("Unknown action ",message)
+    firstUpdated(){
+      var app = this;
+      this.agent = new HelloAgent(this.name);
+      console.log(this.agent)
+      this.agent.receive = function(from, message) {
+        //  console.log("messah",message)
+        if (message.hasOwnProperty("action")){
+          //  console.log(message)
+          switch(message.action) {
+            case "webIdChanged":
+            app.webIdChanged(message.webId)
+            break;
+            default:
+            console.log("Unknown action ",message)
+          }
         }
-      }
-    };
-    //  this.init()
-  }
+      };
 
-  pageChanged(page){
-    console.log(page)
-    this.page = page
-  }
-
-  async init(){
-    console.log(this.agoraPod)
-    const rdf = new RDFeasy(auth)
-    console.log(rdf)
-    let nom =   await rdf.value(this.agoraPod,`
-      SELECT ?name WHERE { <> vcard:fn ?name. }`)
-      console.log("TEST accès POD, NOM :",nom)
     }
+
+    onLoad() {
+      var parsedUrl = new URL(window.location.toString());
+      console.log(parsedUrl)
+      this.share.title = parsedUrl.searchParams.get("title") || ""
+      this.share.text = parsedUrl.searchParams.get("text") || ""
+      this.share.url = parsedUrl.searchParams.get("url") || ""
+      this.share.title.length + this.share.text.length + this.share.url.length > 0 ? this.share.show = true : this.share.length = false;
+      console.log(this.share)
+      /*  logText("Title shared: " + parsedUrl.searchParams.get("title"));
+      logText("Text shared: " + parsedUrl.searchParams.get("text"));
+      logText("URL shared: " + parsedUrl.searchParams.get("url"));*/
+      // We still have the old "url_template" member in the manifest, which is
+      // how WST was previously specced and implemented in Chrome. If the user
+      // agent uses that method, the "oldapi" parameter will be set.
+      if (parsedUrl.searchParams.get("oldapi")) {
+        alert("Your browser is using the deprecated 'url_template' Web Share "
+        + "Target API.");
+      }
+    }
+
 
   }
 
