@@ -9,6 +9,12 @@
  git subtree push --prefix dist origin gh-pages
 
 
+# WEB APIS EXAMPLES
+# pwa-share
+https://github.com/GoogleChrome/samples
+
+https://github.com/GoogleChrome/samples/tree/gh-pages/web-share
+
 # web share
  https://web.dev/web-share/
 

@@ -66,7 +66,7 @@ class ProfileElement extends LitElement {
         <button class="brn btn-primary" @click="${this.edit}">Edit My Profile (WIP)</button>
         `}
         `
-        :html`<login-element name="Login1">Login</login-element>`
+        :html``
       }
 
       </div>

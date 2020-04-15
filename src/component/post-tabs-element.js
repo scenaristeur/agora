@@ -522,40 +522,33 @@ class PostTabsElement extends LitElement {
     // recipient notification
     let notification_Id = uuidv4();
     let pti = await data[to].publicTypeIndex
+    console.log(pti)
     for await (const subject of data[pti].subjects){
-      if(pti != `${subject}`)
-      /*let s = `${subject}`
-      console.log(s)*/
-      if (`${subject}`.endsWith('#Shighl')){
-        let instance  = await data[`${subject}`].solid$instance
-        let ib = await data[`${instance}`].as$inbox
-        let recip_inbox = `${ib}`
-        let notification_uri = recip_inbox+notification_Id+".ttl#this"
+      let s = `${subject}`
+      console.log(s)
+      if(pti != `${subject}`){
 
-        console.log(notification_uri)
+        console.log(s)
+        if (`${subject}`.endsWith('#Shighl')){
+          console.log(s)
+          let instance  = await data[`${subject}`].solid$instance
+          let ib = await data[`${instance}`].as$inbox
+          let recip_inbox = `${ib}`
+          let notification_uri = recip_inbox+notification_Id+".ttl#this"
 
-        await data[notification_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
-        await data[notification_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
-        await data[notification_uri]['https://www.w3.org/ns/activitystreams#summary'].add(title)
-        await data[notification_uri].rdfs$label.add(title)
-        await data[notification_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
-        await data[notification_uri]['https://www.w3.org/ns/activitystreams#link'].add(namedNode(activity_uri))
+          console.log(notification_uri)
 
+          await data[notification_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
+          await data[notification_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
+          await data[notification_uri]['https://www.w3.org/ns/activitystreams#summary'].add(title)
+          await data[notification_uri].rdfs$label.add(title)
+          await data[notification_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+          await data[notification_uri]['https://www.w3.org/ns/activitystreams#link'].add(namedNode(activity_uri))
 
+        }
       }
     }
-
   });
-
-
-
-
-
-
-
-
-
-
 
 }
 
@@ -575,8 +568,8 @@ async setAcl(o, aclStringWebIds, agora_pub){
   :Read
   a acl:Authorization;
   acl:accessTo <${o.file}>;
-  acl:agent ${aclStringWebIds};
-  ${agora_pub == true ?  "acl:agentClass <http://xmlns.com/foaf/0.1/Agent> ;" : ""}
+  ${aclStringWebIds.length > 0 ?   ` acl:agent ${aclStringWebIds};`  : "" }
+  ${agora_pub == true ?   "acl:agentClass <http://xmlns.com/foaf/0.1/Agent> ;" : ""}
   acl:mode acl:Read.`
 
   console.log(aclString)
