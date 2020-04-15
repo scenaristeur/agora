@@ -1,11 +1,11 @@
 {
-  "name": "Agora Long",
+  "name": "Agora Decentralishare",
   "short_name": "Agora Short",
   "start_url": "index.html",
-  "display": "standalone",
+  "display": "fullscreen",
   "share_target": {
-    "url_template": "sharetarget.html?oldapi=true&title={title}&text={text}&url={url}",
-    "action": "sharetarget.html",
+    "url_template": "index.html?oldapi=true&title={title}&text={text}&url={url}",
+    "action": "index.html",
     "params": {
       "title": "title",
       "text": "text",
@@ -15,25 +15,25 @@
   "icons": [{
     "src": "images/icon-16.png",
     "sizes": "16x16"
-  }, {
-    "src": "images/icon-32.png",
-    "sizes": "32x32"
-  }, {
-    "src": "images/icon-48.png",
-    "sizes": "48x48"
-  }, {
-    "src": "images/icon-128.png",
-    "sizes": "128x128"
-  }, {
-    "src": "images/icon-180.png",
-    "sizes": "180x180"
-  }, {
-    "src": "images/icon-256.png",
-    "sizes": "256x256"
-  }, {
-    "src": "images/icon-512.png",
-    "sizes": "512x512"
-  }],
-  "theme_color": "#111111",
-  "background_color": "#ffffff"
-}
+    }, {
+      "src": "images/icon-32.png",
+      "sizes": "32x32"
+      }, {
+        "src": "images/icon-48.png",
+        "sizes": "48x48"
+        }, {
+          "src": "images/icon-128.png",
+          "sizes": "128x128"
+          }, {
+            "src": "images/icon-180.png",
+            "sizes": "180x180"
+            }, {
+              "src": "images/icon-256.png",
+              "sizes": "256x256"
+              }, {
+                "src": "images/icon-512.png",
+                "sizes": "512x512"
+                }],
+                "theme_color": "#111111",
+                "background_color": "#ffffff"
+              }
