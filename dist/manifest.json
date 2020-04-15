@@ -1,7 +1,7 @@
 {
-  "name": "Web Share Target Test App",
-  "short_name": "Target Test",
-  "start_url": "sharetarget.html",
+  "name": "Agora Long",
+  "short_name": "Agora Short",
+  "start_url": "index.html",
   "display": "standalone",
   "share_target": {
     "url_template": "sharetarget.html?oldapi=true&title={title}&text={text}&url={url}",
