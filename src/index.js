@@ -10,14 +10,8 @@ window.addEventListener('load', () => {
 });
 
 function initRouter() {
-  let router;
-  if (window.location.host == "localhost:9000"){
-    router = new Router(document.querySelector('main'));
-  }else{
-    router = new Router(document.querySelector('main'),{baseUrl: '/agora/'});
-  }
-
-
+  const router = new Router(document.querySelector('main'));
+//,{baseUrl: '/agora/'}
   console.log("ROUTER",router)
   router.setRoutes([
     {
