@@ -34,3 +34,6 @@ https://zeit.co/pricing
 
 # build-utils
 https://github.com/vaadin-learning-center/lit-element-tutorial-starter
+
+# Lit-element pwa redux
+https://vaadin.com/learn/tutorials/lit-element/state-management-with-redux

@@ -37,7 +37,8 @@ const assets = [
   {
     from: 'src/images',
     to: 'images/'
-  }
+  },
+   'src/manifest.json'
 ];
 
 const plugins = [
@@ -52,7 +53,7 @@ const plugins = [
       minifyJS: true
     }
   }),
-  new CopyWebpackPlugin([...polyfills, ...assets, 'src/manifest.json'], {
+  new CopyWebpackPlugin([...polyfills, ...assets], {
     ignore: ['.DS_Store']
   })
 ];
