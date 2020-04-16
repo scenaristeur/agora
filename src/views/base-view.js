@@ -40,4 +40,8 @@ export class BaseView extends LitElement {
   test(message){
     console.log(this.name," received ",message)
   }
+
+  click(e){
+    console.log(e)
+  }
 }

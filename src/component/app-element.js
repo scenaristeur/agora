@@ -30,7 +30,7 @@ class AppElement extends LitElement {
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
-    <div class="containe-fluid">
+    <div class="container-fluid">
     <div class="row">Header</div>
 
     <div class="container">
@@ -44,11 +44,7 @@ class AppElement extends LitElement {
       `
       :html`-`}
 
-
-
-
       <login-element name="Login">Loading</login-element>
-
       </div>
       <div class="col-sm-4 col-md-6">
       <flux-element name="Flux">Loading</flux-element>

@@ -38,7 +38,15 @@ const assets = [
     from: 'src/images',
     to: 'images/'
   },
-   'src/manifest.json'
+  {
+    from: 'src/css',
+    to: 'css/'
+  },
+  {
+    from: 'src/dist-popup',
+    to: 'dist-popup/'
+  },
+  'src/manifest.json'
 ];
 
 const plugins = [
@@ -49,7 +57,7 @@ const plugins = [
     template: './src/index.html',
     minify: {
       collapseWhitespace: true,
-      minifyCSS: true,
+      //  minifyCSS: true,
       minifyJS: true
     }
   }),
