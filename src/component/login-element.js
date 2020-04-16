@@ -23,10 +23,10 @@ class LoginElement extends LitElement {
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     ${this.webId == null ?
       html`
-      <button type="button" class="btn btn-primary" @click=${this.login}>Login</button>
+      <button type="button" class="btn btn-success" @click=${this.login}>Login</button>
       `
       : html`
-      <button type="button" class="btn btn-primary" @click=${this.logout}>Logout</button>
+      <button type="button" class="btn btn-sm btn-outline-danger" @click=${this.logout}>Logout</button>
       `
     }
     `;
@@ -38,11 +38,11 @@ class LoginElement extends LitElement {
     auth.trackSession(async function(session) {
       if (!session){
         app.webId=null
-        app.agent.sendMulti(['Config', 'Fab', 'Post', 'PostTabs', 'Profile'],  {action:"webIdChanged", webId: app.webId});
+        app.agent.sendMulti(['App','Config', 'Fab', 'Post', 'PostTabs', 'Profile'],  {action:"webIdChanged", webId: app.webId});
       }
       else{
         app.webId = session.webId
-        app.agent.sendMulti(['Config', 'Fab', 'Post', 'PostTabs', 'Profile'], {action:"webIdChanged", webId: app.webId});
+        app.agent.sendMulti(['App','Config', 'Fab', 'Post', 'PostTabs', 'Profile'], {action:"webIdChanged", webId: app.webId});
       }
     })
 

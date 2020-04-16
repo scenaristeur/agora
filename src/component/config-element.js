@@ -27,7 +27,7 @@ class ConfigElement extends LitElement {
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
-    <div class="container fluid">
+    <div class="container-fluid">
     <h3>Configuration</h3>
     Configuration Log : ${this.log}<br>
     WebId: ${this.config.webId}<br>

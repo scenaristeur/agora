@@ -24,3 +24,10 @@ https://web.dev/web-share/
 
 # receive-share
 https://web.dev/web-share-target/
+
+# file web-share-target
+https://paul.kinlan.me/fr/file-web-share-target/
+ see manifest & sw
+
+# free hossting
+https://zeit.co/pricing
