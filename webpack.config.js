@@ -63,7 +63,8 @@ module.exports = ({ mode, presets }) => {
     {
       mode,
       output: {
-        filename: '[name].[hash:8].js'
+        filename: '[name].[hash:8].js',
+        publicPath: "/agora/",
       },
       devServer: {
         contentBase: path.join(__dirname, 'dist'),
