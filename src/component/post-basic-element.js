@@ -34,20 +34,13 @@ class PostBasicElement extends LitElement {
     id="content"
     style="width:100%;height:38vh"
     placeholder="Write a note on your Pod & share it on Agora">
-    text:  ${this.share.text}
+${this.share.text}
 
-    url:  ${this.share.url}
+${this.share.url}
     </textarea>
     <button class="btn btn-primary" @click="${this.send}">Spog !</button>
     </div>
     </div>
-
-
-
-
-
-
-
     `;
   }
 

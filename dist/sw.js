@@ -2,6 +2,7 @@
  * (http://www.w3.org/Consortium/Legal/2015/copyright-software-and-document).
  */
 
+
 self.addEventListener('fetch', event => {
   event.respondWith((async () => {
     // Get content from the network.
