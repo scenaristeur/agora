@@ -46,6 +46,7 @@
     "@vaadin/vaadin-radio-button": "^1.3.0-alpha1",
     "@vaadin/vaadin-text-field": "^2.5.5",
     "@webcomponents/webcomponentsjs": "^2.1.3",
+    "evejs": "github:scenaristeur/evejs",
     "lit-element": "^2.3.1",
     "nanoid": "^3.1.3",
     "pwa-helpers": "^0.9.1",

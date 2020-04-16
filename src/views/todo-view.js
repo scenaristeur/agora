@@ -91,8 +91,8 @@ class TodoView extends BaseView {
   </div>
 
 
-  <stats-view>STATS</stats-view>
-  <not-found-view>NFW</not-found-view>
+  <stats-view name="Stats">STATS</stats-view>
+  <not-found-view name="Nfw">NFW</not-found-view>
 
   <vaadin-radio-group
   class="visibility-filters"

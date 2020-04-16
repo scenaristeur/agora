@@ -1,4 +1,5 @@
 import './styles.css';
+import './views/app-view.js';
 import './views/todo-view.js';
 import './views/stats-view.js';
 import './views/not-found-view.js';
@@ -8,12 +9,12 @@ import './views/not-found-view.js';
 import { Router } from '@vaadin/router';
 
 window.addEventListener('load', () => {
-//  initRouter();
+  //  initRouter();
 });
 
 function initRouter() {
   const router = new Router(document.querySelector('main'));
-//,{baseUrl: '/agora/'}
+  //,{baseUrl: '/agora/'}
   console.log("ROUTER",router)
   router.setRoutes([
     {
