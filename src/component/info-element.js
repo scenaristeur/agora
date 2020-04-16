@@ -22,7 +22,7 @@ class InfoElement extends LitElement {
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
 
     <button class="btn btn-primary" ?hidden="${!this.hidden}" @click="${this.toggleHidden}">Help</button>
-    <div class="container fluid" ?hidden="${this.hidden}">
+    <div class="container-fluid" ?hidden="${this.hidden}">
     <button class="btn btn-primary" @click="${this.toggleHidden}">Toggle Help</button>
     Hi, <b>Agora</b> is an POC to use ActivityPub system
     on top of the Solid Platform.<br><br>

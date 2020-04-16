@@ -27,7 +27,7 @@ class AgoraInboxElement extends LitElement {
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
-    <div class="container fluid">
+    <div class="container-fluid">
 
     POD : ${this.agoraPod}<br>
     Notifications : ${this.notifications.length}</br>

@@ -19,7 +19,7 @@ class PostPanelElement extends LitElement {
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
-    <div class="container fluid">
+    <div class="container-fluid">
     Hello <b>${this.name}</b> from app-element
     <post-element name="Post">Loading Post...</post-element>
     </div>
