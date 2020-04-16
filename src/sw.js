@@ -1,5 +1,3 @@
-importScripts("precache-manifest.c0ecd5cbf2a353c2b7c95b66a741bb77.js", "https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
-
 /* This work is licensed under the W3C Software and Document License
  * (http://www.w3.org/Consortium/Legal/2015/copyright-software-and-document).
  */
@@ -15,4 +13,3 @@ self.addEventListener('fetch', event => {
     }
   })());
 });
-

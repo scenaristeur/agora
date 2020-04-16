@@ -1,73 +1,13 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta charset="utf-8">
-  <link rel="manifest" href="manifest.json">
-  <title>Agora Decentralishare B</title>
-  <link rel="shortcut icon" type="image/png" href="images/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-  <meta name="theme-color" content="#111111" />
-  <style>
-  .error {
-    color: #d22;
-  }
-  </style>
-  <link href="css/fontawesome/css/all.css" rel="stylesheet">
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="X-UA-Compatible" content="ie=edge"><link rel="manifest" href="manifest.json"><title>Todo</title><link rel="icon" type="image/png" href="./img/icons/favicon.png"><meta name="theme-color" content="#2A3443"><meta name="description" content="Tutorial app."><!-- iOS --><link rel="apple-touch-icon" href="./img/icons/icon-144x144.png"><meta name="mobile-web-app-capable" content="yes"><meta name="mobile-web-app-status-bar-style" content="black"><meta name="mobile-web-app-title" content="TutorialApp"><script>window.customElements||document.write("\x3c!--")</script><script src="./vendor/custom-elements-es5-adapter.js"></script><!-- ! DO NOT REMOVE THIS COMMENT, WE NEED ITS CLOSING MARKER --><link href="main.css" rel="stylesheet"></head><body><header><h1>Todo app</h1></header><main><todo-view></todo-view></main><script src="./vendor/webcomponents-loader.js"></script><!--  <script>
+    'use strict';
 
-</head>
-<body>
-  <h1>Agora C Decentralishare</h1>
-  <div id="output"></div>
-  <p>This is a test app for the <a href="https://github.com/WICG/web-share-target">Web
-    Share Target API</a>. It will only work in browsers that have implemented the
-    draft proposal. At the time of writing, this works with:</p>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(registration => {
+        console.log('ServiceWorker registration successful with scope:',
+        registration.scope);
+      }).catch(err => {
+        console.error('ServiceWorker registration failed:', err);
+      });
+    }
 
-    <app-element name="App" agoraPod="https://agora.solid.community/profile/card#me">
-      <div style="position:absolute; top:50%; left:50%; margin-top:-100px; margin-left: -64px; width:140px; height:128px; text-align:center">
-        <br> <span style="font-size:9px">L O A D I N G <br> A G O R A</span>
-      </div>
-    </app-element>
-
-    <ul>
-      <li>Google Chrome for Chrome OS, Windows, or Linux, with
-        chrome://flags#enable-experimental-web-platform-features enabled.
-        <ul>
-          <li>To "register" this app with Google Chrome, click the Chrome menu
-            &rarr; More tools &rarr; Add to desktop/shelf (you can cancel the
-            dialog; this just forces the manifest to download). Then it should
-            show up as a target when using <a href="https://github.com/WICG/web-share">Web
-              Share</a> (<a href="https://wicg.github.io/web-share/demos/share.html">demo
-                site</a>).
-              </li>
-            </ul>
-          </li>
-          <li>Google <a
-            href="https://play.google.com/store/apps/details?id=com.chrome.dev">Chrome
-            Dev</a> or <a
-            href="https://play.google.com/store/apps/details?id=com.chrome.canary">Chrome
-            Canary</a> for Android.
-            <ul>
-              <li>To "register" this app with the Android OS, click the Chrome menu
-                &rarr; Add to home screen. Then it should show up as a target when
-                sharing from any other Android app (including Web Share).
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <script>
-        'use strict';
-
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('sw.js').then(registration => {
-            console.log('ServiceWorker registration successful with scope:',
-            registration.scope);
-          }).catch(err => {
-            console.error('ServiceWorker registration failed:', err);
-          });
-        }
-
-        </script>
-      </body>
-      <script src="app-element.js" type="module"></script>
-      </html>
+    </script>--><script type="text/javascript" src="main.d4866251.js"></script></body></html>

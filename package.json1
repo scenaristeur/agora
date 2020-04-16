@@ -1,0 +1,38 @@
+{
+  "name": "agora",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server -d --hot --config webpack.config.js --watch",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scenaristeur/agora.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scenaristeur/agora/issues"
+  },
+  "homepage": "https://github.com/scenaristeur/agora#readme",
+  "devDependencies": {
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "@solid/query-ldflex": "^2.10.0",
+    "evejs": "github:scenaristeur/evejs",
+    "lit-element": "^2.3.1",
+    "rdf-easy": "github:jeff-zucker/rdf-easy",
+    "rdf-namespaces": "^1.8.0",
+    "rdflib": "^1.1.0",
+    "solid-auth-client": "^2.4.1",
+    "solid-file-client": "^1.0.2",
+    "tripledoc": "^4.3.4"
+  }
+}
