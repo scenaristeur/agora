@@ -1,6 +1,6 @@
 /* This work is licensed under the W3C Software and Document License
- * (http://www.w3.org/Consortium/Legal/2015/copyright-software-and-document).
- */
+* (http://www.w3.org/Consortium/Legal/2015/copyright-software-and-document).
+*/
 
 self.addEventListener('fetch', event => {
   event.respondWith((async () => {
@@ -13,3 +13,22 @@ self.addEventListener('fetch', event => {
     }
   })());
 });
+
+onfetch = async (event) => {
+  if (event.request.method !== 'POST') return;
+  //  if (event.request.url.startsWith('https://scenaristeur.github.io/agora/') === false) return;
+
+  /* This is to fix the issue Jake found */
+  event.respondWith(Response.redirect('/'));
+
+  event.waitUntil(async function () {
+    const data = await event.request.formData();
+    const client = await self.clients.get(event.resultingClientId || event.clientId);
+    // Get the data from the named element 'file'
+    const file = data.get('file');
+
+    console.log('file', file);
+    alert('file', file);
+    client.postMessage({ file, action: 'load-image' });
+  }());
+};
