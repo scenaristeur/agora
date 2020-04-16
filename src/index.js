@@ -10,8 +10,15 @@ window.addEventListener('load', () => {
 });
 
 function initRouter() {
-  const router = new Router(document.querySelector('main'));
+  let router;
+  if (window.location == "http://localhost:9000/"){
+    router = new Router(document.querySelector('main'));
+  }else{
+    router = new Router(document.querySelector('main'),{baseUrl: '/agora/'});
+  }
 
+
+  console.log("ROUTER",router)
   router.setRoutes([
     {
       path: '/',
@@ -21,13 +28,13 @@ function initRouter() {
       path: '/stats',
       component: 'stats-view',
       action: () =>
-        import(/* webpackChunkName: "stats" */ './views/stats-view') //
+      import(/* webpackChunkName: "stats" */ './views/stats-view') //
     },
     {
       path: '(.*)',
       component: 'not-found-view',
       action: () =>
-        import(/* webpackChunkName: "not-found-view" */ './views/not-found-view')
+      import(/* webpackChunkName: "not-found-view" */ './views/not-found-view')
     }
   ]);
 }
