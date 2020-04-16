@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpackMerge = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const path = require('path');
 
 const modeConfig = env => require(`./build-utils/webpack.${env.mode}.js`)(env);
 const loadPresets = require('./build-utils/loadPresets');
@@ -61,7 +62,20 @@ module.exports = ({ mode, presets }) => {
     {
       mode,
       output: {
-        filename: '[name].[chunkhash:8].js'
+        filename: '[name].[hash:8].js'
+      },
+      devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        compress: true,
+        port: 9000,
+        historyApiFallback: true,
+        inline: true,
+        open: true,
+        hot: true
+      },
+      devtool: "eval-source-map",
+      performance: {
+        hints: false
       },
       module: {
         rules: [
