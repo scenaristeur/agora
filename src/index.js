@@ -14,17 +14,17 @@ function initRouter() {
 
   router.setRoutes([
     {
-      path: '/agora',
+      path: '/',
       component: 'todo-view'
     },
     {
-      path: '/agora/stats',
+      path: '/stats',
       component: 'stats-view',
       action: () =>
         import(/* webpackChunkName: "stats" */ './views/stats-view') //
     },
     {
-      path: '(/agora/.*)',
+      path: '(.*)',
       component: 'not-found-view',
       action: () =>
         import(/* webpackChunkName: "not-found-view" */ './views/not-found-view')
