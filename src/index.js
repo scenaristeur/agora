@@ -1,12 +1,14 @@
 import './styles.css';
 import './views/todo-view.js';
+import './views/stats-view.js';
+import './views/not-found-view.js';
 
 
 // ROUTER
 import { Router } from '@vaadin/router';
 
 window.addEventListener('load', () => {
-  initRouter();
+//  initRouter();
 });
 
 function initRouter() {
