@@ -1,4 +1,9 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="X-UA-Compatible" content="ie=edge"><!--<base href="/agora">--><link rel="manifest" href="manifest.json"><title>Agora Decentralishare</title><link rel="icon" type="image/png" href="./img/icons/favicon.png"><meta name="theme-color" content="#2A3443"><meta name="description" content="Tutorial app."><!-- iOS --><link rel="apple-touch-icon" href="./img/icons/icon-144x144.png"><meta name="mobile-web-app-capable" content="yes"><meta name="mobile-web-app-status-bar-style" content="black"><meta name="mobile-web-app-title" content="TutorialApp"><script>window.customElements||document.write("\x3c!--")</script><script src="./vendor/custom-elements-es5-adapter.js"></script><!-- ! DO NOT REMOVE THIS COMMENT, WE NEED ITS CLOSING MARKER --><link href="main.css" rel="stylesheet"></head><body><header><h1>Agora Decentralishare D</h1></header><nav><a href="/">Todos</a> <a href="/stats">Stats</a></nav><main><!--    <todo-view></todo-view>--></main><script src="./vendor/webcomponents-loader.js"></script><script>'use strict';
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="X-UA-Compatible" content="ie=edge"><base id="base" href="/"><link rel="manifest" href="manifest.json"><title>Agora Decentralishare</title><link rel="icon" type="image/png" href="./img/icons/favicon.png"><meta name="theme-color" content="#2A3443"><meta name="description" content="Tutorial app."><!-- iOS --><link rel="apple-touch-icon" href="./img/icons/icon-144x144.png"><meta name="mobile-web-app-capable" content="yes"><meta name="mobile-web-app-status-bar-style" content="black"><meta name="mobile-web-app-title" content="TutorialApp"><script>console.log(window.location.host)
+  if (window.location.host != "localhost:9000"){
+    document.getElementById('base').setAttribute('href', 'agora/')
+    let base = document.getElementById('base').getAttribute('href')
+    console.log(base)
+  }</script><script>window.customElements||document.write("\x3c!--")</script><script src="./vendor/custom-elements-es5-adapter.js"></script><!-- ! DO NOT REMOVE THIS COMMENT, WE NEED ITS CLOSING MARKER --><link href="main.css" rel="stylesheet"></head><body><header><h1>Agora Decentralishare E</h1></header><nav><a href="/">Todos</a> <a href="/stats">Stats</a></nav><main><!--    <todo-view></todo-view>--></main><script src="./vendor/webcomponents-loader.js"></script><script>'use strict';
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').then(registration => {
@@ -7,4 +12,4 @@
     }).catch(err => {
       console.error('ServiceWorker registration failed:', err);
     });
-  }</script><script type="text/javascript" src="main.805ac6a1.js"></script></body></html>
+  }</script><script type="text/javascript" src="main.45bd9890.js"></script></body></html>

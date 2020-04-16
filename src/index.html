@@ -6,7 +6,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <!--<base href="/agora">-->
+  <base id="base" href="/">
   <link rel="manifest" href="manifest.json">
   <title>Agora Decentralishare</title>
 
@@ -20,6 +20,14 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-status-bar-style" content="black" />
   <meta name="mobile-web-app-title" content="TutorialApp" />
+  <script>
+console.log(window.location.host)
+  if (window.location.host != "localhost:9000"){
+    document.getElementById('base').setAttribute('href', 'agora/')
+    let base = document.getElementById('base').getAttribute('href')
+    console.log(base)
+  }
+  </script>
 
   <script>
   if (!window.customElements) {
@@ -31,13 +39,13 @@
 </head>
 
 <body>
-  <header><h1>Agora Decentralishare D</h1></header>
+  <header><h1>Agora Decentralishare E</h1></header>
   <nav>
     <a href="/">Todos</a>
     <a href="/stats">Stats</a>
   </nav>
   <main>
-<!--    <todo-view></todo-view>-->
+    <!--    <todo-view></todo-view>-->
   </main>
   <script src="./vendor/webcomponents-loader.js"></script>
   <script>

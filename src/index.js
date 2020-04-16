@@ -11,7 +11,7 @@ window.addEventListener('load', () => {
 
 function initRouter() {
   let router;
-  if (window.location == "http://localhost:9000/"){
+  if (window.location.host == "localhost:9000"){
     router = new Router(document.querySelector('main'));
   }else{
     router = new Router(document.querySelector('main'),{baseUrl: '/agora/'});
