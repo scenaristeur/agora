@@ -6,18 +6,10 @@
   "share_target": {
     "url_template": "index.html?oldapi=true&title={title}&text={text}&url={url}",
     "action": "index.html",
-    "method": "POST",
-  "enctype": "multipart/form-data",
     "params": {
       "title": "title",
       "text": "text",
-      "url": "url",
-      "files": [
-       {
-         "name": "file",
-         "accept": ["image/*"]
-       }
-     ]
+      "url": "url"
     }
   },
   "icons": [{
