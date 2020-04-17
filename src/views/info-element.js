@@ -13,7 +13,7 @@ class InfoElement extends LitElement {
   constructor() {
     super();
     this.name = "Info"
-    this.hidden = false
+    this.hidden = true
   }
 
   render(){
@@ -34,7 +34,7 @@ class InfoElement extends LitElement {
 
     <p>  If you want to use Agora, you must configure your POD.</p>
     <p>
-    Agora needs to HIGH CONTROL of your POD to set authorizations on data created.<br>
+    Agora needs HIGH CONTROL to your POD to set authorizations on data created.<br>
     Although Agora limits its interaction to a specific folder of your POD,
     if you don't want Agora to access your entire favorite POD,
     you can <a class="btn btn-info btn-sm" href="https://solid.inrupt.com/get-a-solid-pod" target="_blank">create a new POD</a>
@@ -43,17 +43,19 @@ class InfoElement extends LitElement {
     <p>
     To conform to ActivityPub, one user (you) must have two folders (inbox & outbox).<br>
     We decided to put them in your /public/ folder in a /shighl_test/ sub-folder (arbitrary for the moment & you can change it in the profil/config panel).<br>
-    In that /shighl_test/ folder there is an "index.ttl" that reference "inbox" & "outbox" folder
+    In that /shighl_test/ folders there is an "index.ttl" file that reference
+    "inbox" & "outbox" folders
     & that is referenced in your <b>publicTypeIndex</b> as a <b>Shighl</b> instance.<br><br>
     Some specials authorizations are set to the /inbox/ & /outbox/ folders:
     <ul>
     <li>
     <b>/inbox/</b> folder where you receive notifications of other users actions.
-    <br>You keep full CONTROL and Authenticated Agent (Everyone with a POD) is a Submitter to your /inbox/  (they can write but not read)
+    <br>You keep full CONTROL.
+    Authenticated Agent (Everyone with a POD) is a Submitter (they can write but not read).
     </li>
     <li>
     <b>/outbox/</b> folder where <b>activities</b> & <b>objects</b> that you create are stored.<br>
-    You keep full CONTROL and authorizations for data stored in /activities/ & /objects/ sub-folders
+    You keep full CONTROL. Authorizations for data stored in /activities/ & /objects/ sub-folders
     are set when you create that activities/objects,
     according to the recipient of that activity (Public, or a specific POD)
     </li>
@@ -63,10 +65,12 @@ class InfoElement extends LitElement {
     </p>
 
     <p><b>To allow Agora to configure your POD,
-    you must accept that this app can "CONTROL" your POD.</b><br>
+    you must accept Agora can "CONTROL" your POD.</b>
+    </p>
+    <p>
     This can be done when you login for the first time
     on an app hosted on https://scenaristeur.github.io/
-    by checking the last line of the authorization
+    by checking the last line of the authorization.
     <br><br>
     <a href="./img/checkControl.png"
     target="_blank">
@@ -76,8 +80,10 @@ class InfoElement extends LitElement {
     </a>
     <br>
     <br>
-    If you miss it or if you have already logged on https://scenaristeur.github.io/ app but did not allow "CONTROL"
-    you can add it in the preference of your POD by checking all 4 "Access Modes".
+    If you miss it or if you have already logged on a https://scenaristeur.github.io/ app
+    but did not allow "CONTROL"
+    you can add it in the preferences (right menu of your POD)
+    by checking all 4 "Access Modes" like shown below.
     <br><br>
     <a href="./img/trustedApps.png"
     target="_blank">
@@ -99,6 +105,12 @@ class InfoElement extends LitElement {
     alt="Add https://scenaristeur.github.io to trustedApps">
     </a>
 
+    <p>
+    If you have any question or suggestion, feel free to ask on
+    <a href="https://forum.solidproject.org/" target="_blank">Solid Community Forum</a>,
+    or on <a href="https://github.com/scenaristeur/agora/blob/master/README.md"
+    target="_blank">Agora project</a> repository.
+    </p>
     <p class="lead">
     If all is OK for you,
     <button class="btn btn-info" @click="${this.toggleHidden}">Toggle Help</button> and Login.
@@ -120,20 +132,25 @@ class InfoElement extends LitElement {
       if (message.hasOwnProperty("action")){
         //  console.log(message)
         switch(message.action) {
-          case "webIdChanged":
-          app.webIdChanged(message.webId)
+          case "hiddenChanged":
+          app.hiddenChanged(message.hidden)
           break;
           default:
           console.log("Unknown action ",message)
         }
       }
     };
+      this.agent.send("Store", {action: "getInfoHidden"})
   }
 
   toggleHidden(){
     this.hidden = !this.hidden
+    this.agent.send("Store", {action: "setStorage", values: {infoHidden: this.hidden}})
   }
-
+  hiddenChanged(hidden){
+    console.log("hiddenChanged", hidden)
+    this.hidden = hidden
+  }
 }
 
 customElements.define('info-element', InfoElement);

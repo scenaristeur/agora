@@ -36,11 +36,11 @@ class LoginElement extends BaseView {
     auth.trackSession(async function(session) {
       if (!session){
         app.webId=null
-        app.agent.sendMulti(['App','Config', 'Fab', 'Post', 'PostTabs', 'Profile'],  {action:"webIdChanged", webId: app.webId});
+        app.agent.sendMulti(['App','Config', 'ConfigGet', 'Fab', 'Post', 'PostTabs', 'Profile'],  {action:"webIdChanged", webId: app.webId});
       }
       else{
         app.webId = session.webId
-        app.agent.sendMulti(['App','Config', 'Fab', 'Post', 'PostTabs', 'Profile'], {action:"webIdChanged", webId: app.webId});
+        app.agent.sendMulti(['App','Config', 'ConfigGet', 'Fab', 'Post', 'PostTabs', 'Profile'], {action:"webIdChanged", webId: app.webId});
       }
     })
 

@@ -26,12 +26,12 @@ class AppView extends BaseView {
   render() {
 
     return html`
-
+    <store-element name="Store">Loading Store</store-element>
     <div class="row">
     <info-element name="Info">Loading Info</info-element>
     </div>
 
-    <div class = "row">
+    <div class="row">
     <div class="col-sm">
     ${this.webId != null?
       html`
@@ -43,8 +43,11 @@ class AppView extends BaseView {
       <login-element name="Login">Loading</login-element>
       </div>
       <div class="col-sm-4 col-md-6">
-
-      <profile-element ?hidden="${this.webId == null}" name="Profile">Loading Profil</profile-element>
+      <div ?hidden="${this.webId == null}" >
+      <config-get-view name="ConfigGet">Loading Config Get</config-get-view>
+      <config-set-view name="ConfigSet">Loading Config Set</config-set-view>
+      </div>
+      <!--      <profile-element ?hidden="${this.webId == null}" name="Profile">Loading Profil</profile-element>-->
       <!--      <flux-element name="Flux" agoraPod="${this.agoraPod}">Loading</flux-element>-->
       </div>
       <div class="col-sm">
@@ -53,6 +56,7 @@ class AppView extends BaseView {
       <post-element name="Post">Loading Post</post-element>
       <fab-element name="Fab">Loading FAb<</fab-element>
       <menu-element name="Menu">Loading</menu-element>
+
       </div>
 
       </div>
@@ -69,8 +73,6 @@ class AppView extends BaseView {
 
     firstUpdated(){
       super.firstUpdated()
-      console.log("FU")
-      console.log(this.agent)
     }
 
     webIdChanged(webId){
@@ -79,15 +81,13 @@ class AppView extends BaseView {
     }
 
     onLoad() {
-      console.log(this)
-      console.log("SHADOW",document.getElementById("test"))
       var parsedUrl = new URL(window.location.toString());
-      console.log(parsedUrl)
+      //  console.log(parsedUrl)
       this.share.title = parsedUrl.searchParams.get("title") || ""
       this.share.text = parsedUrl.searchParams.get("text") || ""
       this.share.url = parsedUrl.searchParams.get("url") || ""
       this.share.title.length + this.share.text.length + this.share.url.length > 0 ? this.share.show = true : this.share.length = false;
-      console.log(this.share)
+      //console.log(this.share)
       if (parsedUrl.searchParams.get("oldapi")) {
         alert("Your browser is using the deprecated 'url_template' Web Share "
         + "Target API.");
