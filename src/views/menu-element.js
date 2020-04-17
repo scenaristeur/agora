@@ -16,9 +16,20 @@ class MenuElement extends BaseView {
 
   render(){
     return html`
-    <div class="container-fluid">
-    Hello <b>${this.name}</b> from app-element
-    </div>
+    <ul class="nav flex-column">
+    <li class="nav-item">
+    <button class="nav-link btn btn-outline-info" href="#">Home</button>
+    </li>
+    <li class="nav-item">
+    <button class="nav-link" href="#">Profile</button>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link" href="#">Config</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link disabled" href="#">Disabled</a>
+    </li>
+    </ul>
     `;
   }
 

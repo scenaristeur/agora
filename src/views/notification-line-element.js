@@ -63,7 +63,7 @@ class NotificationLineElement extends LitElement {
   showProfile(e){
     let webId = e.target.getAttribute("webId")
     console.log(webId)
-    this.agent.send("App", {action: "pageChanged", page: "Profile"})
+    this.agent.send("App", {action: "pageChanged", page: "profile"})
     this.agent.send("Profile", {action: "profileChanged", webId: webId})
 
   }

@@ -32,7 +32,7 @@ class ConfigElement extends LitElement {
     Configuration Log : ${this.log}<br>
     WebId: ${this.config.webId}<br>
     PublicTypeIndex: ${this.config.pti}<br>
-    Shighl Instance: ${this.config.instance}<br>
+    Agora Instance: ${this.config.instance}<br>
     Inbox Folder: ${this.config.inbox}<br>
     Outbox Folder: ${this.config.outbox}<br>
 
@@ -153,8 +153,8 @@ class ConfigElement extends LitElement {
     if(this.config.pti != `${subject}`)
     /*let s = `${subject}`
     console.log(s)*/
-    this.log = " Checking Shighl Instance"
-    if (`${subject}`.endsWith('#Shighl')){
+    this.log = " Checking Agora Instance"
+    if (`${subject}`.endsWith('#Agora')){
       let instance  = await data[`${subject}`].solid$instance
       this.config.instance = `${instance}`
       this.log = "Checking Inbox"
@@ -177,7 +177,7 @@ class ConfigElement extends LitElement {
   }
 
   if(this.config.instance == null){
-    this.log = "No Shighl Instance Found in your PublicTypeIndex"
+    this.log = "No Agora Instance Found in your PublicTypeIndex"
     this.openConfigBox()
   }
   console.log("CONFIG",this.config)
@@ -204,7 +204,7 @@ async openConfigBox(){
   console.log(this.config.pti)
   this.storage = await data[this.config.webId].storage
   console.log(`${this.storage}`)
-  this.path = this.storage+"public/shighl_test/"
+  this.path = this.storage+"public/agora/"
   console.log(this.path)
   this.showModal()
   await this.requestUpdate()
@@ -215,7 +215,7 @@ async createFolders(){
 
   if (!this.path.includes(this.storage+"public/")){
     alert("Error the path must be in your /public folder")
-    this.path = this.storage+"public/shighl_test/"
+    this.path = this.storage+"public/agora/"
     this.shadowRoot.getElementById("pathInput").value = this.path
     console.log(this.path)
     await this.requestUpdate()
@@ -318,7 +318,7 @@ async createFolders(){
 
     try{
 
-      let id = "#Shighl"
+      let id = "#Agora"
       let inst_uri = this.config.pti+id
       let inst_index = root+'index.ttl#this'
       this.log = "Instance Creation : ",inst_uri

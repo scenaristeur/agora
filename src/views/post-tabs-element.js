@@ -30,7 +30,10 @@ class PostTabsElement extends LitElement {
       webId: {type: String},
       info: {type: String},
       replyTo: {type: Object},
-      friends: {type: Array}
+      friends: {type: Array},
+      share: {type: Object},
+      confidentialite: {type: Array},
+      title: {type: String}
     };
   }
 
@@ -44,6 +47,12 @@ class PostTabsElement extends LitElement {
     this.info = ""
     this.replyTo = {}
     this.friends = []
+    this.share = {}
+    this.confidentialite = [{level: "Public", selected: true, value: "public", description: "Everyone", icon:"fas fa-globe"},
+    {level: "Not listed", value: "not_listed", description: "Not listed in public ?", icon: "fas fa-lock-open"},
+    {level: "Followers", value: "followers", description: "Only your followers", icon: "fas fa-lock"},
+    {level: "Direct", value: "direct", description: "Only listed users", icon: "fas fa-envelop"}]
+
     //  this.agoraNotesListUrl = "https://agora.solid.community/public/notes.ttl"
   }
 
@@ -124,7 +133,7 @@ class PostTabsElement extends LitElement {
 
     <div class="row"><!--style="height:50vh"-->
     <div id="Note" class="tabcontent" style="display:block;height: 40vh">
-    <note-element name="Note"></note-element>
+    <note-element name="Note" .share="${this.share}"></note-element>
     </div>
 
     <div id="Media" class="tabcontent" style="height: 40vh">
@@ -162,6 +171,20 @@ class PostTabsElement extends LitElement {
 
 
     <div class="row">
+
+    <select id="confid" class="custom-select" @change="${this.change}" @input="${this.input}" @select="${this.select}"> <!--multiple-->
+    ${this.confidentialite.map(c =>
+      html`
+      <option
+
+      value="${c.value}" title="${c.description}">
+      <!-- <i class="${c.icon}"></i> -->
+      ${c.level}
+      </option>
+      `
+    )}
+    </select>
+    <hr>
 
     <select id="recipients" class="custom-select" multiple> <!--multiple-->
     <option disabled>Select Multi Recipient</option>
@@ -220,8 +243,21 @@ class PostTabsElement extends LitElement {
       `;
     }
 
+    select(e){
+      console.log(e.target.value)
+    }
+
+    input(e){
+      console.log(e.target.value)
+    }
+
+    change(e){
+      console.log(e.target.value)
+    }
 
     addNote(){
+      let confid = this.shadowRoot.getElementById("confid").value
+      console.log(confid)
       var title = this.shadowRoot.getElementById('title').value.trim();
       if (title.length == 0){
         alert ("Don't you want to provide a  beautiful title to your wonder post ?")
@@ -263,6 +299,7 @@ class PostTabsElement extends LitElement {
       var app = this;
       //  this.ph = new PodHelper();
       this.agent = new HelloAgent(this.name);
+      console.log(this.agent)
       this.agent.receive = function(from, message) {
         if (message.hasOwnProperty("action")){
           switch(message.action) {
@@ -283,6 +320,10 @@ class PostTabsElement extends LitElement {
           }
         }
       };
+      if(this.share.title != undefined){
+        this.title = this.share.title
+      }
+      this.agent.send("Store", {action: "getConfig"})
     }
 
     configChanged(config){
@@ -532,7 +573,7 @@ class PostTabsElement extends LitElement {
       if(pti != `${subject}`){
 
         console.log(s)
-        if (`${subject}`.endsWith('#Shighl')){
+        if (`${subject}`.endsWith('#Agora')){
           instanceTrouvee = true
           console.log(s)
           let instance  = await data[`${subject}`].solid$instance
@@ -553,7 +594,7 @@ class PostTabsElement extends LitElement {
       }
     }
 
-    instanceTrouvee == false ? alert("No Shighl Instance found in "+to+" Public Type Index ") : "";
+    instanceTrouvee == false ? alert("No Agora Instance found in "+to+" Public Type Index ") : "";
   });
 
 }

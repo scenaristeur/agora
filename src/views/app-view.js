@@ -8,7 +8,8 @@ class AppView extends BaseView {
       name: { type: String },
       webId: {type: String},
       share: {type: String},
-      agoraPod: {type: String}
+      agoraPod: {type: String},
+      page: {type: String}
     };
   }
 
@@ -18,6 +19,7 @@ class AppView extends BaseView {
     this.webId = ""
     this.share = {}
     this.agoraPod = ""
+    this.page = "flux"
     this.onLoad()
 
   }
@@ -31,36 +33,43 @@ class AppView extends BaseView {
     <info-element name="Info">Loading Info</info-element>
     </div>
 
+    Page : ${this.page}
     <div class="row">
     <div class="col-sm">
     ${this.webId != null?
       html`
-      <profil-cartouche-element name="ProfilCartouche" webId=${this.webId}>Loading</profil-cartouche-element>
-      <post-basic-element name="PostBasic" .share="${this.share}">Loading</post-basic-element>
+      <profil-cartouche-element name="ProfilCartouche" webId="${this.webId}">Loading</profil-cartouche-element>
+      <!--<post-basic-element name="PostBasic" .share="${this.share}">Loading</post-basic-element>-->
+      <post-element name="Post" .share="${this.share}">Loading Post</post-element>
+
       `
       :html``}
 
       <login-element name="Login">Loading</login-element>
       </div>
       <div class="col-sm-4 col-md-6">
-      <div ?hidden="${this.webId == null}" >
-      <config-get-view name="ConfigGet">Loading Config Get</config-get-view>
-<!--      <config-set-view name="ConfigSet">Loading Config Set</config-set-view>-->
+      <div ?hidden="${this.webId == null || this.page != "userProfile"}" >
+      <user-profile-view name="UserProfile">Loading userProfile</user-profile-view>
       </div>
-      <!--      <profile-element ?hidden="${this.webId == null}" name="Profile">Loading Profil</profile-element>-->
-      <!--      <flux-element name="Flux" agoraPod="${this.agoraPod}">Loading</flux-element>-->
+
+
+      <div ?hidden="${this.webId == null || this.page != "config"}" >
+      <config-get-view name="ConfigGet">Loading Config Get</config-get-view>
+      <!--      <config-set-view name="ConfigSet">Loading Config Set</config-set-view>-->
+      </div>
+      <profile-element ?hidden="${this.page != "profile"}" name="Profile">Loading Profil</profile-element>
+      <flux-element name="Flux" ?hidden="${this.page !="flux"}" agoraPod="${this.agoraPod}">Loading</flux-element>
       </div>
       <div class="col-sm">
-    <!--  <config-element name="Config">Loading</config-element> -->
+      <!--  <config-element name="Config">Loading</config-element> -->
 
-      <post-element name="Post">Loading Post</post-element>
-      <fab-element name="Fab">Loading FAb<</fab-element>
-      <menu-element name="Menu">Loading</menu-element>
 
-      </div>
+      <!--      <menu-element name="Menu">Loading</menu-element>-->
 
       </div>
 
+      </div>
+      <fab-element name="Fab" ?hidden="${this.webId == null}">Loading FAb<</fab-element>
       <!--    <app-old-element name="AppOld">Loading App old</app-old-element>
       -->
 
@@ -77,6 +86,7 @@ class AppView extends BaseView {
 
     webIdChanged(webId){
       super.webIdChanged(webId)
+      //  this.page = "config"
       console.log("supercharger")
     }
 
@@ -92,6 +102,7 @@ class AppView extends BaseView {
         alert("Your browser is using the deprecated 'url_template' Web Share "
         + "Target API.");
       }
+
     }
 
   }

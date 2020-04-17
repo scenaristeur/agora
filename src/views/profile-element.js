@@ -137,7 +137,7 @@ class ProfileElement extends LitElement {
         if(this.p_config.pti != `${subject}`)
         /*let s = `${subject}`
         console.log(s)*/
-        if (`${subject}`.endsWith('#Shighl')){
+        if (`${subject}`.endsWith('#Agora')){
           let instance  = await data[`${subject}`].solid$instance
           this.p_config.instance = `${instance}`
           //  let inbox = await data[this.p_config.instance].as$inbox

@@ -9,7 +9,8 @@ class PostElement extends LitElement {
     return {
       name: {type: String},
       dialogVisible: {type: Boolean},
-      webId: {type: String}
+      webId: {type: String},
+      share: {type: Object}
     }
   }
 
@@ -17,6 +18,7 @@ class PostElement extends LitElement {
     super()
     this.dialogVisible = false
     this.webId = null
+    this.share = {}
   }
 
   render () {
@@ -32,7 +34,8 @@ class PostElement extends LitElement {
       <button type="button" class="btn btn-primary btn-sm" @click="${this.toggleDialog.bind(this)}"><i class="fa fa-pen"></i></button>
       <post-dialog-element ?opened="${this.dialogVisible}"
       @dialog.accept="${this.closeDialog.bind(this)}"
-      @dialog.cancel="${this.closeDialog.bind(this)}">
+      @dialog.cancel="${this.closeDialog.bind(this)}"
+      .share="${this.share}">
       </post-dialog-element>
       </div>
       `
@@ -86,11 +89,11 @@ class PostElement extends LitElement {
         }
       }
     };
-
+    this.share.show == true ? this.toggleWrite() : "";
   }
 
   toggleWrite(message){
-      console.log(message)
+    console.log(message)
     this.toggleDialog(message)
   }
 

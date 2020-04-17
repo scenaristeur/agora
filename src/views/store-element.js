@@ -49,6 +49,9 @@ class StoreElement extends BaseView {
             case "getInfoHidden":
             app.getInfoHidden()
             break;
+            case "getConfig":
+            app.getConfig(from)
+            break;
             default:
             console.log("Unknown action ",message)
           }
@@ -56,8 +59,22 @@ class StoreElement extends BaseView {
       };
     }
     this.readStorage()
-    console.log("HIDDEN",this.store,this.store.infoHidden)
+    this.getInfoHidden("Info")
+    this.getConfig("Config")
+  }
+
+  getConfig(from){
+    this.agent.send(from, {action: "configChanged", config: this.store.config})
+    this.agent.send("PostTabs", {action: "configChanged", config: this.store.config})
+  }
+
+  getInfoHidden(from){
     this.agent.send("Info", {action: "hiddenChanged", hidden: this.store.infoHidden})
+  }
+
+  readStorage(){
+    this.store = JSON.parse(localStorage.getItem("agora")) || {}
+    console.log("STORE : ",this.store)
   }
 
   setStorage(values){
@@ -68,15 +85,6 @@ class StoreElement extends BaseView {
     }
     console.log(this.store)
     this.populateStorage()
-  }
-
-  getInfoHidden(){
-    this.agent.send("Info", {action: "hiddenChanged", hidden: this.store.infoHidden})
-  }
-
-  readStorage(){
-    this.store = JSON.parse(localStorage.getItem("agora")) || {}
-    console.log("STORE : ",this.store)
   }
 
   populateStorage(){

@@ -23,6 +23,9 @@ export class BaseView extends LitElement {
             case "test":
             app.test(message)
             break;
+            case "pageChanged":
+            app.pageChanged(message.page)
+            break;
             default:
             console.log("Unknown action ",message)
           }
@@ -35,6 +38,9 @@ export class BaseView extends LitElement {
   webIdChanged(webId){
     console.log("WIC",this.name,webId)
     this.webId = webId
+  }
+  pageChanged(page){
+    page == "defaut" ? this.page = "flux" : this.page = page
   }
 
   test(message){

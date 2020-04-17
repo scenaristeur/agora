@@ -5,12 +5,14 @@ class NoteElement extends LitElement {
 
   static get properties() {
     return {
-      name: {type: String}
+      name: {type: String},
+      share: {type: String}
     };
   }
 
   constructor() {
     super();
+    this.share = {}
   }
 
   render(){
@@ -19,7 +21,9 @@ class NoteElement extends LitElement {
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <div class="form-group">
     <!--    <label class="text-primary" for="notearea"></label>-->
-    <textarea class="form-control" id="notearea"  style="width:100%;height:38vh" placeholder="Write a note on your Pod & share it on Agora"></textarea>
+    <textarea class="form-control" id="notearea"
+    style="width:100%;height:38vh"
+    placeholder="Write a note on your Pod & share it on Agora"></textarea>
     </div>
     `;
   }
@@ -38,6 +42,10 @@ class NoteElement extends LitElement {
         }
       }
     };
+    console.log("SHARE", this.share)
+    if(this.share.text != undefined){
+      this.shadowRoot.getElementById("notearea").innerHTML += this.share.text + "\n\n"+this.share.url
+    }
   }
 
   askContent(from, message){

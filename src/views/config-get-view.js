@@ -105,8 +105,6 @@ class ConfigGetView extends LitElement {
       </div>
       </div>
       </div>
-
-
       </form>
 
       </div>
@@ -118,18 +116,18 @@ class ConfigGetView extends LitElement {
       </div>
       </div>
       </div>
-
-
-
-
       `;
     }
 
     async checkConfig(){
       this.textColor = "text-primary"
       this.log = "Checking PublicTypeIndex"
+      this.config.date = new Date();
+      this.config.status = "unknown"
+      this.config.origin = "pod"
       this.config.pti= "undefined"
-      this.config.pti = await data[this.config.webId].publicTypeIndex
+      let pti = await data[this.config.webId].publicTypeIndex
+      this.config.pti = `${pti}`
       this.log = "Checking Instances"
       this.config.instance= "undefined"
       for await (const subject of data[this.config.pti].subjects){
@@ -166,16 +164,21 @@ class ConfigGetView extends LitElement {
         }
       }
 
-
-
       console.log(Object.values(this.config))
       if( Object.values(this.config).includes("undefined")){
         this.log = this.log +" CONFIGURATION NOT OK"
         this.textColor = "text-danger"
+        this.config.status = "KO"
+        this.agent.send("App", {action: "pageChanged", page: "config"})
         this.openConfigBox()
       }else{
         this.log = "CONFIGURATION OK"
+        this.config.status = "OK"
         this.textColor = "text-success"
+        this.agent.send("Store", {action: "setStorage", values: {config: this.config}})
+        if (this.config.status == "OK"){
+          this.agent.send("App", {action: "pageChanged", page: "flux"})
+        }
       }
     }
 
@@ -195,8 +198,6 @@ class ConfigGetView extends LitElement {
         alert(err + "... Are you sure you grant AGORA to FULL CONTROL ? see HELP !")
         this.log = err +"... Are you sure you grant AGORA to FULL CONTROL ? Please see HELP !"
       });
-
-
     }
 
     async openConfigBox(){
@@ -219,7 +220,6 @@ class ConfigGetView extends LitElement {
       this.shadowRoot.getElementById("modal1").style.display = "none"
     }
 
-
     async createFolders(){
 
       if (!this.path.includes(this.storage+"public/")){
@@ -240,8 +240,6 @@ class ConfigGetView extends LitElement {
         console.log(root,inbox, outbox)
 
         this.log = "Creating Inbox Folder"
-
-
 
         let file = inbox+".acl"
         await fc.createFile (file, this.aclInboxContent, "text/turtle") .then (success => {
@@ -344,6 +342,9 @@ class ConfigGetView extends LitElement {
             case "webIdChanged":
             app.webIdChanged(message.webId)
             break;
+            case "configChanged":
+            app.configChanged(message.config)
+            break;
             default:
             console.log("Unknown action ",message)
           }
@@ -351,12 +352,28 @@ class ConfigGetView extends LitElement {
       };
     }
 
+    configChanged(config){
+      console.log("CONFIG CHANGED", config)
+      if (config != undefined && config.webId == this.config.webId){
+        config.origin = "store"
+        this.config = config
+        if (this.config.status == "OK"){
+          this.agent.send("App", {action: "pageChanged", page: "flux"})
+        }
+      }else{
+        this.agent.send("App", {action: "pageChanged", page: "config"})
+        this.checkConfig()
+      }
+    }
+
     webIdChanged(webId){
       console.log("CONFIG GET ",webId)
       this.config.webId = webId
       if (webId != null){
         this.log = "Logged"
-        this.checkConfig()
+        this.agent.send("Store", {action: "getConfig"})
+
+        //  this.checkConfig()
       }else{
         this.config = {}
         this.log = "Not Logged"

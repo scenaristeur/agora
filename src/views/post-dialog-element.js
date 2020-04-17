@@ -6,16 +6,17 @@ import { classMap } from 'lit-html/directives/class-map'
 import  './post-tabs-element.js';
 
 class PostDialogElement extends LitElement {
+  static get properties () {
+    return {
+      opened: {type: Boolean},
+      share: {type: Object}
+    }
+  }
 
   constructor () {
     super()
     this.opened = false
-  }
-
-  static get properties () {
-    return {
-      opened: {type: Boolean}
-    }
+    this.share = {}
   }
 
   render () {
@@ -111,7 +112,7 @@ class PostDialogElement extends LitElement {
     <i @click="${() => this.dispatchEvent(new CustomEvent('dialog.cancel'))}" class="close fas fa-window-close"></i>
     </h6>
     <div>
-    <post-tabs-element name="PostTabs"></post-tabs-element>
+    <post-tabs-element name="PostTabs" .share="${this.share}"></post-tabs-element>
     </div>
     </div>
     </div>`

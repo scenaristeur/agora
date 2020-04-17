@@ -51,51 +51,51 @@ class FluxElement extends BaseView {
         `
       }
 
-    </div>
-    `;
-  }
-
-  firstUpdated(){
-    super.firstUpdated()
-    this.init()
-  }
-
-  async init(){
-    let app = this
-    this.log = "Agora Pod : "+this.agoraPod
-    //      console.log(this.agoraPod)
-    let pti_url = await data[this.agoraPod].solid$publicTypeIndex
-    this.log = 'Pti url : '+pti_url
-    //    console.log(`${pti_url}`)
-    let instance = await data[pti_url+"#Shighl"].solid$instance
-    this.log = 'Instance url : '+instance
-    //    console.log(`${instance}`)
-    let inbox = await data[instance].as$inbox
-    this.log = 'Inbox : '+inbox
-    //    console.log(`${inbox}`)
-
-    let notifications = []
-    for await (const subject of data[inbox].subjects){
-      //    console.log(`${subject}`)
-      if(`${subject}` != inbox){
-        let n = {}
-        n.url = `${subject}`+'#this'
-        let published = new Date(await data[n.url].as$published)
-        n.published = `${published}`
-        n.timestamp = published.getTime()
-        notifications.push(n)
-        app.log = "Notifications : "+notifications.length
-      }
+      </div>
+      `;
     }
-    //  console.log(notifications)
-    this.log = "Sort Notifications"
-    notifications.sort(function(a, b){
-      return a.timestamp < b.timestamp;
-    });
-    this.notifications = notifications
-    this.log = "Ready"
+
+    firstUpdated(){
+      super.firstUpdated()
+      this.init()
+    }
+
+    async init(){
+      let app = this
+      this.log = "Agora Pod : "+this.agoraPod
+      //      console.log(this.agoraPod)
+      let pti_url = await data[this.agoraPod].solid$publicTypeIndex
+      this.log = 'Pti url : '+pti_url
+      //    console.log(`${pti_url}`)
+      let instance = await data[pti_url+"#Agora"].solid$instance
+      this.log = 'Instance url : '+instance
+      //    console.log(`${instance}`)
+      let inbox = await data[instance].as$inbox
+      this.log = 'Inbox : '+inbox
+      //    console.log(`${inbox}`)
+
+      let notifications = []
+      for await (const subject of data[inbox].subjects){
+        //    console.log(`${subject}`)
+        if(`${subject}` != inbox){
+          let n = {}
+          n.url = `${subject}`+'#this'
+          let published = new Date(await data[n.url].as$published)
+          n.published = `${published}`
+          n.timestamp = published.getTime()
+          notifications.push(n)
+          app.log = "Notifications : "+notifications.length
+        }
+      }
+      //  console.log(notifications)
+      this.log = "Sort Notifications"
+      notifications.sort(function(a, b){
+        return a.timestamp < b.timestamp;
+      });
+      this.notifications = notifications
+      this.log = "Ready"
+    }
+
   }
 
-}
-
-customElements.define('flux-element', FluxElement);
+  customElements.define('flux-element', FluxElement);
