@@ -6,7 +6,8 @@ class PostBasicElement extends LitElement {
   static get properties() {
     return {
       name: {type: String},
-      share: {type: Object}
+      share: {type: Object},
+      confidentialite: {type: Array}
     };
   }
 
@@ -14,6 +15,10 @@ class PostBasicElement extends LitElement {
     super();
     this.name = "Post Basic"
     this.share = {}
+    this.confidentialite = [{level: "Public", selected: true, value: "public", description: "Everyone", icon:"fas fa-globe"},
+    {level: "Not listed", value: "not_listed", description: "Not listed in public ?", icon: ""},
+    {level: "Followers", value: "followers", description: "Only your followers", icon: ""},
+    {level: "Direct", value: "direct", description: "Only listed users", icon: ""}]
   }
 
   render(){
@@ -34,21 +39,58 @@ class PostBasicElement extends LitElement {
     id="content"
     style="width:100%;height:38vh"
     placeholder="Write a note on your Pod & share it on Agora">
-${this.share.text}
+    ${this.share.text}
 
-${this.share.url}
+    ${this.share.url}
     </textarea>
+
+    <select id="confid" class="custom-select" @change="${this.change}" @input="${this.input}" @select="${this.select}"> <!--multiple-->
+    ${this.confidentialite.map(c =>
+      html`
+      <option
+
+      value="${c.value}" title="${c.description}">
+      <!-- <i class="${c.icon}"></i> -->
+      ${c.level}
+      </option>
+      `
+    )}
+    </select>
+
     <button class="btn btn-primary" @click="${this.send}">Spog !</button>
     </div>
     </div>
     `;
   }
 
+  select(e){
+    console.log(e.target.value)
+  }
+
+  input(e){
+    console.log(e.target.value)
+  }
+
+  change(e){
+    console.log(e.target.value)
+  }
+
+
+
   send(){
     let title = this.shadowRoot.getElementById("title").value.trim()
     let content = this.shadowRoot.getElementById("content").value.trim()
-    console.log(title, content)
-    alert(title+" "+content)
+    let confid = this.shadowRoot.getElementById("confid").value
+  /*pour multiselect
+    let conf = Array(...confid_select.options).reduce((acc, option) => {
+      if (option.selected === true) {
+        acc.push(option.value);
+      }
+      return acc;
+    }, []);*/
+
+    console.log(title, content, confid)
+    alert(title+" "+content+" "+confid)
   }
 
 

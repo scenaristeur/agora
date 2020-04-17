@@ -7,7 +7,8 @@ class AppView extends BaseView {
     return {
       name: { type: String },
       webId: {type: String},
-      share: {type: String}
+      share: {type: String},
+      agoraPod: {type: String}
     };
   }
 
@@ -16,6 +17,7 @@ class AppView extends BaseView {
     this.name = "App"
     this.webId = ""
     this.share = {}
+    this.agoraPod = ""
     this.onLoad()
 
   }
@@ -37,7 +39,7 @@ class AppView extends BaseView {
       <login-element name="Login">Loading</login-element>
       </div>
       <div class="col-sm-4 col-md-6">
-      <flux-element name="Flux">Loading</flux-element>
+      <flux-element name="Flux" agoraPod="${this.agoraPod}">Loading</flux-element>
       </div>
       <div class="col-sm">
       <menu-element name="Menu">Loading</menu-element>
