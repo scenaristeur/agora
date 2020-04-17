@@ -27,6 +27,10 @@ class AppView extends BaseView {
 
     return html`
 
+    <div class="row">
+    <info-element name="Info">Loading Info</info-element>
+    </div>
+
     <div class = "row">
     <div class="col-sm">
     ${this.webId != null?
@@ -34,29 +38,28 @@ class AppView extends BaseView {
       <profil-cartouche-element name="ProfilCartouche" webId=${this.webId}>Loading</profil-cartouche-element>
       <post-basic-element name="PostBasic" .share="${this.share}">Loading</post-basic-element>
       `
-      :html`-`}
+      :html``}
 
       <login-element name="Login">Loading</login-element>
       </div>
       <div class="col-sm-4 col-md-6">
-      <flux-element name="Flux" agoraPod="${this.agoraPod}">Loading</flux-element>
+
+      <profile-element ?hidden="${this.webId == null}" name="Profile">Loading Profil</profile-element>
+      <!--      <flux-element name="Flux" agoraPod="${this.agoraPod}">Loading</flux-element>-->
       </div>
       <div class="col-sm">
+      <config-element name="Config">Loading</config-element>
+
+      <post-element name="Post">Loading Post</post-element>
+      <fab-element name="Fab">Loading FAb<</fab-element>
       <menu-element name="Menu">Loading</menu-element>
       </div>
 
       </div>
 
-      <hr>
-      OLD APP TEST
       <!--    <app-old-element name="AppOld">Loading App old</app-old-element>
       -->
 
-
-      Hello <b>${this.name}</b> from app-element<br>
-      wI ${this.webId} WI
-      <button id="test" class="btn btn-primary" @click="${this.click}">BB</button>
-      </div>
       `;
     }
 
@@ -73,7 +76,6 @@ class AppView extends BaseView {
     webIdChanged(webId){
       super.webIdChanged(webId)
       console.log("supercharger")
-      this.agent.send("Stats", {action: "test", value:"HELLLLLLLO"})
     }
 
     onLoad() {

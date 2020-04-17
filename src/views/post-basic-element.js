@@ -16,9 +16,9 @@ class PostBasicElement extends LitElement {
     this.name = "Post Basic"
     this.share = {}
     this.confidentialite = [{level: "Public", selected: true, value: "public", description: "Everyone", icon:"fas fa-globe"},
-    {level: "Not listed", value: "not_listed", description: "Not listed in public ?", icon: ""},
-    {level: "Followers", value: "followers", description: "Only your followers", icon: ""},
-    {level: "Direct", value: "direct", description: "Only listed users", icon: ""}]
+    {level: "Not listed", value: "not_listed", description: "Not listed in public ?", icon: "fas fa-lock-open"},
+    {level: "Followers", value: "followers", description: "Only your followers", icon: "fas fa-lock"},
+    {level: "Direct", value: "direct", description: "Only listed users", icon: "fas fa-envelop"}]
   }
 
   render(){
@@ -75,22 +75,15 @@ class PostBasicElement extends LitElement {
     console.log(e.target.value)
   }
 
-
-
   send(){
     let title = this.shadowRoot.getElementById("title").value.trim()
     let content = this.shadowRoot.getElementById("content").value.trim()
     let confid = this.shadowRoot.getElementById("confid").value
-  /*pour multiselect
-    let conf = Array(...confid_select.options).reduce((acc, option) => {
-      if (option.selected === true) {
-        acc.push(option.value);
-      }
-      return acc;
-    }, []);*/
-
     console.log(title, content, confid)
     alert(title+" "+content+" "+confid)
+    console.log("WebId",this.webId)
+    let dateObj = new Date();
+    let date = dateObj.toISOString()
   }
 
 

@@ -1,5 +1,22 @@
 # agora
 
+# flow
+1- not logged
+* show first help,
+* show public ?
+
+2- invite to set CONTROL to this app
+
+3- First Login
+* check config & update if needed
+
+4- show all app
+
+--------------
+1- logged
+* get share-target params & show app
+
+
 # todo
 [ ]  review post,post-tabs...
 [ ] https://mstdn.fr/web/accounts/146921, https://joinmastodon.org/ , https://fr.mstdn.wiki/Accueil
@@ -27,7 +44,7 @@ https://web.dev/web-share-target/
 
 # file web-share-target
 https://paul.kinlan.me/fr/file-web-share-target/
- see manifest & sw
+see manifest & sw
 
 # free hossting
 https://zeit.co/pricing
