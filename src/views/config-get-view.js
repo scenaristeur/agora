@@ -56,6 +56,8 @@ class ConfigGetView extends LitElement {
 
     <h1>${this.name}</h1>
     Log : <span class="${this.textColor}">${this.log}</span><br><br>
+    <button class="btn btn-danger" ?hidden="${this.textColor != "text-danger"}" @click="${this.checkConfig}">RE-check</button>
+
 
     <ul class="list-group">
     ${Object.entries(this.config).map(([key, value]) =>
@@ -160,10 +162,11 @@ class ConfigGetView extends LitElement {
           let liked = await data[this.config.instance].as$liked
           this.config.liked = `${liked}`
           this.log = "Cool, your configuration seems OK"
+          await this.checkAcl()
         }
       }
 
-      await this.checkAcl()
+
 
       console.log(Object.values(this.config))
       if( Object.values(this.config).includes("undefined")){
@@ -178,11 +181,12 @@ class ConfigGetView extends LitElement {
 
     async checkAcl(){
       let app = this
+      this.log = "ACL INBOX VERIFICATION"
+      this.config.acl_inbox= "undefined"
       let inboxacl = this.config.inbox+".acl"
       console.log(inboxacl)
       let fc = new SolidFileClient(auth)
-      this.log = "ACL INBOX VERIFICATION"
-      this.config.acl_inbox= "undefined"
+
       await fc.createFile (inboxacl, this.aclInboxContent, "text/turtle") .then (success => {
         this.log = "Created "+inboxacl
         this.config.acl_inbox = inboxacl
