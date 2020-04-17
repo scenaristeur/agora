@@ -4,7 +4,7 @@ import './styles.css';
 import './views/app-view.js';
 import './views/info-element.js';
 import './views/config-get-view.js'
-import './views/config-set-view.js'
+//import './views/config-set-view.js'
 import './views/store-element.js'
 /*import './views/todo-view.js';
 import './views/stats-view.js';

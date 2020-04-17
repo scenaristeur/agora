@@ -45,13 +45,13 @@ class AppView extends BaseView {
       <div class="col-sm-4 col-md-6">
       <div ?hidden="${this.webId == null}" >
       <config-get-view name="ConfigGet">Loading Config Get</config-get-view>
-      <config-set-view name="ConfigSet">Loading Config Set</config-set-view>
+<!--      <config-set-view name="ConfigSet">Loading Config Set</config-set-view>-->
       </div>
       <!--      <profile-element ?hidden="${this.webId == null}" name="Profile">Loading Profil</profile-element>-->
       <!--      <flux-element name="Flux" agoraPod="${this.agoraPod}">Loading</flux-element>-->
       </div>
       <div class="col-sm">
-      <config-element name="Config">Loading</config-element>
+    <!--  <config-element name="Config">Loading</config-element> -->
 
       <post-element name="Post">Loading Post</post-element>
       <fab-element name="Fab">Loading FAb<</fab-element>

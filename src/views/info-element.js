@@ -42,10 +42,10 @@ class InfoElement extends LitElement {
 
     <p>
     To conform to ActivityPub, one user (you) must have two folders (inbox & outbox).<br>
-    We decided to put them in your /public/ folder in a /shighl_test/ sub-folder (arbitrary for the moment & you can change it in the profil/config panel).<br>
-    In that /shighl_test/ folders there is an "index.ttl" file that reference
+    We decided to put them in your /public/ folder in a /agora/ (old /shighl_test/) sub-folder (arbitrary for the moment & you can change it in the profil/config panel).<br>
+    In that /agora/ folders there is an "index.ttl" file that reference
     "inbox" & "outbox" folders
-    & that is referenced in your <b>publicTypeIndex</b> as a <b>Shighl</b> instance.<br><br>
+    & that is referenced in your <b>publicTypeIndex</b> as a <b>Agora</b> instance.<br><br>
     Some specials authorizations are set to the /inbox/ & /outbox/ folders:
     <ul>
     <li>
@@ -96,7 +96,7 @@ class InfoElement extends LitElement {
 
     <p>
     At the end of the configuration, you should see a structure like this one on your POD (this example show you structure & some data in each )
-    (followers, followning, liked are not ready, WIP).
+    (shighl_test has been replaced by agora / followers, followning, liked are not ready, WIP).
     <br><br>
     <a href="./img/agora_folder.png"
     target="_blank"><img src="./img/agora_folder.png"
@@ -140,7 +140,7 @@ class InfoElement extends LitElement {
         }
       }
     };
-      this.agent.send("Store", {action: "getInfoHidden"})
+    this.agent.send("Store", {action: "getInfoHidden"})
   }
 
   toggleHidden(){
