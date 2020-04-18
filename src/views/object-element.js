@@ -20,15 +20,17 @@ class ObjectElement extends LitElement {
   }
 
   render(){
+
+
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
     <div class="row">
     <b>${this.object.name}</b>
     </div>
-    <div class="row mt-2">
+    <div class="row mt-2" id="content">
+    <!--  SEE LINKIFY-->
     ${this.object.content}
-
     </div>
     <div class="row mt-2">
     <button class="btn btn-outline-info btn-sm"  @click="${this.replyTo}">Reply</button>
@@ -40,7 +42,7 @@ class ObjectElement extends LitElement {
   }
 
   like(){
-  alert("// TODO: come back later ;-) ")
+    alert("// TODO: come back later ;-) ")
   }
   dislike(){
     alert("// TODO: come back later ;-) ")
@@ -53,17 +55,18 @@ class ObjectElement extends LitElement {
     console.log(inputText)
     //URLs starting with http://, https://, or ftp://
     var replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
-    var replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+    var replacedText = inputText.replace(replacePattern1, '<br><small><a href="$1" target="_blank">$1</a></small><br>');
 
     //URLs starting with www. (without // before it, or it'd re-link the ones done above)
     var replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
-    var replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+    var replacedText = replacedText.replace(replacePattern2, '<br><small>$1<a href="http://$2" target="_blank">$2</a></small><br>');
 
     //Change email addresses to mailto:: links
     var replacePattern3 = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
     var replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
-
-    return replacedText
+    this.shadowRoot.innerHTML = replacedText
+    this.requestUpdate()
+    //    return html`${replacedText}`
   }
 
 
@@ -90,6 +93,7 @@ class ObjectElement extends LitElement {
         }
       }
     };
+    ///  this.linkify(`${this.object.content}`)
   }
 
   updated(changedProperties) {
