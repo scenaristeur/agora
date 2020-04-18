@@ -26,30 +26,21 @@ class FluxElement extends BaseView {
 
   render(){
     return html`
-    <div class="container-fluid">
-    POD : ${this.agoraPod}<br>
-    Notifications : ${this.notifications.length}</br>
+    <!--    POD : ${this.agoraPod}<br>
+    Notifications : ${this.notifications.length}</br>-->
+    <div class="row" style="overflow-y:scroll;position:relative;height: 400px;">
 
-    ${this.notifications.length == 0 ?
-      html ` L O A D I N G <br>
-      A G O R A &nbsp;&nbsp; N O T I F I C A T I O N S<br>
-      P L E A S E&nbsp;&nbsp;W A I T...
-      <br><br>
-      ${this.log}
+    <div ?hidden = "${this.notifications.length != 0}">Loading Activities from ${this.agoraPod} </div>
+    <ul class="list-group list-group-flush">
+    ${this.notifications.map((n,i) => html `
+      <li class="list-group-item" id="${this.name}">
+      <notification-line-element id="${'Notification'+i}"
+      name = "${'Notification'+i}"
+      .notification="${n}">Loading notification...</notification-line-element>
+      </li>
+      `)}
+      </ul>
 
-      `
-      :html`
-      <ul class="list-group list-group-flush">
-      ${this.notifications.map((n,i) => html `
-        <li class="list-group-item" id="${this.name}">
-        <notification-line-element id="${'Notification'+i}"
-        name = "${'Notification'+i}"
-        .notification="${n}">Loading notification...</notification-line-element>
-        </li>
-        `)}
-        </ul>
-        `
-      }
 
       </div>
       `;

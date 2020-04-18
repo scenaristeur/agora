@@ -3,6 +3,8 @@ import './css/bootstrap/bootstrap.min.css';
 import './styles.css';
 import './views/app-view.js';
 import './views/store-element.js'
+import './views/friends-view.js'
+import './views/friend-view.js'
 import './views/info-element.js';
 import './views/config-get-view.js'
 import './views/user-profile-view.js'
