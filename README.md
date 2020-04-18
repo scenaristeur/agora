@@ -1,5 +1,32 @@
 # agora
 
+# install
+```
+git clone https://github.com/scenaristeur/agora.git
+cd agora
+npm install
+
+```
+YOU NEED TO BUILD EVEJS
+
+# Build a minimal browser version in dist/eve.custom.js
+```
+npm install -g browserify
+cd node_modules/evejs
+browserify custom.js -o dist/eve.custom.js -s eve
+```
+
+# Run dev server
+```
+npm run dev
+```
+
+#Build for prod in /dist folder
+```
+npm run prod
+```
+
+
 # flow
 1- not logged
 * show first help,
