@@ -32,24 +32,22 @@ class AppView extends BaseView {
     <div class="container">
 
     <div class="row " style=" background-color: rgba(100,100,0,0.1);">
-    <div class="col-md">
+
     <info-element name="Info">Loading Info</info-element>
     <login-element name="Login">Loading</login-element>
-    </div>
+    <post-element name="Post" .share="${this.share}">Loading Post</post-element>
+    <div ?hidden="${this.webId == null}">
+    <profil-cartouche-element name="ProfilCartouche" webId="${this.webId}">Loading</profil-cartouche-element>
+
+
 
     </div>
     <div class="row" style="background-color: rgba(0,255,0,0.1);">
-    <div class="col-md">
+  <!--  <div class="col-md">
     Search
     <br>
-        <post-element name="Post" .share="${this.share}">Loading Post</post-element>
-    <div ?hidden="${this.webId == null}">
-    <profil-cartouche-element name="ProfilCartouche" webId="${this.webId}">Loading</profil-cartouche-element>
-    <!--<post-basic-element name="PostBasic" .share="${this.share}">Loading</post-basic-element>-->
 
-
-    </div>
-    </div>
+    </div>-->
     <div class="col-md">
     <div ?hidden="${this.webId == null || this.page != "userProfile"}" >
     <user-profile-view name="UserProfile">Loading userProfile</user-profile-view>
@@ -69,10 +67,10 @@ class AppView extends BaseView {
     <friends-view name="Friends">Loading friends</friends-view>
     </div>
     </div>
-    <div class="row" style="height: 20vh; background-color: rgba(255,0,0,0.1);">
+    <!--<div class="row" style="height: 20vh; background-color: rgba(255,0,0,0.1);">
     bot<br>
     Page : ${this.page}
-    </div>
+    </div>-->
     <fab-element name="Fab">Loading Fab</fab-element>
     </div>
     `}
