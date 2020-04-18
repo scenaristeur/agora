@@ -29,8 +29,9 @@ class AppView extends BaseView {
 
     return html`
     <store-element name="Store">Loading Store</store-element>
-    <div class="container">
 
+    <div class="container">
+    <fab-element name="Fab" ?hidden="${this.webId == null}">Loading FAb<</fab-element>
     <div class="row " style=" background-color: rgba(100,100,0,0.1);">
 
     <info-element name="Info">Loading Info</info-element>
@@ -43,7 +44,7 @@ class AppView extends BaseView {
 
     </div>
     <div class="row" style="background-color: rgba(0,255,0,0.1);">
-  <!--  <div class="col-md">
+    <!--  <div class="col-md">
     Search
     <br>
 
@@ -119,7 +120,7 @@ class AppView extends BaseView {
         </div>
 
         </div>
-        <fab-element name="Fab" ?hidden="${this.webId == null}">Loading FAb<</fab-element>
+
         <!--    <app-old-element name="AppOld">Loading App old</app-old-element>
         -->
 

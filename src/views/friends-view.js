@@ -1,5 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
+import data from "@solid/query-ldflex";
+
 
 class FriendsView extends LitElement {
 
@@ -14,12 +16,6 @@ class FriendsView extends LitElement {
     super();
     this.name = "Friends"
     this.friends = []
-    this.friends.push({name:"one"})
-    this.friends.push({name:"one"})
-    this.friends.push({name:"one"})
-    this.friends.push({name:"one"})
-    this.friends.push({name:"one"})
-    this.friends.push({name:"one"})
   }
 
   render(){
@@ -46,39 +42,54 @@ class FriendsView extends LitElement {
 
     <div class="row" style="overflow-y:scroll;position:relative;height: 300px;">
 
-    ${this.friends.map(f => html`
-      <div class="col-sm-12">
-      <friend-view name="Friend" .friend=${f}>Loading Friend</friend-view>
+    ${this.friends.map((f, i) => html`
+      <div class="col-sm-4">
+      <friend-view name="${"Friend_"+i}" f_webId=${f}>Loading Friend</friend-view>
       </div>
       `)}
+      </div>
 
+      </div>
+      </div>
+      `;
+    }
 
-    </div>
-
-    </div>
-    </div>
-    `;
-  }
-
-  firstUpdated(){
-    var app = this;
-    this.agent = new HelloAgent(this.name);
-    console.log(this.agent)
-    this.agent.receive = function(from, message) {
-      //  console.log("messah",message)
-      if (message.hasOwnProperty("action")){
-        //  console.log(message)
-        switch(message.action) {
-          case "webIdChanged":
-          app.webIdChanged(message.webId)
-          break;
-          default:
-          console.log("Unknown action ",message)
+    firstUpdated(){
+      var app = this;
+      this.agent = new HelloAgent(this.name);
+      console.log(this.agent)
+      this.agent.receive = function(from, message) {
+        //  console.log("messah",message)
+        if (message.hasOwnProperty("action")){
+          //  console.log(message)
+          switch(message.action) {
+            case "webIdChanged":
+            app.webIdChanged(message.webId)
+            break;
+            default:
+            console.log("Unknown action ",message)
+          }
         }
+      };
+    }
+
+    async webIdChanged(webId){
+      this.webId = webId
+      if (webId != null){
+        this.getFriends()
+      }else{
+        this.friends = []
       }
-    };
+    }
+
+    async getFriends(){
+      let friends = []
+      for await (const f of data[this.webId].friends){
+        friends = [... friends, `${f}`]
+      }
+      this.friends = friends
+    }
+
   }
 
-}
-
-customElements.define('friends-view', FriendsView);
+  customElements.define('friends-view', FriendsView);

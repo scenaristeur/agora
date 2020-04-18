@@ -64,8 +64,7 @@ class StoreElement extends BaseView {
   }
 
   getConfig(from){
-    this.agent.send(from, {action: "configChanged", config: this.store.config})
-    this.agent.send("PostTabs", {action: "configChanged", config: this.store.config})
+    this.agent.sendMulti([from, "PostTabs", "Profile"], {action: "configChanged", config: this.store.config})
   }
 
   getInfoHidden(from){

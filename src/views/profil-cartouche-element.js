@@ -1,12 +1,15 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
+import data from "@solid/query-ldflex";
+
 
 class ProfilCartoucheElement extends LitElement {
 
   static get properties() {
     return {
       name: {type: String},
-      webId: {type: String}
+      webId: {type: String},
+      username: {type: String}
     };
   }
 
@@ -14,6 +17,7 @@ class ProfilCartoucheElement extends LitElement {
     super();
     this.name = "Profil Cartouche"
     this.webId = ""
+    this.username = ""
   }
 
   render(){
@@ -25,7 +29,7 @@ class ProfilCartoucheElement extends LitElement {
     <button class="btn btn-sm btn-outline-primary dropdown-toggle"
     type="button" data-toggle="dropdown"
     @click="${this.toggleMenu}">
-    ${this.webId}
+    ${this.username}
     </button>
     <div class="dropdown-menu" id="menu" >
     <button class="dropdown-item" type="button" @click="${this.toggleMenu}" id="userProfile">Profile</button>
@@ -38,6 +42,7 @@ class ProfilCartoucheElement extends LitElement {
     <!--  <button class="btn btn-sm btn-outline-primary" @click="${this.editProfil}">${this.webId}</button>-->
     `;
   }
+
 
   toggleMenu(e){
     let id = e.target.getAttribute("id")
@@ -64,6 +69,11 @@ class ProfilCartoucheElement extends LitElement {
         }
       }
     };
+    //  this.init()
+  }
+
+async webIdChanged(webId){
+    this.username = await data[webId].vcard$fn  || webId.split("/")[2].split('.')[0];
   }
 
 }

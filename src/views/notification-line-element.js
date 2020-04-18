@@ -28,7 +28,7 @@ class NotificationLineElement extends LitElement {
 
     <div class="row">
     <div class="col-3">
-    <button  class="btn btn-outline-primary btn-sm" webId="${this.notification.attributedTo}" @click="${this.showProfile}" >
+    <button  class="btn btn-outline-info btn-sm" webId="${this.notification.attributedTo}" @click="${this.showProfile}">
     ${this.notification.creatorName}</button>
     <small><p class="font-weight-light">${this.delay(this.notification.published)}</p></small>
 
@@ -60,7 +60,7 @@ class NotificationLineElement extends LitElement {
     mois > 0 ? duree+= mois+"m" :
     jours > 0 ? duree += jours+"j":
     heures > 0 ? duree += heures+"h":
-    minutes > 0 ? duree += miniutes+"m":
+    minutes > 0 ? duree += minutes+"m":
     duree = diff/1000+ "s";
     return duree
   }
@@ -70,7 +70,6 @@ class NotificationLineElement extends LitElement {
     console.log(webId)
     this.agent.send("App", {action: "pageChanged", page: "profile"})
     this.agent.send("Profile", {action: "profileChanged", webId: webId})
-
   }
 
   firstUpdated(){

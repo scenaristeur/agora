@@ -60,10 +60,10 @@ class ProfileElement extends LitElement {
     ${this.webId != null ?
       html`
       ${this.webId != this.p_config.webId ?
-        html `<button class="btn btn-primary" @click="${this.follow}">Follow</button>
+        html `<button class="btn btn-outline-info btn-sm" @click="${this.follow}"><i class="fas fa-user-plus"></i>Follow</button>
         `
         :html `
-        <button class="brn btn-primary" @click="${this.edit}">Edit My Profile (WIP)</button>
+        <button class="brn btn-outline-primary btn-sm" @click="${this.edit}">Edit My Profile (WIP)</button>
         `}
         `
         :html``
@@ -72,6 +72,10 @@ class ProfileElement extends LitElement {
       </div>
       </div>
       `;
+    }
+
+    edit(){
+      alert("// TODO: come back later ;-) ")
     }
 
     close(){
@@ -117,7 +121,7 @@ class ProfileElement extends LitElement {
 
     async  follow(){
       // Must create a follow Activity with accept ?
-
+      alert("// TODO: come back later ;-) ")
       let profile_followers = this.p_config.followers+'index.ttl#this'
       console.log(profile_followers)
       let user_following = this.config.following+'index.ttl#this'

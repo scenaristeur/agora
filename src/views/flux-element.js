@@ -30,7 +30,7 @@ class FluxElement extends BaseView {
     Notifications : ${this.notifications.length}</br>-->
     <div class="row" style="overflow-y:scroll;position:relative;height: 400px;">
 
-    <div ?hidden = "${this.notifications.length != 0}">Loading Activities from ${this.agoraPod} </div>
+    <div ?hidden = "${this.notifications.length != 0}">Loading<br>Activities<br>from<br>${this.agoraPod}</div>
     <ul class="list-group list-group-flush">
     ${this.notifications.map((n,i) => html `
       <li class="list-group-item" id="${this.name}">

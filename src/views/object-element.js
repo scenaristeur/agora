@@ -33,9 +33,20 @@ class ObjectElement extends LitElement {
     <div class="row mt-2">
     <button class="btn btn-outline-info btn-sm"  @click="${this.replyTo}">Reply</button>
     <button class="btn btn-outline-info btn-sm"><i class="fas fa-share-alt" @click="${this.share}"></i></button>
+    <button class="btn btn-outline-info btn-sm"><i class="far fa-thumbs-up" @click="${this.like}"></i></button>
+    <button class="btn btn-outline-info btn-sm"><i class="far fa-thumbs-down" @click="${this.dislike}"></i></button>
     </div>
     `;
   }
+
+  like(){
+  alert("// TODO: come back later ;-) ")
+  }
+  dislike(){
+    alert("// TODO: come back later ;-) ")
+  }
+
+
 
   linkify(inputText) {
     // <!--    ${this.linkify(`${this.object.content}`)}-->
