@@ -26,16 +26,14 @@ class ActivityElement extends LitElement {
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
 
-    <div class="row" id="${this.url}">
+  <!--  <div class="row" id="${this.url}">
     <b>${this.activity.summary}</b>
-    <!-- /     Target : <a href="${this.activity.target}"
+     /     Target : <a href="${this.activity.target}"
     target="_blank">${this.localName(this.activity.target)}</a>
-    <br>-->
-    </div>
-    <div class="row">
+    <br>
+    </div>-->
     <object-element name="${this.name+'_object'}" url="${this.activity.object}">
     Loading object {this.activity.object}...</object-element>
-    </div>
 
     `;
   }

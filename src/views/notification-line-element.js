@@ -25,26 +25,13 @@ class NotificationLineElement extends LitElement {
     <div timestamp="${this.notification.timestamp}"
     url="${this.notification.url}">
 
-    <div class="row">
-    <div class="col">
-    ${this.notification.summary}
-    </div>
-
-    <div class="col">
-    <a href="${this.notification.type}"
-    title="${this.notification.type}"
-    target="_blank">${this.localName(this.notification.type)}</a>
-    </div>
-
-    <div class="col">
-    ${new Date(this.notification.published).toLocaleString()}
-    </div>
-    </div>
 
     <div class="row">
     <div class="col-3">
-    <button  class="btn btn-outline-primary" webId="${this.notification.attributedTo}" @click="${this.showProfile}" >
+    <button  class="btn btn-outline-primary btn-sm" webId="${this.notification.attributedTo}" @click="${this.showProfile}" >
     ${this.notification.creatorName}</button>
+    <small><p class="font-weight-light">${this.delay(this.notification.published)}</p></small>
+
     </div>
 
     <div class="col">
@@ -59,6 +46,24 @@ class NotificationLineElement extends LitElement {
     `;
   }
 
+
+  delay(published){
+    let diff = new Date().getTime() - new Date(published).getTime()
+    let minute = 1000 * 60;
+    let minutes = Math.floor(diff/minute);
+    let heures = Math.floor(minutes/60);
+    let jours = Math.floor(heures/24);
+    let mois = Math.floor(jours/31); //*
+    let annees = Math.floor(mois/12);
+    let duree = ""
+    annees > 0 ? duree+= annees+"y" :
+    mois > 0 ? duree+= mois+"m" :
+    jours > 0 ? duree += jours+"j":
+    heures > 0 ? duree += heures+"h":
+    minutes > 0 ? duree += miniutes+"m":
+    duree = diff/1000+ "s";
+    return duree
+  }
 
   showProfile(e){
     let webId = e.target.getAttribute("webId")

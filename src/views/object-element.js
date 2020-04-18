@@ -23,14 +23,38 @@ class ObjectElement extends LitElement {
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
-    <div class="container">
-    Name : ${this.object.name}<br>
-    Content: ${this.object.content}<br>
-    <button class="btn btn-outline-primary"  @click="${this.replyTo}">Reply</button>
-    <button class="btn btn-outline-primary"><i class="fas fa-share-alt" @click="${this.share}"></i></button>
+    <div class="row">
+    <b>${this.object.name}</b>
+    </div>
+    <div class="row mt-2">
+    ${this.object.content}
+
+    </div>
+    <div class="row mt-2">
+    <button class="btn btn-outline-info btn-sm"  @click="${this.replyTo}">Reply</button>
+    <button class="btn btn-outline-info btn-sm"><i class="fas fa-share-alt" @click="${this.share}"></i></button>
     </div>
     `;
   }
+
+  linkify(inputText) {
+    // <!--    ${this.linkify(`${this.object.content}`)}-->
+    console.log(inputText)
+    //URLs starting with http://, https://, or ftp://
+    var replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+    var replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+
+    //URLs starting with www. (without // before it, or it'd re-link the ones done above)
+    var replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+    var replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+
+    //Change email addresses to mailto:: links
+    var replacePattern3 = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
+    var replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
+
+    return replacedText
+  }
+
 
   replyTo(){
     console.log(this.url)
