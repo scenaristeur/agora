@@ -26,24 +26,32 @@ class FriendView extends LitElement {
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
 
     <div class="card">
-      ${this.f_photo.length > 0 ?
-    html`<img class="rounded-circle user_img_msg" src="//images.weserv.nl/?url=${this.f_photo}&w=100&h=100" title="${this.f_photo}" alt="no image">`
+    ${this.f_photo.length > 0 ?
+    html`<img class="rounded-circle card-img-top" src="//images.weserv.nl/?url=${this.f_photo}&w=150&h=150" title="${this.f_photo}" alt="no image">`
     :html`<i class="fas fa-user-circle fa-2x" title="${this.f_name}"></i>`
   }
-<!--  <img class="card-img-top" src="//images.weserv.nl/?url=${this.f_photo}&w=32&h=32"  alt="Card image cap">-->
-  <div class="card-body">
-  <!--  <h5 class="card-title">${this.f_name}</h5>
-  <p class="card-text"> ${this.f_webId} With supporting text below as a natural lead-in to additional content.</p>-->
-  <button class="btn btn-outline-info btn-sm" webId="${this.f_webId}"
-   @click="${this.showProfile}">${this.f_name}</button>
-  </div>
-  </div>
-  `;
+
+<!--    <img class="card-img-top" src="//images.weserv.nl/?url=${this.f_photo}&w=150&h=150"  alt="${this.f_name}">-->
+    <div class="card-body">
+    <!--  <h5 class="card-title">${this.f_name}</h5>
+    <p class="card-text"> ${this.f_webId} With supporting text below as a natural lead-in to additional content.</p>-->
+    <button class="btn btn-outline-info btn-sm" webId="${this.f_webId}"
+    @click="${this.showProfile}">${this.f_name}</button>
+    </div>
+    </div>
+    `;
+  }
+
+  /* test photo
+  ${this.f_photo.length > 0 ?
+  html`<img class="rounded-circle user_img_msg" src="//images.weserv.nl/?url=${this.f_photo}&w=144&h=144" title="${this.f_photo}" alt="no image">`
+  :html`<i class="fas fa-user-circle fa-2x" title="${this.f_name}"></i>`
 }
+*/
 
 showProfile(e){
   let webId = e.target.getAttribute("webId")
-//  console.log(webId)
+  //  console.log(webId)
   this.agent.send("App", {action: "pageChanged", page: "profile"})
   this.agent.send("Profile", {action: "profileChanged", webId: webId})
 }

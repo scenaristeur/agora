@@ -33,7 +33,8 @@ class PostTabsElement extends LitElement {
       friends: {type: Array},
       share: {type: Object},
       confidentialite: {type: Array},
-      title: {type: String}
+      title: {type: String},
+      log: {type: String}
     };
   }
 
@@ -52,7 +53,7 @@ class PostTabsElement extends LitElement {
     {level: "Not listed", value: "not_listed", description: "Not listed in public ?", icon: "fas fa-lock-open"},
     {level: "Followers", value: "followers", description: "Only your followers", icon: "fas fa-lock"},
     {level: "Direct", value: "direct", description: "Only listed users", icon: "fas fa-envelop"}]
-
+    this.log = ""
     //  this.agoraNotesListUrl = "https://agora.solid.community/public/notes.ttl"
   }
 
@@ -178,7 +179,6 @@ class PostTabsElement extends LitElement {
       <option
 
       value="${c.value}" title="${c.description}">
-      <!-- <i class="${c.icon}"></i> -->
       ${c.level}
       </option>
       `
@@ -204,13 +204,16 @@ class PostTabsElement extends LitElement {
 
       <div class="buttons">
       <div class="row">
-      <div class="col-8">
+      <div class="col-4">
       <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="agora_pub" name="agora_pub" checked>
       <label class="text-primary" for="agora_pub">
       Push to Agora
       </label>
       </div>
+      </div>
+      <div class="col-4">
+      Log : ${this.log}
       </div>
       <div class="col">
       <button type="button" class="btn btn-primary" primary @click=${this.addNote}>
@@ -256,6 +259,7 @@ class PostTabsElement extends LitElement {
     }
 
     addNote(){
+      this.log = "Add Note"
       let confid = this.shadowRoot.getElementById("confid").value
       console.log(confid)
       var title = this.shadowRoot.getElementById('title').value.trim();
@@ -265,9 +269,10 @@ class PostTabsElement extends LitElement {
         var id = new Date().toISOString ()
         this.requetes[id] = this.subelements.length
         console.log(this.requetes)
+        this.log = "Ask SubElements Content"
         var mess = {action: "askContent", id : id}
         this.agent.sendMulti(this.subelements, mess)
-        this.toggleWrite()
+
       }
     }
 
@@ -493,7 +498,7 @@ class PostTabsElement extends LitElement {
     }
   });
 
-
+this.log = activity_uri+ "DONE"
   console.log("Activity OK",activity_uri)
   let activity = {url: activity_uri, file: activity_file}
   app.setAcl(activity, aclStringWebIds, agora_pub)
@@ -547,6 +552,7 @@ class PostTabsElement extends LitElement {
 
 
   if (agora_pub == true){
+    this.log = "Add Public to recipients"
     console.log("PUBLIC",agora_pub)
     await data[activity_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
     await data[activity_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://www.w3.org/ns/activitystreams#Public"))
@@ -558,6 +564,7 @@ class PostTabsElement extends LitElement {
 
   recipients.forEach(async function(to, i) {
     console.log("TO",to)
+    app.log = "notification to "+to
     await data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(to))
 
     // recipient notification
@@ -589,19 +596,20 @@ class PostTabsElement extends LitElement {
           await data[notification_uri].rdfs$label.add(title)
           await data[notification_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
           await data[notification_uri]['https://www.w3.org/ns/activitystreams#link'].add(namedNode(activity_uri))
-
+app.log = notification_uri+ "DONE"
         }
       }
     }
 
     instanceTrouvee == false ? alert("No Agora Instance found in "+to+" Public Type Index ") : "";
   });
-
+  this.log = "Send OK"
+   this.toggleWrite()
 }
 
 
 async setAcl(o, aclStringWebIds, agora_pub){
-
+this.log = "Set ACL for ",o.file
   let aclString = `
   @prefix : <#>.
   @prefix acl: <http://www.w3.org/ns/auth/acl#>.
@@ -622,7 +630,11 @@ async setAcl(o, aclStringWebIds, agora_pub){
   console.log(aclString)
   try{
     await this.fileClient.createFile (o.file+'.acl', aclString, "text/turtle")
-  }catch(e){alert(e)}
+    this.log = o.file+'.acl Created'
+  }catch(e){
+    alert(e)
+
+  }
 }
 
 
