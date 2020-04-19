@@ -182,11 +182,11 @@ class ConfigElement extends LitElement {
   }
   console.log("CONFIG",this.config)
   this.requestUpdate()
-  await this.getFriends()
+//  await this.getFriends()
   this.agent.sendMulti(["PostTabs", "Profile"], {action: "configChanged", config: this.config})
 
 }
-
+/*
 async getFriends(){
   this.config.friends = []
   for await (const friend of data[this.config.webId].friends){
@@ -198,7 +198,7 @@ async getFriends(){
     f.webId = `${friend}`
     this.config.friends = [... this.config.friends, f]
   }
-}
+}*/
 
 async openConfigBox(){
   console.log(this.config.pti)
