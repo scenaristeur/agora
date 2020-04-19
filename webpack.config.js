@@ -87,7 +87,13 @@ module.exports = ({ mode, presets }) => {
       },
       entry: {
         "main": './src/index.js',
-        "profile-cartouche-element": './src/views/profile-cartouche-element.js'
+
+        "store-element": './src/views/store-element.js',
+        "info-element": './src/views/info-element.js',
+        "login-element": './src/views/login-element.js',
+        /*"post-element": './src/views/post-element.js',
+        "fab-element": './src/views/fab-element.js',*/
+        "profile-cartouche-element": './src/views/profile-cartouche-element.js',
       },
       /*  entry: {
       "app-view": './src/views/app-view.js',
