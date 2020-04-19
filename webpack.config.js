@@ -31,6 +31,10 @@ const polyfills = [
 
 const assets = [
   {
+    from: 'src/libs',
+    to: 'libs/'
+  },
+  {
     from: 'src/img',
     to: 'img/'
   },
@@ -70,11 +74,28 @@ module.exports = ({ mode, presets }) => {
   return webpackMerge(
     {
       mode,
-      entry: {
-        "app-view": './src/views/app-view.js',
-        "store-element": './src/views/store-element.js',
-        "profile-cartouche-element": './src/views/profile-cartouche-element.js',
+      externals: {
+        '@solid/query-ldflex': {
+           root: ['solid', 'data'],
+           commonjs: '@solid/query-ldflex', // not used, but needed for config
+           commonjs2: '@solid/query-ldflex',  // not used, but needed for config
+         },
       },
+    /*  entry: {
+        "app-view": './src/views/app-view.js',
+        "login-element": './src/views/login-element.js',
+        "store-element": './src/views/store-element.js',
+        "info-element": './src/views/info-element.js',
+        "post-element": './src/views/post-element.js',
+        "flux-element": './src/views/flux-element.js',
+        "friends-view": './src/views/friends-view.js',
+        "friend-view": './src/views/friend-view.js',
+        "notification-line-element": './src/views/notification-line-element.js',
+        "activity-element": './src/views/activity-element.js',
+        "object-element": './src/views/object-element.js',
+        "profile-cartouche-element": './src/views/profile-cartouche-element.js',
+        "fab-element": './src/views/fab-element.js',
+      },*/
       output: {
         //filename: '[name].[hash:8].js'
         filename: 'views/[name].js',

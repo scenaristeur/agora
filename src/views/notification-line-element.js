@@ -1,7 +1,10 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
-import data from "@solid/query-ldflex";
-import './activity-element.js'
+////let data = solid.data
+//console.log("LDFK+LEX",data)
+//import './activity-element.js'
+//let data = solid.data
+//console.log("LDFK+LEX",data)
 
 class NotificationLineElement extends LitElement {
 
@@ -94,12 +97,12 @@ class NotificationLineElement extends LitElement {
 
   async init(){
     //    console.log(this.notification.url)
-    this.notification.attributedTo = await data[this.notification.url].as$attributedTo
-    this.notification.summary = await data[this.notification.url].as$summary
-    this.notification.type = await data[this.notification.url].as$type
-    let link = await data[this.notification.url].as$link
+    this.notification.attributedTo = await solid.data[this.notification.url].as$attributedTo
+    this.notification.summary = await solid.data[this.notification.url].as$summary
+    this.notification.type = await solid.data[this.notification.url].as$type
+    let link = await solid.data[this.notification.url].as$link
     this.notification.link = `${link}`
-    this.notification.creatorName = await data[this.notification.attributedTo].vcard$fn || `${this.notification.attributedTo}`.split("/")[2].split('.')[0];
+    this.notification.creatorName = await solid.data[this.notification.attributedTo].vcard$fn || `${this.notification.attributedTo}`.split("/")[2].split('.')[0];
     //  console.log(this.notification)
     this.requestUpdate()
   }

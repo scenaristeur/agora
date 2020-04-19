@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
-import data from "@solid/query-ldflex";
+//let data = solid.data
+//console.log("LDFK+LEX",data)
 
 
 class FriendsView extends LitElement {
@@ -137,7 +138,7 @@ class FriendsView extends LitElement {
 
         async getFriends(){
           let friends = []
-          for await (const f of data[this.webId].friends){
+          for await (const f of solid.data[this.webId].friends){
             friends = [... friends, `${f}`]
           }
           this.friends = friends
@@ -148,7 +149,7 @@ class FriendsView extends LitElement {
           console.log(this.config)
           let user_followers = this.config.followers+'index.ttl#this'
           console.log(user_followers)
-          for await (const fer of data[user_followers].as$items){
+          for await (const fer of solid.data[user_followers].as$items){
             followers = [... followers, `${fer}`]
           }
           this.followers = followers
@@ -159,7 +160,7 @@ class FriendsView extends LitElement {
           console.log(this.config)
           let user_following = this.config.following+'index.ttl#this'
           console.log(user_following)
-          for await (const fing of data[user_following].as$items){
+          for await (const fing of solid.data[user_following].as$items){
             following = [... following, `${fing}`]
           }
           this.following = following

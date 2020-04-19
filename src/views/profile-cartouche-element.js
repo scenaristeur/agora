@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
-import data from "@solid/query-ldflex";
+//let data = solid.data
+//console.log("LDFK+LEX",data)
 
 
 class ProfileCartoucheElement extends LitElement {
@@ -58,7 +59,7 @@ class ProfileCartoucheElement extends LitElement {
     this.agent = new HelloAgent(this.name);
     console.log(this.agent)
     this.agent.receive = function(from, message) {
-      //  console.log("messah",message)
+      console.log("messah",message)
       if (message.hasOwnProperty("action")){
         //  console.log(message)
         switch(message.action) {
@@ -70,12 +71,15 @@ class ProfileCartoucheElement extends LitElement {
         }
       }
     };
+    app.agent.send("Login", {action:"test", webId: app.webId});
+
     //  this.init()
   }
 
   async webIdChanged(webId){
+    console.log(webId)
     this.webId = webId
-    this.username = await data[webId].vcard$fn  || webId.split("/")[2].split('.')[0];
+    this.username = await solid.data[webId].vcard$fn  || webId.split("/")[2].split('.')[0];
   }
 
 }

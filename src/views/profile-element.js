@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
-import data from "@solid/query-ldflex";
+//let data = solid.data
+//console.log("LDFK+LEX",data)
 import { namedNode } from '@rdfjs/data-model';
 
 
@@ -128,9 +129,9 @@ class ProfileElement extends LitElement {
       console.log(profile_followers)
       let user_following = this.config.following+'index.ttl#this'
       console.log(user_following)
-      await data[user_following].as$items.add(namedNode(this.p_config.webId))
+      await solid.data[user_following].as$items.add(namedNode(this.p_config.webId))
       console.log("!!! Must first set authenticated agent to publisher in config")
-      await data[profile_followers].as$items.add(namedNode(this.config.webId))
+      await solid.data[profile_followers].as$items.add(namedNode(this.config.webId))
     }
 
 
@@ -138,23 +139,23 @@ class ProfileElement extends LitElement {
     async profileChanged(webId){
       this.p_config = {}
       this.p_config.webId = webId
-      this.p_config.pti = await data[this.p_config.webId].publicTypeIndex
-      for await (const subject of data[this.p_config.pti].subjects){
+      this.p_config.pti = await solid.data[this.p_config.webId].publicTypeIndex
+      for await (const subject of solid.data[this.p_config.pti].subjects){
         if(this.p_config.pti != `${subject}`)
         /*let s = `${subject}`
         console.log(s)*/
         if (`${subject}`.endsWith('#Agora')){
-          let instance  = await data[`${subject}`].solid$instance
+          let instance  = await solid.data[`${subject}`].solid$instance
           this.p_config.instance = `${instance}`
-          let inbox = await data[this.p_config.instance].as$inbox
+          let inbox = await solid.data[this.p_config.instance].as$inbox
           this.p_config.inbox = `${inbox}`
-          let outbox = await data[this.p_config.instance].as$outbox
+          let outbox = await solid.data[this.p_config.instance].as$outbox
           this.p_config.outbox = `${outbox}`
-          let followers = await data[this.p_config.instance].as$followers
+          let followers = await solid.data[this.p_config.instance].as$followers
           this.p_config.followers = `${followers}`
-          let following = await data[this.p_config.instance].as$following
+          let following = await solid.data[this.p_config.instance].as$following
           this.p_config.following = `${following}`
-          let liked = await data[this.p_config.instance].as$liked
+          let liked = await solid.data[this.p_config.instance].as$liked
           this.p_config.liked = `${liked}`
         }
       }

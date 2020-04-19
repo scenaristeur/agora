@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
-import data from "@solid/query-ldflex";
+//let data = solid.data
+//console.log("LDFK+LEX",data)
 
 
 class FriendView extends LitElement {
@@ -77,8 +78,8 @@ firstUpdated(){
 }
 
 async init(){
-  let name = await data[`${this.f_webId}`].vcard$fn || `${this.f_webId}`.split("/")[2].split('.')[0];
-  let photo = await data[`${this.f_webId}`].vcard$hasPhoto || "https://solid.github.io/solid-ui/src/icons/noun_15059.svg"
+  let name = await solid.data[`${this.f_webId}`].vcard$fn || `${this.f_webId}`.split("/")[2].split('.')[0];
+  let photo = await solid.data[`${this.f_webId}`].vcard$hasPhoto || "https://solid.github.io/solid-ui/src/icons/noun_15059.svg"
   this.f_name = `${name}`
   this.f_photo = `${photo}`!= "undefined" ? `${photo}` : "https://solid.github.io/solid-ui/src/icons/noun_15059.svg"
   this.requestUpdate()

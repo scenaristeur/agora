@@ -28,7 +28,7 @@ class AppView extends BaseView {
   render() {
 
     return html`
-
+<store-element name="Store">Loading Store</store-element>
     <div class="container">
     <fab-element name="Fab" ?hidden="${this.webId == null}">Loading FAb</fab-element>
     <div class="row " style=" background-color: rgba(100,100,0,0.1);">
@@ -36,9 +36,9 @@ class AppView extends BaseView {
     <info-element name="Info">Loading Info</info-element>
     <login-element name="Login">Loading</login-element>
     <post-element name="Post" .share="${this.share}">Loading Post</post-element>
-  <!--  <div ?hidden="${this.webId == null}">
+   <div ?hidden="${this.webId == null}">
     <profile-cartouche-element name="ProfileCartouche" webId="${this.webId}">Loading</profile-cartouche-element>
-    </div>-->
+    </div>
     <div class="row" style="background-color: rgba(0,255,0,0.1);">
     <!--  <div class="col-md">
     Search

@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
-import data from "@solid/query-ldflex";
+//let data = solid.data
+//console.log("LDFK+LEX",data)
 
 class ObjectElement extends LitElement {
 
@@ -107,8 +108,8 @@ class ObjectElement extends LitElement {
 
   async init(){
     //console.log(this.url)
-    this.object.name = await data[this.url].as$name
-    this.object.content = await data[this.url].as$content
+    this.object.name = await solid.data[this.url].as$name
+    this.object.content = await solid.data[this.url].as$content
     this.requestUpdate()
   }
 

@@ -3,9 +3,9 @@ import { HelloAgent } from '../agents/hello-agent.js';
 
 //import { PodHelper } from '../tools/pod-helper.js';
 /*import { fetchDocument } from 'tripledoc';*/
-import { solid, schema, rdf, rdfs } from 'rdf-namespaces';
+//import { solid, schema, rdf, rdfs } from 'rdf-namespaces';
 import { namedNode } from '@rdfjs/data-model';
-import  data  from "@solid/query-ldflex";
+//import  data  from "@solid/query-ldflex";
 
 import * as auth from 'solid-auth-client';
 import * as SolidFileClient from "solid-file-client"
@@ -340,8 +340,8 @@ class PostTabsElement extends LitElement {
       if (message.replyTo != undefined){
         this.replyTo ={}
         this.replyTo.url  = message.replyTo
-        let attributedTo = await data[this.replyTo.url].as$attributedTo
-        let name = await data[`${attributedTo}`].vcard$fn || `${friend}`.split("/")[2].split('.')[0];
+        let attributedTo = await solid.data[this.replyTo.url].as$attributedTo
+        let name = await solid.data[`${attributedTo}`].vcard$fn || `${friend}`.split("/")[2].split('.')[0];
         this.replyTo.attributedTo = `${attributedTo}`
         this.replyTo.name = `${name}`
         console.log(this.replyTo)
@@ -392,7 +392,7 @@ class PostTabsElement extends LitElement {
       }
       this.shadowRoot.getElementById('title').value = ""
       this.shadowRoot.getElementById('tags').value = ""
-      this.storage = await data.user.storage
+      this.storage = await solid.data.user.storage
 
       // TREAT OBJECTS
       let dateObj = new Date();
@@ -413,11 +413,11 @@ class PostTabsElement extends LitElement {
           if(r.message.content.length >0){
             objects.push({uri: object_uri, file: object_file})
             console.log("CREATE NOTE WITH", r.message.content, object_uri)
-            await data[object_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Note'))
-            await data[object_uri]['https://www.w3.org/ns/activitystreams#name'].add(title)
-            await data[object_uri]['https://www.w3.org/ns/activitystreams#content'].add(r.message.content)
-            await data[object_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
-            await data[object_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Note'))
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#name'].add(title)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#content'].add(r.message.content)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
 
           }
           break;
@@ -468,14 +468,14 @@ class PostTabsElement extends LitElement {
     let activity_file = app.config.outbox+"activities/"+activity_Id+".ttl"
     let activity_uri = activity_file+"#this"
 
-    await data[activity_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
-    await data[activity_uri]['https://www.w3.org/ns/activitystreams#summary'].add(title)
-    await data[activity_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
-    await data[activity_uri].rdfs$label.add(title)
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#summary'].add(title)
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+    await solid.data[activity_uri].rdfs$label.add(title)
 
     /*  if (recipients.length== 0){
-    await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(app.config.webId))
-    await data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(app.config.webId))
+    await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(app.config.webId))
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(app.config.webId))
   }*/
 
   // ACL OBJECT
@@ -488,13 +488,13 @@ class PostTabsElement extends LitElement {
 
   objects.forEach(async function(o, i) {
     app.setAcl(o, aclStringWebIds, agora_pub)
-    await data[activity_uri]['https://www.w3.org/ns/activitystreams#object'].add(namedNode(o.uri))
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#object'].add(namedNode(o.uri))
     recipients.forEach(async function(to, i) {
-      await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(to))
+      await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(to))
     })
     if (agora_pub == true){
-      await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
-      await data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://www.w3.org/ns/activitystreams#Public"))
+      await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
+      await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://www.w3.org/ns/activitystreams#Public"))
     }
   });
 
@@ -554,8 +554,8 @@ this.log = activity_uri+ "DONE"
   if (agora_pub == true){
     this.log = "Add Public to recipients"
     console.log("PUBLIC",agora_pub)
-    await data[activity_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
-    await data[activity_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://www.w3.org/ns/activitystreams#Public"))
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://www.w3.org/ns/activitystreams#Public"))
     recipients.push("https://agora.solid.community/profile/card#me")
   }
 
@@ -565,16 +565,16 @@ this.log = activity_uri+ "DONE"
   recipients.forEach(async function(to, i) {
     console.log("TO",to)
     app.log = "notification to "+to
-    await data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(to))
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(to))
 
     // recipient notification
     let notification_Id = uuidv4();
-    let pti = await data[to].publicTypeIndex
+    let pti = await solid.data[to].publicTypeIndex
     console.log(pti)
 
     let instanceTrouvee = false
 
-    for await (const subject of data[pti].subjects){
+    for await (const subject of solid.data[pti].subjects){
       let s = `${subject}`
       console.log(s)
       if(pti != `${subject}`){
@@ -583,19 +583,19 @@ this.log = activity_uri+ "DONE"
         if (`${subject}`.endsWith('#Agora')){
           instanceTrouvee = true
           console.log(s)
-          let instance  = await data[`${subject}`].solid$instance
-          let ib = await data[`${instance}`].as$inbox
+          let instance  = await solid.data[`${subject}`].solid$instance
+          let ib = await solid.data[`${instance}`].as$inbox
           let recip_inbox = `${ib}`
           let notification_uri = recip_inbox+notification_Id+".ttl#this"
 
           console.log(notification_uri)
 
-          await data[notification_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
-          await data[notification_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
-          await data[notification_uri]['https://www.w3.org/ns/activitystreams#summary'].add(title)
-          await data[notification_uri].rdfs$label.add(title)
-          await data[notification_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
-          await data[notification_uri]['https://www.w3.org/ns/activitystreams#link'].add(namedNode(activity_uri))
+          await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
+          await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
+          await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#summary'].add(title)
+          await solid.data[notification_uri].rdfs$label.add(title)
+          await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+          await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#link'].add(namedNode(activity_uri))
 app.log = notification_uri+ "DONE"
         }
       }
@@ -652,24 +652,24 @@ async preparePost2(){
   }
   this.shadowRoot.getElementById('title').value = ""
   this.shadowRoot.getElementById('tags').value = ""
-  this.storage = await data.user.storage
+  this.storage = await solid.data.user.storage
   var userActivity = this.storage+"public/spoggy/activity.ttl#"+id
   console.log("Creation ", userActivity)
-  await data[userActivity].as$name.set(title)
-  await data[userActivity].rdfs$label.set(title)
-  await data[userActivity].schema$dateCreated.set(date.toISOString())
-  await data[userActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
-  inReplyTo!= null && inReplyTo.length > 0 ? await data[userActivity].as$inReplyTo.add(namedNode(inReplyTo)) : "";
+  await solid.data[userActivity].as$name.set(title)
+  await solid.data[userActivity].rdfs$label.set(title)
+  await solid.data[userActivity].schema$dateCreated.set(date.toISOString())
+  await solid.data[userActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
+  inReplyTo!= null && inReplyTo.length > 0 ? await solid.data[userActivity].as$inReplyTo.add(namedNode(inReplyTo)) : "";
 
   if (agora_pub == true){
     var agoraActivity = "https://agora.solid.community/public/spoggy/activity.ttl#"+id
-    await data[agoraActivity].as$name.add(title)
-    await data[agoraActivity].rdfs$label.add(title)
-    await data[agoraActivity].schema$dateCreated.add(date.toISOString())
-    await data[agoraActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
-    await data[agoraActivity].as$actor.add(namedNode(app.webId))
-    await data[agoraActivity].as$target.add(namedNode(userActivity))
-    inReplyTo!= null &&  inReplyTo.length > 0 ? await data[agoraActivity].as$inReplyTo.add(namedNode(inReplyTo)) : "";
+    await solid.data[agoraActivity].as$name.add(title)
+    await solid.data[agoraActivity].rdfs$label.add(title)
+    await solid.data[agoraActivity].schema$dateCreated.add(date.toISOString())
+    await solid.data[agoraActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
+    await solid.data[agoraActivity].as$actor.add(namedNode(app.webId))
+    await solid.data[agoraActivity].as$target.add(namedNode(userActivity))
+    inReplyTo!= null &&  inReplyTo.length > 0 ? await solid.data[agoraActivity].as$inReplyTo.add(namedNode(inReplyTo)) : "";
   }
 
   this.responses.forEach(async function(r){
@@ -678,14 +678,14 @@ async preparePost2(){
       if (r.message.content.length > 0){
         var userNote = app.storage+"public/Notes/"+id+".ttl"
         var content = r.message.content
-        await data[userNote].schema$text.add(content);
-        await data[userNote].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Note'))
-        await data[userActivity].schema$text.add(content);
-        await data[userActivity].as$object.add(namedNode(userNote))
+        await solid.data[userNote].schema$text.add(content);
+        await solid.data[userNote].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Note'))
+        await solid.data[userActivity].schema$text.add(content);
+        await solid.data[userActivity].as$object.add(namedNode(userNote))
 
         if (agora_pub == true){
-          await data[agoraActivity].schema$text.add(content);
-          await data[agoraActivity].as$object.add(namedNode(userNote))
+          await solid.data[agoraActivity].schema$text.add(content);
+          await solid.data[agoraActivity].as$object.add(namedNode(userNote))
         }
       }
       break;
@@ -701,8 +701,8 @@ async preparePost2(){
         var userMedia = app.storage+"public/spoggy/"+classe+"/"+newFilename
         console.log("creation ",userMedia)
         await app.sendFile(userMedia, file, contentType)
-        await  data[userActivity].as$object.add(namedNode(userMedia))
-        await  data[agoraActivity].as$object.add(namedNode(userMedia))
+        await  solid.data[userActivity].as$object.add(namedNode(userMedia))
+        await  solid.data[agoraActivity].as$object.add(namedNode(userMedia))
       }
       break;
       case "Triple":
@@ -728,44 +728,44 @@ async preparePost1(){
   var tags = this.shadowRoot.getElementById('tags').value.split(',');
   this.shadowRoot.getElementById('title').value = ""
   this.shadowRoot.getElementById('tags').value = ""
-  this.storage = await data.user.storage
+  this.storage = await solid.data.user.storage
 
 
   var userActivity = this.storage+"public/spoggy/activity.ttl#"+id
   console.log("Creation ", userActivity)
-  await  data[userActivity].rdfs$label.add(title)
-  await  data[userActivity].schema$dateCreated.add(date.toISOString())
+  await  solid.data[userActivity].rdfs$label.add(title)
+  await  solid.data[userActivity].schema$dateCreated.add(date.toISOString())
 
-  await data[userActivity].as$name.add(title)
-  await data[userActivity].as$generator.add(window.location.origin)
-  await data[userActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
+  await solid.data[userActivity].as$name.add(title)
+  await solid.data[userActivity].as$generator.add(window.location.origin)
+  await solid.data[userActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
   console.log(userActivity+ " -- >created")
-  await data[app.storage+"public/spoggy/tags.ttl"].rdfs$label.add("Tags")
+  await solid.data[app.storage+"public/spoggy/tags.ttl"].rdfs$label.add("Tags")
 
   var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
   if (agora_pub == true){
     console.log("Creation ", userActivity)
     var agoraActivity = "https://agora.solid.community/public/spoggy/activity.ttl#"+id
-    await data[agoraActivity].schema$dateCreated.add(date.toISOString())
-    await data[agoraActivity].rdfs$label.add(title)
-    await data[agoraActivity].as$name.add(title)
-    await data[agoraActivity].as$target.add(namedNode(userActivity))
-    await data[agoraActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Add'))
-    await data[agoraActivity].schema$creator.add(namedNode(app.webId))
-    await data[agoraActivity].as$actor.add(namedNode(app.webId))
+    await solid.data[agoraActivity].schema$dateCreated.add(date.toISOString())
+    await solid.data[agoraActivity].rdfs$label.add(title)
+    await solid.data[agoraActivity].as$name.add(title)
+    await solid.data[agoraActivity].as$target.add(namedNode(userActivity))
+    await solid.data[agoraActivity].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Add'))
+    await solid.data[agoraActivity].schema$creator.add(namedNode(app.webId))
+    await solid.data[agoraActivity].as$actor.add(namedNode(app.webId))
     console.log(agoraActivity+ " -- >created")
   }
 
   tags.forEach(async function(t){
     var taguri = app.storage+"public/spoggy/tags.ttl#"+t.trim();
-    await  data[userActivity].as$tag.add(namedNode(taguri))
+    await  solid.data[userActivity].as$tag.add(namedNode(taguri))
     //    console.log(taguri+ " -- >created")
   })
 
   //  var path = this.storage+"public/Notes/"+id+".ttl"
   //  console.log(data)
-  //  var tit = await  data[path].rdfs$label.add("title ONE")
-  //  var cont = await data[path].schema$text.add("content ONE");
+  //  var tit = await  solid.data[path].rdfs$label.add("title ONE")
+  //  var cont = await solid.data[path].schema$text.add("content ONE");
 
 
   this.responses.forEach(async function(r){
@@ -773,18 +773,18 @@ async preparePost1(){
       case "Note":
       var userNote = app.storage+"public/spoggy/Notes/"+id+".ttl"
       var content = r.message.content
-      await data[userNote].rdfs$label.add(title)
-      await data[userNote].schema$text.add(content);
-      await data[userNote].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Note'))
+      await solid.data[userNote].rdfs$label.add(title)
+      await solid.data[userNote].schema$text.add(content);
+      await solid.data[userNote].rdf$type.add(namedNode('https://www.w3.org/ns/activitystreams#Note'))
       //!!! as$Note ne fonctionne pas
-      await  data[userActivity].as$attachment.add(namedNode(userNote))
-      await data[userActivity].schema$text.add(content);
+      await  solid.data[userActivity].as$attachment.add(namedNode(userNote))
+      await solid.data[userActivity].schema$text.add(content);
 
       var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
       if (agora_pub == true){
         //!!! as$Note ne fonctionne pas
-        await  data[agoraActivity].as$object.add(namedNode(userNote))
-        await data[agoraActivity].schema$text.add(content);
+        await  solid.data[agoraActivity].as$object.add(namedNode(userNote))
+        await solid.data[agoraActivity].schema$text.add(content);
       }
 
 
@@ -801,10 +801,10 @@ async preparePost1(){
         var userMedia = app.storage+"public/spoggy/"+classe+"/"+newFilename
         console.log("creation ",userMedia)
         await app.sendFile(userMedia, file, contentType)
-        await  data[userActivity].as$attachment.add(namedNode(userMedia))
+        await  solid.data[userActivity].as$attachment.add(namedNode(userMedia))
         if (agora_pub == true){
           //!!! as$Note ne fonctionne pas
-          await  data[agoraActivity].as$object.add(namedNode(userMedia))
+          await  solid.data[agoraActivity].as$object.add(namedNode(userMedia))
         }
 
       }
@@ -814,10 +814,10 @@ async preparePost1(){
     }
   })
 
-  await data[app.storage+"public/spoggy/tags.ttl"].rdfs$label.add("Tags")
+  await solid.data[app.storage+"public/spoggy/tags.ttl"].rdfs$label.add("Tags")
   tags.forEach(async function(t){
     var taguri = app.storage+"public/spoggy/tags.ttl#"+t.trim();
-    await  data[userActivity].as$tag.add(namedNode(taguri))
+    await  solid.data[userActivity].as$tag.add(namedNode(taguri))
     //    console.log(taguri+ " -- >created")
   })
 

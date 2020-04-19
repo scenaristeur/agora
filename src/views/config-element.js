@@ -1,7 +1,8 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
-import data from "@solid/query-ldflex";
-import * as auth from 'solid-auth-client';
+//let data = solid.data
+//console.log("LDFK+LEX",data)
+//import * as auth from 'solid-auth-client';
 import * as SolidFileClient from "solid-file-client"
 import { namedNode } from '@rdfjs/data-model';
 
@@ -141,36 +142,36 @@ class ConfigElement extends LitElement {
   async checkConfig(){
     //  console.log(this.config.webId)
     /*TEST TO CHECK IF APP IS trustedApp
-    for await (const trustedApp of data[this.config.webId].acl$trustedApp){
+    for await (const trustedApp of solid.data[this.config.webId].acl$trustedApp){
     console.log("ta",`${trustedApp}`)
-    let origin = await data[trustedApp].acl$origin
+    let origin = await solid.data[trustedApp].acl$origin
     console.log(`${origin}`)
   }*/
   this.log = "Checking PublicTypeIndex"
-  this.config.pti = await data[this.config.webId].publicTypeIndex
+  this.config.pti = await solid.data[this.config.webId].publicTypeIndex
   this.log = "Checking Instances"
-  for await (const subject of data[this.config.pti].subjects){
+  for await (const subject of solid.data[this.config.pti].subjects){
     if(this.config.pti != `${subject}`)
     /*let s = `${subject}`
     console.log(s)*/
     this.log = " Checking Agora Instance"
     if (`${subject}`.endsWith('#Agora')){
-      let instance  = await data[`${subject}`].solid$instance
+      let instance  = await solid.data[`${subject}`].solid$instance
       this.config.instance = `${instance}`
       this.log = "Checking Inbox"
-      let inbox = await data[this.config.instance].as$inbox
+      let inbox = await solid.data[this.config.instance].as$inbox
       this.config.inbox = `${inbox}`
       this.log = "Checking Outbox"
-      let outbox = await data[this.config.instance].as$outbox
+      let outbox = await solid.data[this.config.instance].as$outbox
       this.config.outbox = `${outbox}`
       this.log = "Checking Followers"
-      let followers = await data[this.config.instance].as$followers
+      let followers = await solid.data[this.config.instance].as$followers
       this.config.followers = `${followers}`
       this.log = "Checking Following"
-      let following = await data[this.config.instance].as$following
+      let following = await solid.data[this.config.instance].as$following
       this.config.following = `${following}`
       this.log = "Checking Liked"
-      let liked = await data[this.config.instance].as$liked
+      let liked = await solid.data[this.config.instance].as$liked
       this.config.liked = `${liked}`
       this.log = "Cool, your configuration seems OK"
     }
@@ -189,10 +190,10 @@ class ConfigElement extends LitElement {
 /*
 async getFriends(){
   this.config.friends = []
-  for await (const friend of data[this.config.webId].friends){
+  for await (const friend of solid.data[this.config.webId].friends){
     console.log("FRIEND",`${friend}`)
     let f = {}
-    let name = await data[`${friend}`].vcard$fn || `${friend}`.split("/")[2].split('.')[0];
+    let name = await solid.data[`${friend}`].vcard$fn || `${friend}`.split("/")[2].split('.')[0];
     f.name = `${name}`
 
     f.webId = `${friend}`
@@ -202,7 +203,7 @@ async getFriends(){
 
 async openConfigBox(){
   console.log(this.config.pti)
-  this.storage = await data[this.config.webId].storage
+  this.storage = await solid.data[this.config.webId].storage
   console.log(`${this.storage}`)
   this.path = this.storage+"public/agora/"
   console.log(this.path)
@@ -223,7 +224,7 @@ async createFolders(){
   }else{
     this.hideModal()
     this.log = "Creating Folders"
-    let fc = new SolidFileClient(auth)
+    let fc = new SolidFileClient(solid.auth)
     console.log(this.fc)
     let root = this.path
     let inbox = this.shadowRoot.getElementById("staticInbox").value
@@ -322,15 +323,15 @@ async createFolders(){
       let inst_uri = this.config.pti+id
       let inst_index = root+'index.ttl#this'
       this.log = "Instance Creation : ",inst_uri
-      await data[inst_uri].solid$forClass.add(namedNode('https://www.w3.org/ns/activitystreams#Collection'))
-      await data[inst_uri].solid$instance.set(namedNode(inst_index))
-      //  await data[inst_uri].rdfs$label.add("Activity Streams Collection")
+      await solid.data[inst_uri].solid$forClass.add(namedNode('https://www.w3.org/ns/activitystreams#Collection'))
+      await solid.data[inst_uri].solid$instance.set(namedNode(inst_index))
+      //  await solid.data[inst_uri].rdfs$label.add("Activity Streams Collection")
       this.log = "Index Creation : ",inst_index
-      await data[inst_index].as$inbox.add(namedNode(inbox))
-      await data[inst_index].as$outbox.set(namedNode(outbox))
-      await data[inst_index].as$following.set(namedNode(root+'following/'))
-      await data[inst_index].as$followers.set(namedNode(root+'followers/'))
-      await data[inst_index].as$liked.set(namedNode(root+'liked/'))
+      await solid.data[inst_index].as$inbox.add(namedNode(inbox))
+      await solid.data[inst_index].as$outbox.set(namedNode(outbox))
+      await solid.data[inst_index].as$following.set(namedNode(root+'following/'))
+      await solid.data[inst_index].as$followers.set(namedNode(root+'followers/'))
+      await solid.data[inst_index].as$liked.set(namedNode(root+'liked/'))
       this.log = "YAHOOOOOOOOOOO, AGORA IS READY, AND WELL CONFIGURED !!!"
     }
     catch(e){

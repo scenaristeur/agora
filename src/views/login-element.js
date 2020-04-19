@@ -1,9 +1,11 @@
-import { html } from 'lit-element';
-import { BaseView } from './base-view.js';
-import * as auth from 'solid-auth-client';
-//import data from "@solid/query-ldflex";
+import { LitElement, html } from 'lit-element';
+import { HelloAgent } from '../agents/hello-agent.js';
+//import { BaseView } from './base-view.js';
+//import * as auth from 'solid-auth-client';
+////let data = solid.data
+//console.log("LDFK+LEX",data)
 
-class LoginElement extends BaseView {
+class LoginElement extends LitElement {
 
   static get properties() {
     return {
@@ -22,6 +24,9 @@ class LoginElement extends BaseView {
 
     render(){
       return html`
+      <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
+      <link href="css/fontawesome/css/all.css" rel="stylesheet">
+
       ${this.webId == null ?
         html`
         <button type="button" class="btn btn-success" @click=${this.login}>Login</button>
@@ -34,15 +39,31 @@ class LoginElement extends BaseView {
     }
 
     firstUpdated(){
-      super.firstUpdated()
-      let app = this
-      auth.trackSession(async function(session) {
+      var app = this;
+      this.agent = new HelloAgent(this.name);
+      console.log(this.agent)
+      this.agent.receive = function(from, message) {
+        console.log("messah",message)
+        if (message.hasOwnProperty("action")){
+          //  console.log(message)
+          switch(message.action) {
+            case "webIdChanged":
+            app.webIdChanged(message.webId)
+            break;
+            default:
+            console.log("Unknown action ",message)
+          }
+        }
+      };
+      solid.auth.trackSession(async function(session) {
         if (!session){
           app.webId=null
+          console.log("WWWWWWWWWWWWWGGGGGGGGGGGGGGG",app.webId)
           app.agent.sendMulti(app.destinataires,  {action:"webIdChanged", webId: app.webId});
         }
         else{
           app.webId = session.webId
+          console.log("WWWWWWWWWWWWWGGGGGGGGGGGGGGG",app.webId)
           app.agent.sendMulti(app.destinataires, {action:"webIdChanged", webId: app.webId});
         }
       })
@@ -66,15 +87,15 @@ class LoginElement extends BaseView {
 
     logout() {
       let wi = this.webId
-      auth.logout().then(() => alert('Goodbye '+wi+' !'));
+      solid.auth.logout().then(() => alert('Goodbye '+wi+' !'));
     }
 
     async popupLogin() {
-      let session = await auth.currentSession();
+      let session = await solid.auth.currentSession();
       let popupUri = './dist-popup/popup.html';
       //  let popupUri = 'https://solid.community/common/popup.html';
       if (!session)
-      session = await auth.popupLogin({ popupUri });
+      session = await solid.auth.popupLogin({ popupUri });
     }
   }
 

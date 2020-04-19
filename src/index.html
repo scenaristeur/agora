@@ -42,7 +42,6 @@ if (!window.customElements) {
 
 <body>
   <header><h4>Agora</h4>
-    <profile-cartouche-element name="ProfileCartouche" >Loading Cartouche</profile-cartouche-element>
 
   </header>
   <!--<nav>
@@ -71,7 +70,11 @@ if ('serviceWorker' in navigator) {
 }
 
 </script>
-<store-element name="Store">Loading Store</store-element>
+
+<script src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.3.0/dist-lib/solid-auth-client.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/solid-file-client@1.0.0/dist/window/solid-file-client.bundle.js"></script>
+<script src="./libs/solid-query-ldflex.bundle.js"></script>
+
 <!--<script src="views/store-element.js" type="module"></script>-->
 </body>
 </html>

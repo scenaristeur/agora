@@ -1,9 +1,11 @@
 import { html } from 'lit-element';
 import { BaseView } from './base-view.js';
-import data from "@solid/query-ldflex";
-//import * as auth from 'solid-auth-client';
-import './notification-line-element.js'
-
+////let data = solid.data
+//console.log("LDFK+LEX",data)
+////import * as auth from 'solid-auth-client';
+//import './notification-line-element.js'
+//let data = solid.data
+//console.log("LDFK+LEX",data)
 
 class FluxElement extends BaseView {
 
@@ -55,23 +57,23 @@ class FluxElement extends BaseView {
       let app = this
       this.log = "Agora Pod : "+this.agoraPod
       //      console.log(this.agoraPod)
-      let pti_url = await data[this.agoraPod].solid$publicTypeIndex
+      let pti_url = await solid.data[this.agoraPod].solid$publicTypeIndex
       this.log = 'Pti url : '+pti_url
       //    console.log(`${pti_url}`)
-      let instance = await data[pti_url+"#Agora"].solid$instance
+      let instance = await solid.data[pti_url+"#Agora"].solid$instance
       this.log = 'Instance url : '+instance
       //    console.log(`${instance}`)
-      let inbox = await data[instance].as$inbox
+      let inbox = await solid.data[instance].as$inbox
       this.log = 'Inbox : '+inbox
       //    console.log(`${inbox}`)
 
       let notifications = []
-      for await (const subject of data[inbox].subjects){
+      for await (const subject of solid.data[inbox].subjects){
         //    console.log(`${subject}`)
         if(`${subject}` != inbox){
           let n = {}
           n.url = `${subject}`+'#this'
-          let published = new Date(await data[n.url].as$published)
+          let published = new Date(await solid.data[n.url].as$published)
           n.published = `${published}`
           n.timestamp = published.getTime()
           notifications.push(n)
