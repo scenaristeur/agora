@@ -3,7 +3,7 @@ import './css/bootstrap/bootstrap.min.css';
 //import './css/fontawesome/css/all.css';
 import './styles.css';
 import './views/app-view.js';
-import './views/store-element.js'
+//import './views/store-element.js'
 import './views/friends-view.js'
 import './views/friend-view.js'
 import './views/info-element.js';
@@ -21,7 +21,7 @@ import './views/post-basic-element.js'
 import './views/flux-element.js'
 import './views/menu-element.js'
 import './views/profile-element.js'
-import './views/profil-cartouche-element.js'
+//import './views/profile-cartouche-element.js'
 
 import './views/config-element.js'
 import './views/fab-element.js'

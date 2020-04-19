@@ -38,7 +38,7 @@ class AppView extends BaseView {
     <div class="col-sm">
     ${this.webId != null?
       html`
-      <profil-cartouche-element name="ProfilCartouche" webId="${this.webId}">Loading</profil-cartouche-element>
+      <profile-cartouche-element name="ProfileCartouche" webId="${this.webId}">Loading</profile-cartouche-element>
       <!--<post-basic-element name="PostBasic" .share="${this.share}">Loading</post-basic-element>-->
       <post-element name="Post" .share="${this.share}">Loading Post</post-element>
 

@@ -17,7 +17,7 @@ class LoginElement extends BaseView {
     super();
     this.webId = null
     this.destinataires = [
-      'App','Config', 'ConfigGet', 'Fab', 'Post', 'PostTabs', 'Profile', 'ProfilCartouche', 'Friends']
+      'App','Config', 'ConfigGet', 'Fab', 'Post', 'PostTabs', 'Profile', 'ProfileCartouche', 'Friends']
     }
 
     render(){

@@ -28,21 +28,17 @@ class AppView extends BaseView {
   render() {
 
     return html`
-    <store-element name="Store">Loading Store</store-element>
 
     <div class="container">
-    <fab-element name="Fab" ?hidden="${this.webId == null}">Loading FAb<</fab-element>
+    <fab-element name="Fab" ?hidden="${this.webId == null}">Loading FAb</fab-element>
     <div class="row " style=" background-color: rgba(100,100,0,0.1);">
 
     <info-element name="Info">Loading Info</info-element>
     <login-element name="Login">Loading</login-element>
     <post-element name="Post" .share="${this.share}">Loading Post</post-element>
-    <div ?hidden="${this.webId == null}">
-    <profil-cartouche-element name="ProfilCartouche" webId="${this.webId}">Loading</profil-cartouche-element>
-
-
-
-    </div>
+  <!--  <div ?hidden="${this.webId == null}">
+    <profile-cartouche-element name="ProfileCartouche" webId="${this.webId}">Loading</profile-cartouche-element>
+    </div>-->
     <div class="row" style="background-color: rgba(0,255,0,0.1);">
     <!--  <div class="col-md">
     Search
@@ -71,60 +67,9 @@ class AppView extends BaseView {
     <div class="row" style="height: 20vh; background-color: rgba(255,0,0,0.1);">
     Page : ${this.page}
     </div>
-    <fab-element name="Fab">Loading Fab</fab-element>
     </div>
     `}
 
-    render1() {
-
-      return html`
-      <store-element name="Store">Loading Store</store-element>
-      <div class="row">
-      <info-element name="Info">Loading Info</info-element>
-      </div>
-
-      Page : ${this.page}
-      <div class="row">
-      <div class="col-sm">
-      ${this.webId != null?
-        html`
-        <profil-cartouche-element name="ProfilCartouche" webId="${this.webId}">Loading</profil-cartouche-element>
-        <!--<post-basic-element name="PostBasic" .share="${this.share}">Loading</post-basic-element>-->
-        <post-element name="Post" .share="${this.share}">Loading Post</post-element>
-
-        `
-        :html``}
-
-        <login-element name="Login">Loading</login-element>
-        </div>
-        <div class="col-sm-4 col-md-6">
-        <div ?hidden="${this.webId == null || this.page != "userProfile"}" >
-        <user-profile-view name="UserProfile">Loading userProfile</user-profile-view>
-        </div>
-
-
-        <div ?hidden="${this.webId == null || this.page != "config"}" >
-        <config-get-view name="ConfigGet">Loading Config Get</config-get-view>
-        <!--      <config-set-view name="ConfigSet">Loading Config Set</config-set-view>-->
-        </div>
-        <profile-element ?hidden="${this.page != "profile"}" name="Profile">Loading Profil</profile-element>
-        <flux-element name="Flux" ?hidden="${this.page !="flux"}" agoraPod="${this.agoraPod}">Loading</flux-element>
-        </div>
-        <div class="col-sm">
-        <!--  <config-element name="Config">Loading</config-element> -->
-
-
-        <!--      <menu-element name="Menu">Loading</menu-element>-->
-
-        </div>
-
-        </div>
-
-        <!--    <app-old-element name="AppOld">Loading App old</app-old-element>
-        -->
-
-        `;
-      }
 
       createRenderRoot() {
         return this;

@@ -70,8 +70,14 @@ module.exports = ({ mode, presets }) => {
   return webpackMerge(
     {
       mode,
+      entry: {
+        "app-view": './src/views/app-view.js',
+        "store-element": './src/views/store-element.js',
+        "profile-cartouche-element": './src/views/profile-cartouche-element.js',
+      },
       output: {
-        filename: '[name].[hash:8].js'
+        //filename: '[name].[hash:8].js'
+        filename: 'views/[name].js',
       },
       devServer: {
         contentBase: path.join(__dirname, 'dist'),
