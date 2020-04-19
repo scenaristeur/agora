@@ -121,7 +121,9 @@ class ProfileElement extends LitElement {
 
     async  follow(){
       // Must create a follow Activity with accept ?
-      alert("// TODO: come back later ;-) ")
+      //  alert("// TODO: come back later ;-) ")
+      console.log("CONFIG", this.config)
+      console.log("P_CONFIG", this.p_config)
       let profile_followers = this.p_config.followers+'index.ttl#this'
       console.log(profile_followers)
       let user_following = this.config.following+'index.ttl#this'
@@ -144,16 +146,16 @@ class ProfileElement extends LitElement {
         if (`${subject}`.endsWith('#Agora')){
           let instance  = await data[`${subject}`].solid$instance
           this.p_config.instance = `${instance}`
-          //  let inbox = await data[this.p_config.instance].as$inbox
-          //  this.p_config.inbox = `${inbox}`
-          //  let outbox = await data[this.p_config.instance].as$outbox
-          //  this.p_config.outbox = `${outbox}`
+          let inbox = await data[this.p_config.instance].as$inbox
+          this.p_config.inbox = `${inbox}`
+          let outbox = await data[this.p_config.instance].as$outbox
+          this.p_config.outbox = `${outbox}`
           let followers = await data[this.p_config.instance].as$followers
           this.p_config.followers = `${followers}`
-          //  let following = await data[this.p_config.instance].as$following
-          //  this.p_config.following = `${following}`
-          //  let liked = await data[this.p_config.instance].as$liked
-          //  this.p_config.liked = `${liked}`
+          let following = await data[this.p_config.instance].as$following
+          this.p_config.following = `${following}`
+          let liked = await data[this.p_config.instance].as$liked
+          this.p_config.liked = `${liked}`
         }
       }
       console.log(this.p_config)

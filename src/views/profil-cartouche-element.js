@@ -32,7 +32,7 @@ class ProfilCartoucheElement extends LitElement {
     ${this.username}
     </button>
     <div class="dropdown-menu" id="menu" >
-    <button class="dropdown-item" type="button" @click="${this.toggleMenu}" id="userProfile">Profile</button>
+    <button class="dropdown-item" type="button" @click="${this.toggleMenu}" id="profile">Profile</button>
     <button class="dropdown-item" type="button" @click="${this.toggleMenu}" id="config">Config</button>
     <button class="dropdown-item" type="button" @click="${this.toggleMenu}" id="flux">Flux public</button>
     <!--    <button class="dropdown-item" type="button">Autres</button>-->
@@ -48,6 +48,9 @@ class ProfilCartoucheElement extends LitElement {
     let id = e.target.getAttribute("id")
     if (id != null){
       this.agent.send("App", {action: "pageChanged", page: id})
+      if(id == "profile"){
+        this.agent.send("Profile", {action: "profileChanged", webId: this.webId})
+      }
     }
     this.shadowRoot.getElementById("menu").classList.toggle("d-block")
   }
@@ -72,7 +75,7 @@ class ProfilCartoucheElement extends LitElement {
     //  this.init()
   }
 
-async webIdChanged(webId){
+  async webIdChanged(webId){
     this.username = await data[webId].vcard$fn  || webId.split("/")[2].split('.')[0];
   }
 

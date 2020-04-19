@@ -50,9 +50,9 @@ class AppView extends BaseView {
 
     </div>-->
     <div class="col-md">
-    <div ?hidden="${this.webId == null || this.page != "userProfile"}" >
+  <!--  <div ?hidden="${this.webId == null || this.page != "userProfile"}" >
     <user-profile-view name="UserProfile">Loading userProfile</user-profile-view>
-    </div>
+    </div>-->
 
     <div ?hidden="${this.webId == null || this.page != "config"}" >
     <config-get-view name="ConfigGet">Loading Config Get</config-get-view>
@@ -63,15 +63,14 @@ class AppView extends BaseView {
 
     <flux-element name="Flux" agoraPod="${this.agoraPod}">Loading Flux</flux-element>
     </div>
-    <div class="col-md">
+    <div class="col-md"  ?hidden="${this.webId == null}">
 
     <friends-view name="Friends">Loading friends</friends-view>
     </div>
     </div>
-    <!--<div class="row" style="height: 20vh; background-color: rgba(255,0,0,0.1);">
-    bot<br>
+    <div class="row" style="height: 20vh; background-color: rgba(255,0,0,0.1);">
     Page : ${this.page}
-    </div>-->
+    </div>
     <fab-element name="Fab">Loading Fab</fab-element>
     </div>
     `}

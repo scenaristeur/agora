@@ -40,7 +40,7 @@ export class BaseView extends LitElement {
     this.webId = webId
   }
   pageChanged(page){
-    page == "defaut" ? this.page = "flux" : this.page = page
+    page == "default" ? this.page = "flux" : this.page = page
   }
 
   test(message){

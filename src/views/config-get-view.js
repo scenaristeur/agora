@@ -54,9 +54,9 @@ class ConfigGetView extends LitElement {
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
 
-    <h1>${this.name}</h1>
+    <h4>Configuration</h4>
     Log : <span class="${this.textColor}">${this.log}</span><br><br>
-    <button class="btn btn-danger" ?hidden="${this.textColor != "text-danger"}" @click="${this.checkConfig}">RE-check</button>
+    <button class="btn btn-danger" @click="${this.checkConfig}">RE-check configuration from POD</button>
 
 
     <ul class="list-group">
@@ -184,10 +184,13 @@ class ConfigGetView extends LitElement {
 
     async checkAcl(){
       let app = this
-      this.log = "ACL INBOX VERIFICATION"
+      this.log = "ACL INBOX & FOLLOWERS VERIFICATION"
       this.config.acl_inbox= "undefined"
+      this.config.acl_followers= "undefined"
       let inboxacl = this.config.inbox+".acl"
+      let followersacl = this.config.followers+".acl"
       console.log(inboxacl)
+      console.log(followersacl)
       let fc = new SolidFileClient(auth)
 
       await fc.createFile (inboxacl, this.aclInboxContent, "text/turtle") .then (success => {
@@ -198,6 +201,18 @@ class ConfigGetView extends LitElement {
         alert(err + "... Are you sure you grant AGORA to FULL CONTROL ? see HELP !")
         this.log = err +"... Are you sure you grant AGORA to FULL CONTROL ? Please see HELP !"
       });
+
+      await fc.createFile (followersacl, this.aclInboxContent, "text/turtle") .then (success => {
+        this.log = "Created "+followersacl
+        this.config.acl_followers = followersacl
+      }, err => {
+        this.log = err
+        alert(err + "... Are you sure you grant AGORA to FULL CONTROL ? see HELP !")
+        this.log = err +"... Are you sure you grant AGORA to FULL CONTROL ? Please see HELP !"
+      });
+
+
+
     }
 
     async openConfigBox(){
