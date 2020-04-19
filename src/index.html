@@ -36,12 +36,16 @@ if (!window.customElements) {
   document.write('<!--');
 }
 </script>
+
 <script src="./vendor/custom-elements-es5-adapter.js"></script>
+<script src="./libs/eve.custom.js"></script>
+<script src="./agents/hello-agent.js" type="module"></script>
 <!-- ! DO NOT REMOVE THIS COMMENT, WE NEED ITS CLOSING MARKER -->
 </head>
 
 <body>
   <header><h4>Agora</h4>
+    <profile-cartouche-element name="ProfileCartouche" webId="${this.webId}">Loading</profile-cartouche-element>
 
   </header>
   <!--<nav>

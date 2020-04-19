@@ -1,4 +1,4 @@
-import  eve from 'evejs/dist/eve.custom.js';
+//import  eve from 'evejs/dist/eve.custom.js';
 
 function HelloAgent(id){
   // execute super constructor

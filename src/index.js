@@ -22,7 +22,7 @@ import './views/post-basic-element.js'
 import './views/flux-element.js'
 import './views/menu-element.js'
 import './views/profile-element.js'
-import './views/profile-cartouche-element.js'
+//import './views/profile-cartouche-element.js'
 
 import './views/config-element.js'
 import './views/fab-element.js'

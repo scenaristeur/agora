@@ -43,6 +43,10 @@ const assets = [
     to: 'images/'
   },
   {
+    from: 'src/agents',
+    to: 'agents/'
+  },
+  {
     from: 'src/css',
     to: 'css/'
   },
@@ -76,67 +80,71 @@ module.exports = ({ mode, presets }) => {
       mode,
       externals: {
         '@solid/query-ldflex': {
-           root: ['solid', 'data'],
-           commonjs: '@solid/query-ldflex', // not used, but needed for config
-           commonjs2: '@solid/query-ldflex',  // not used, but needed for config
-         },
+          root: ['solid', 'data'],
+          commonjs: '@solid/query-ldflex', // not used, but needed for config
+          commonjs2: '@solid/query-ldflex',  // not used, but needed for config
+        },
       },
-    /*  entry: {
-        "app-view": './src/views/app-view.js',
-        "login-element": './src/views/login-element.js',
-        "store-element": './src/views/store-element.js',
-        "info-element": './src/views/info-element.js',
-        "post-element": './src/views/post-element.js',
-        "flux-element": './src/views/flux-element.js',
-        "friends-view": './src/views/friends-view.js',
-        "friend-view": './src/views/friend-view.js',
-        "notification-line-element": './src/views/notification-line-element.js',
-        "activity-element": './src/views/activity-element.js',
-        "object-element": './src/views/object-element.js',
-        "profile-cartouche-element": './src/views/profile-cartouche-element.js',
-        "fab-element": './src/views/fab-element.js',
-      },*/
-      output: {
-        //filename: '[name].[hash:8].js'
-        filename: 'views/[name].js',
+      entry: {
+        "main": './src/index.js',
+        "profile-cartouche-element": './src/views/profile-cartouche-element.js'
       },
-      devServer: {
-        contentBase: path.join(__dirname, 'dist'),
-        compress: true,
-        port: 9000,
-        historyApiFallback: true,
-        inline: true,
-        open: true,
-        hot: true
-      },
-      devtool: "eval-source-map",
-      performance: {
-        hints: false
-      },
-      module: {
-        rules: [
-          {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader',
-            options: {
-              plugins: ['@babel/plugin-syntax-dynamic-import'],
-              presets: [
-                [
-                  '@babel/preset-env',
-                  {
-                    useBuiltIns: 'usage',
-                    targets: '>1%, not dead, not ie 11'
-                  }
-                ]
-              ]
-            }
-          }
-        ]
-      },
-      plugins
+      /*  entry: {
+      "app-view": './src/views/app-view.js',
+      "login-element": './src/views/login-element.js',
+      "store-element": './src/views/store-element.js',
+      "info-element": './src/views/info-element.js',
+      "post-element": './src/views/post-element.js',
+      "flux-element": './src/views/flux-element.js',
+      "friends-view": './src/views/friends-view.js',
+      "friend-view": './src/views/friend-view.js',
+      "notification-line-element": './src/views/notification-line-element.js',
+      "activity-element": './src/views/activity-element.js',
+      "object-element": './src/views/object-element.js',
+      "profile-cartouche-element": './src/views/profile-cartouche-element.js',
+      "fab-element": './src/views/fab-element.js',
+    },*/
+    output: {
+      //filename: '[name].[hash:8].js'
+      filename: 'views/[name].js',
     },
-    modeConfig({ mode, presets }),
-    loadPresets({ mode, presets })
-  );
+    devServer: {
+      contentBase: path.join(__dirname, 'dist'),
+      compress: true,
+      port: 9000,
+      historyApiFallback: true,
+      inline: true,
+      open: true,
+      hot: true
+    },
+    devtool: "eval-source-map",
+    performance: {
+      hints: false
+    },
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+          options: {
+            plugins: ['@babel/plugin-syntax-dynamic-import'],
+            presets: [
+              [
+                '@babel/preset-env',
+                {
+                  useBuiltIns: 'usage',
+                  targets: '>1%, not dead, not ie 11'
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    plugins
+  },
+  modeConfig({ mode, presets }),
+  loadPresets({ mode, presets })
+);
 };

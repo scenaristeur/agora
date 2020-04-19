@@ -140,6 +140,9 @@ class ProfileElement extends LitElement {
       this.p_config = {}
       this.p_config.webId = webId
       this.p_config.pti = await solid.data[this.p_config.webId].publicTypeIndex
+    //  this.p_config.name = await solid.data[this.p_config.webId].vcard$fn || `${this.notification.attributedTo}`.split("/")[2].split('.')[0];
+    //  this.p_config.photo = await solid.data[this.p_config.webId].vcard$hasPhoto || "https://solid.github.io/solid-ui/src/icons/noun_15059.svg"
+
       for await (const subject of solid.data[this.p_config.pti].subjects){
         if(this.p_config.pti != `${subject}`)
         /*let s = `${subject}`

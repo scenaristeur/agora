@@ -45,6 +45,7 @@ class ProfileCartoucheElement extends LitElement {
 
   toggleMenu(e){
     let id = e.target.getAttribute("id")
+    console.log(this.agent)
     if (id != null){
       this.agent.send("App", {action: "pageChanged", page: id})
       if(id == "profile"){
@@ -66,14 +67,21 @@ class ProfileCartoucheElement extends LitElement {
           case "webIdChanged":
           app.webIdChanged(message.webId)
           break;
+          case "configChanged":
+          app.configChanged(message.config)
+          break;
           default:
           console.log("Unknown action ",message)
         }
       }
     };
-    app.agent.send("Login", {action:"test", webId: app.webId});
+    app.agent.send("Store", {action:"getConfig"});
 
     //  this.init()
+  }
+
+  configChanged(config){
+    this.webIdChanged(config.webId)
   }
 
   async webIdChanged(webId){
