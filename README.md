@@ -45,6 +45,7 @@ npm run prod
 # publish to gh & /dist to gh-pages
 ```
 git add .
+git commit -m "my modif"
 git push && git subtree push --prefix dist origin gh-pages
 ```
 
