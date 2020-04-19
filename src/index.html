@@ -45,14 +45,18 @@ if (!window.customElements) {
 
 <body>
   <header><h4>Agora</h4>
-    <profile-cartouche-element name="ProfileCartouche" webId="${this.webId}">Loading</profile-cartouche-element>
-
+    <store-element name="Store"></store-element>
+<div class="row">
+    <login-element name="Login"></login-element>
+    <profile-cartouche-element name="ProfileCartouche" webId="${this.webId}"></profile-cartouche-element>
+</div>
   </header>
   <!--<nav>
   <a href="/">Todos</a>
   <a href="/stats">Stats</a>
 </nav>-->
 <main>
+
   <app-view name="App" agoraPod="https://agora.solid.community/profile/card#me">
     <div style="position:absolute; top:50%; left:50%; margin-top:-100px; margin-left: -150px; width:340px; height:128px; text-align:center">
       <br> <span style="font-size:20px">L O A D I N G <br><br> A G O R A <br> D E C E N T R A L I S H A R E</span>
@@ -75,8 +79,8 @@ if ('serviceWorker' in navigator) {
 
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.3.0/dist-lib/solid-auth-client.bundle.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/solid-file-client@1.0.0/dist/window/solid-file-client.bundle.js"></script>
+<script src="./libs/solid-auth-client.bundle.js"></script>
+<script src="./libs/solid-file-client.bundle.js"></script>
 <script src="./libs/solid-query-ldflex.bundle.js"></script>
 
 <!--<script src="views/store-element.js" type="module"></script>-->
