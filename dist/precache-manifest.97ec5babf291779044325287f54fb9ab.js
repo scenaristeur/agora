@@ -36,16 +36,16 @@ self.__precacheManifest = [
     "url": "vendor/custom-elements-es5-adapter.js"
   },
   {
+    "revision": "cc1382088863aa74eda6e6c8820df514",
+    "url": "css/bootstrap/bootstrap.min.css"
+  },
+  {
     "revision": "e044a63e034bf10304dad73138b8c74b",
     "url": "vendor/webcomponents-loader.js"
   },
   {
     "revision": "fb2608da8f301832531117b05f4acdb3",
     "url": "vendor/bundles/webcomponents-ce.js"
-  },
-  {
-    "revision": "cc1382088863aa74eda6e6c8820df514",
-    "url": "css/bootstrap/bootstrap.min.css"
   },
   {
     "revision": "894a294495257c3d389efa3e1bd9bde7",
@@ -112,10 +112,6 @@ self.__precacheManifest = [
     "url": "images/favicon.ico"
   },
   {
-    "revision": "07383e347d6beadac2693f770fd1f26b",
-    "url": "libs/solid-query-ldflex.bundle.js"
-  },
-  {
     "revision": "b1b1555a1e6a20d43d88f858d222b832",
     "url": "dist-popup/popup-template.html"
   },
@@ -128,16 +124,16 @@ self.__precacheManifest = [
     "url": "images/faviconLoux.ico"
   },
   {
-    "revision": "9b5e91ababe48f96596f6b3494d2fa3e",
-    "url": "img/icons/favicon.png"
+    "revision": "a473d17109009d21b4648f16e666a63e",
+    "url": "img/compose.png"
   },
   {
     "revision": "af4868f2eeec483dea3d6a5f242d1095",
     "url": "img/flow.png"
   },
   {
-    "revision": "a473d17109009d21b4648f16e666a63e",
-    "url": "img/compose.png"
+    "revision": "9b5e91ababe48f96596f6b3494d2fa3e",
+    "url": "img/icons/favicon.png"
   },
   {
     "revision": "104b3fda1e992ee77cf88e2ba8542a4a",
@@ -148,28 +144,36 @@ self.__precacheManifest = [
     "url": "img/icons/icon-192x192.png"
   },
   {
-    "revision": "62b3a769457f5cf5e535e058fdcb1efd",
-    "url": "img/orga.png"
-  },
-  {
     "revision": "23fc57b3e5ca7fcce96bb3d8de543819",
     "url": "img/icons/icon-512x512.png"
-  },
-  {
-    "revision": "9aef2daaf22bfdcc41ea5419a7396ff2",
-    "url": "img/agora_folder.png"
   },
   {
     "revision": "73d476c16ecfe62268d19b0ab138490a",
     "url": "img/checkControl.png"
   },
   {
-    "revision": "d5c13f4a2ff20b35ed2e8edd08b4ef1a",
-    "url": "img/talk.png"
+    "revision": "9aef2daaf22bfdcc41ea5419a7396ff2",
+    "url": "img/agora_folder.png"
+  },
+  {
+    "revision": "62b3a769457f5cf5e535e058fdcb1efd",
+    "url": "img/orga.png"
   },
   {
     "revision": "d076a239e97f39c1cfbf42cc5f9e3d51",
     "url": "img/trustedApps.png"
+  },
+  {
+    "revision": "d5c13f4a2ff20b35ed2e8edd08b4ef1a",
+    "url": "img/talk.png"
+  },
+  {
+    "revision": "07383e347d6beadac2693f770fd1f26b",
+    "url": "libs/solid-query-ldflex.bundle.js"
+  },
+  {
+    "revision": "c0e6c5279c8424e068a91de2604d0f4c",
+    "url": "css/fontawesome/css/brands.min.css"
   },
   {
     "revision": "08ad7a4a944e7564adf9414e9626f501",
@@ -180,24 +184,20 @@ self.__precacheManifest = [
     "url": "css/fontawesome/css/brands.css"
   },
   {
-    "revision": "c0e6c5279c8424e068a91de2604d0f4c",
-    "url": "css/fontawesome/css/brands.min.css"
+    "revision": "da9aca32ed693ed28f5dcf9dbcb47ba5",
+    "url": "css/fontawesome/css/all.css"
   },
   {
     "revision": "2eabdc9bff8bff556f95f7dfe6711f23",
     "url": "css/fontawesome/css/regular.css"
   },
   {
-    "revision": "da9aca32ed693ed28f5dcf9dbcb47ba5",
-    "url": "css/fontawesome/css/all.css"
+    "revision": "f65791dea3d1e31cd6a5f53a3708e098",
+    "url": "css/fontawesome/css/fontawesome.min.css"
   },
   {
     "revision": "8515ea89b91072607e476ee6a6c1218c",
     "url": "css/fontawesome/css/fontawesome.css"
-  },
-  {
-    "revision": "f65791dea3d1e31cd6a5f53a3708e098",
-    "url": "css/fontawesome/css/fontawesome.min.css"
   },
   {
     "revision": "3e9e0e28b383f828743cb81eccfc069f",
@@ -228,12 +228,12 @@ self.__precacheManifest = [
     "url": "css/fontawesome/css/v4-shims.min.css"
   },
   {
-    "revision": "06147b6cd88c7346cecd1edd060cd5de",
-    "url": "css/fontawesome/webfonts/fa-brands-400.ttf"
-  },
-  {
     "revision": "5063b105c7646c8043d58c5289f02cca",
     "url": "css/fontawesome/webfonts/fa-brands-400.eot"
+  },
+  {
+    "revision": "06147b6cd88c7346cecd1edd060cd5de",
+    "url": "css/fontawesome/webfonts/fa-brands-400.ttf"
   },
   {
     "revision": "c5e0f14f88a828261ba01558ce2bf26f",
@@ -244,20 +244,20 @@ self.__precacheManifest = [
     "url": "css/fontawesome/webfonts/fa-regular-400.eot"
   },
   {
-    "revision": "cccc9d29470e879e40eb70249d9a2705",
-    "url": "css/fontawesome/webfonts/fa-brands-400.woff2"
-  },
-  {
     "revision": "65b286af947c0d982ca01b40e1fcab38",
     "url": "css/fontawesome/webfonts/fa-regular-400.ttf"
   },
   {
-    "revision": "c4f508e7c4f01a9eeba7f08155cde04e",
-    "url": "css/fontawesome/webfonts/fa-regular-400.woff"
+    "revision": "cccc9d29470e879e40eb70249d9a2705",
+    "url": "css/fontawesome/webfonts/fa-brands-400.woff2"
   },
   {
     "revision": "f5f2566b93e89391da4db79462b8078b",
     "url": "css/fontawesome/webfonts/fa-regular-400.woff2"
+  },
+  {
+    "revision": "c4f508e7c4f01a9eeba7f08155cde04e",
+    "url": "css/fontawesome/webfonts/fa-regular-400.woff"
   },
   {
     "revision": "9443c1e7fdf95d739af3f0901224f90a",
@@ -268,20 +268,20 @@ self.__precacheManifest = [
     "url": "css/fontawesome/webfonts/fa-solid-900.eot"
   },
   {
-    "revision": "333bae208dc363746961b234ff6c2500",
-    "url": "css/fontawesome/webfonts/fa-solid-900.woff"
+    "revision": "0bff33a5fd7ec390235476b4859747a0",
+    "url": "css/fontawesome/webfonts/fa-solid-900.ttf"
   },
   {
-    "revision": "44d537ab79f921fde5a28b2c1636f397",
-    "url": "css/fontawesome/webfonts/fa-solid-900.woff2"
+    "revision": "333bae208dc363746961b234ff6c2500",
+    "url": "css/fontawesome/webfonts/fa-solid-900.woff"
   },
   {
     "revision": "9dc193bfa1182f65e9a5ac520b549bdf",
     "url": "css/offcanvas.css"
   },
   {
-    "revision": "0bff33a5fd7ec390235476b4859747a0",
-    "url": "css/fontawesome/webfonts/fa-solid-900.ttf"
+    "revision": "44d537ab79f921fde5a28b2c1636f397",
+    "url": "css/fontawesome/webfonts/fa-solid-900.woff2"
   },
   {
     "revision": "9d204f50ec8e5bcc5dcda0132d404b48",
