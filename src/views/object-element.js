@@ -27,11 +27,14 @@ class ObjectElement extends LitElement {
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
     <div class="row">
-    <b>${this.object.name}</b>
+    <p class="lead">
+    ${this.object.name}
+    </p>
+
     </div>
-    <div class="row mt-2" id="content">
+    <div class="row" >
     <!--  SEE LINKIFY-->
-    ${this.object.content}
+    <small> <div id="content">${this.object.content}</div></small>
     </div>
     <div class="row mt-2">
     <button class="btn btn-outline-info btn-sm"  @click="${this.replyTo}">Reply</button>
@@ -56,16 +59,16 @@ class ObjectElement extends LitElement {
     console.log(inputText)
     //URLs starting with http://, https://, or ftp://
     var replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
-    var replacedText = inputText.replace(replacePattern1, '<br><small><a href="$1" target="_blank">$1</a></small><br>');
+    var replacedText = inputText.replace(replacePattern1, ' <small><a href="$1" target="_blank">$1</a></small> ');
 
     //URLs starting with www. (without // before it, or it'd re-link the ones done above)
     var replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
-    var replacedText = replacedText.replace(replacePattern2, '<br><small>$1<a href="http://$2" target="_blank">$2</a></small><br>');
+    var replacedText = replacedText.replace(replacePattern2, ' <small>$1<a href="http://$2" target="_blank">$2</a></small> ');
 
     //Change email addresses to mailto:: links
     var replacePattern3 = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
     var replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
-    this.shadowRoot.innerHTML = replacedText
+    this.shadowRoot.getElementById("content").innerHTML = replacedText
     this.requestUpdate()
     //    return html`${replacedText}`
   }
@@ -94,7 +97,7 @@ class ObjectElement extends LitElement {
         }
       }
     };
-    ///  this.linkify(`${this.object.content}`)
+
   }
 
   updated(changedProperties) {
@@ -110,7 +113,8 @@ class ObjectElement extends LitElement {
     //console.log(this.url)
     this.object.name = await solid.data[this.url].as$name
     this.object.content = await solid.data[this.url].as$content
-    this.requestUpdate()
+        this.linkify(`${this.object.content}`)
+  //  this.requestUpdate()
   }
 
   localName(strPromise){

@@ -13,7 +13,7 @@ class ConfigView extends LitElement {
   constructor() {
     super();
     this.name = "Config"
-    this.webId = ""
+    this.webId = null
   }
 
   render(){

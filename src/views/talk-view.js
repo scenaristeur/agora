@@ -13,7 +13,7 @@ class TalkView extends LitElement {
   constructor() {
     super();
     this.name = "Talk"
-    this.webId = ""
+    this.webId = null
   }
 
   render(){
@@ -28,12 +28,12 @@ class TalkView extends LitElement {
     </div>
     <div class="card-body">
     <div class="text-center">
-    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 15rem;" src="img/talk.png" alt="">
+    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="img/talk.png" alt="">
     </div>
     <p>${this.webId}</p>
-    <p>Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a constantly updated collection of beautiful svg images that you can use completely free and without attribution!</p>
-    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on unDraw &rarr;</a>
-    </div>
+    <p>A space to realtime exchanges!</p>
+    <!--<a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on unDraw &rarr;</a>
+  -->  </div>
     </div>
 
 

@@ -14,7 +14,7 @@ class FlowView extends LitElement {
   constructor() {
     super();
     this.name = "Flow"
-    this.webId = ""
+    this.webId = null
     this.agoraPod = ""
   }
 
@@ -33,9 +33,9 @@ class FlowView extends LitElement {
     </div>
     <p>${this.webId}</p>
     <p><flux-element name="Flux" agoraPod="${this.agoraPod}">Loading Flux</flux-element></p>
-    <p>Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a constantly updated collection of beautiful svg images that you can use completely free and without attribution!</p>
+  <!--  <p>Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a constantly updated collection of beautiful svg images that you can use completely free and without attribution!</p>
     <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on unDraw &rarr;</a>
-    </div>
+  -->  </div>
     </div>
 
     `;

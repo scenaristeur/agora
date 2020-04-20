@@ -17,7 +17,7 @@ class ProfileCartoucheElement extends LitElement {
   constructor() {
     super();
     this.name = "Profile Cartouche"
-    this.webId = ""
+    this.webId = null
     this.username = ""
   }
 

@@ -16,7 +16,7 @@ class AppView extends BaseView {
   constructor() {
     super();
     this.name = "App"
-    this.webId = ""
+    this.webId = null
     this.share = {}
     this.agoraPod = ""
     this.page = "flux"
@@ -34,27 +34,27 @@ class AppView extends BaseView {
 
     <fab-element name="Fab" ?hidden="${this.webId == null}">Loading Fab</fab-element>
     <div class="row">  <!-- style="height:50vh" -->
-    <div class="col" style="width:50vw">
+    <div class="col-sm">
     <compose-view name="Compose" webId="${this.webId}" .share="${this.share}"></compose-view>
     </div>
-    <div class="col" style="width:50vw">
+    <div class="col-sm">
     <orga-view name="Orga" webId="${this.webId}"><orga-view>
     </div>
     </div>
 
     <div class="row"> <!--  style="height:50vh" -->
-    <div class="col" style="width:50vw">
+    <div class="col-sm">
     <flow-view name="Flow" webId="${this.webId}" agoraPod="${this.agoraPod}"><flow-view>
     </div>
-    <div class="col" style="width:50vw">
+    <div class="col-sm">
     <talk-view name="Talk" webId="${this.webId}"></talk-view>
     </div>
 
     </div>
 
     <div class="row"> <!--  style="height:50vh" -->
-    <div class="col" style="width:50vw">
-    <config-view name="Config" webId="${this.webId}"></config-view>
+    <div class="col-sm">
+    <config-view name="Config" webId="${this.webId}" ?hidden="${this.webId == null}"></config-view>
     </div>
     </div>
 

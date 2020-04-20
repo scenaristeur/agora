@@ -14,7 +14,7 @@ class ComposeView extends LitElement {
   constructor() {
     super();
     this.name = "Compose"
-    this.webId = ""
+    this.webId = null
     this.share = {}
   }
 

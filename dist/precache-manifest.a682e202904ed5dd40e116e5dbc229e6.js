@@ -8,15 +8,15 @@ self.__precacheManifest = [
     "url": "views/login-element.js"
   },
   {
-    "revision": "c830bd88ab0b74f343f2",
+    "revision": "32d66a735bfd405fb474",
     "url": "main.css"
   },
   {
-    "revision": "c830bd88ab0b74f343f2",
+    "revision": "32d66a735bfd405fb474",
     "url": "views/main.js"
   },
   {
-    "revision": "f14f2fdca3d01d655684",
+    "revision": "953f5f35d2a104122c71",
     "url": "views/profile-cartouche-element.js"
   },
   {
@@ -44,12 +44,12 @@ self.__precacheManifest = [
     "url": "vendor/bundles/webcomponents-ce.js"
   },
   {
-    "revision": "894a294495257c3d389efa3e1bd9bde7",
-    "url": "vendor/webcomponents-bundle.js"
-  },
-  {
     "revision": "cc1382088863aa74eda6e6c8820df514",
     "url": "css/bootstrap/bootstrap.min.css"
+  },
+  {
+    "revision": "894a294495257c3d389efa3e1bd9bde7",
+    "url": "vendor/webcomponents-bundle.js"
   },
   {
     "revision": "3a28d79ed7dae933323bcabb6ad3dade",
@@ -64,6 +64,10 @@ self.__precacheManifest = [
     "url": "vendor/bundles/webcomponents-sd.js"
   },
   {
+    "revision": "1a1d335b42f6f91037342d576887fa98",
+    "url": "libs/eve.custom.js"
+  },
+  {
     "revision": "35a9c0cff2bb82890b850f239c1f21b2",
     "url": "libs/solid-auth-client.bundle.js"
   },
@@ -72,24 +76,16 @@ self.__precacheManifest = [
     "url": "libs/solid-file-client.bundle.js"
   },
   {
-    "revision": "1a1d335b42f6f91037342d576887fa98",
-    "url": "libs/eve.custom.js"
-  },
-  {
     "revision": "90af4a5d863208fba09a5f84a4ce94de",
     "url": "images/favicon1.ico"
   },
   {
-    "revision": "0cff3aebfb1463f0e052511d90a96772",
-    "url": "images/icon-16.png"
-  },
-  {
-    "revision": "10dde2ee22997667361195d883274e3a",
-    "url": "images/favicon.ico"
-  },
-  {
     "revision": "9adea9fc0bd06d09f31185f0b927d007",
     "url": "images/icon-128.png"
+  },
+  {
+    "revision": "0cff3aebfb1463f0e052511d90a96772",
+    "url": "images/icon-16.png"
   },
   {
     "revision": "f65c8035f4233b911b5c196bbdaa65e6",
@@ -100,16 +96,24 @@ self.__precacheManifest = [
     "url": "images/icon-256.png"
   },
   {
-    "revision": "b81f3b680332c703defbeccbb9ac25ba",
-    "url": "images/icon-48.png"
-  },
-  {
     "revision": "68aded03ecec133a11f41116c9dbe236",
     "url": "images/icon-32.png"
   },
   {
+    "revision": "b81f3b680332c703defbeccbb9ac25ba",
+    "url": "images/icon-48.png"
+  },
+  {
     "revision": "61c0e8d2ba57ccd56501339f3eb6713d",
     "url": "images/icon-512.png"
+  },
+  {
+    "revision": "10dde2ee22997667361195d883274e3a",
+    "url": "images/favicon.ico"
+  },
+  {
+    "revision": "07383e347d6beadac2693f770fd1f26b",
+    "url": "libs/solid-query-ldflex.bundle.js"
   },
   {
     "revision": "b1b1555a1e6a20d43d88f858d222b832",
@@ -120,16 +124,8 @@ self.__precacheManifest = [
     "url": "dist-popup/popup.html"
   },
   {
-    "revision": "07383e347d6beadac2693f770fd1f26b",
-    "url": "libs/solid-query-ldflex.bundle.js"
-  },
-  {
     "revision": "fb4c753bff382564db12c367a745f51c",
     "url": "images/faviconLoux.ico"
-  },
-  {
-    "revision": "a473d17109009d21b4648f16e666a63e",
-    "url": "img/compose.png"
   },
   {
     "revision": "9b5e91ababe48f96596f6b3494d2fa3e",
@@ -140,16 +136,12 @@ self.__precacheManifest = [
     "url": "img/flow.png"
   },
   {
+    "revision": "a473d17109009d21b4648f16e666a63e",
+    "url": "img/compose.png"
+  },
+  {
     "revision": "104b3fda1e992ee77cf88e2ba8542a4a",
     "url": "img/icons/icon-144x144.png"
-  },
-  {
-    "revision": "9aef2daaf22bfdcc41ea5419a7396ff2",
-    "url": "img/agora_folder.png"
-  },
-  {
-    "revision": "73d476c16ecfe62268d19b0ab138490a",
-    "url": "img/checkControl.png"
   },
   {
     "revision": "91a9501d74924f5da51f71dceffe6db5",
@@ -164,6 +156,14 @@ self.__precacheManifest = [
     "url": "img/icons/icon-512x512.png"
   },
   {
+    "revision": "9aef2daaf22bfdcc41ea5419a7396ff2",
+    "url": "img/agora_folder.png"
+  },
+  {
+    "revision": "73d476c16ecfe62268d19b0ab138490a",
+    "url": "img/checkControl.png"
+  },
+  {
     "revision": "d5c13f4a2ff20b35ed2e8edd08b4ef1a",
     "url": "img/talk.png"
   },
@@ -172,12 +172,12 @@ self.__precacheManifest = [
     "url": "img/trustedApps.png"
   },
   {
-    "revision": "cd7111706f6aef7104e641f631f7f7d2",
-    "url": "css/fontawesome/css/brands.css"
+    "revision": "08ad7a4a944e7564adf9414e9626f501",
+    "url": "css/fontawesome/css/all.min.css"
   },
   {
-    "revision": "da9aca32ed693ed28f5dcf9dbcb47ba5",
-    "url": "css/fontawesome/css/all.css"
+    "revision": "cd7111706f6aef7104e641f631f7f7d2",
+    "url": "css/fontawesome/css/brands.css"
   },
   {
     "revision": "c0e6c5279c8424e068a91de2604d0f4c",
@@ -188,32 +188,36 @@ self.__precacheManifest = [
     "url": "css/fontawesome/css/regular.css"
   },
   {
-    "revision": "f65791dea3d1e31cd6a5f53a3708e098",
-    "url": "css/fontawesome/css/fontawesome.min.css"
+    "revision": "da9aca32ed693ed28f5dcf9dbcb47ba5",
+    "url": "css/fontawesome/css/all.css"
   },
   {
     "revision": "8515ea89b91072607e476ee6a6c1218c",
     "url": "css/fontawesome/css/fontawesome.css"
   },
   {
-    "revision": "9ed1a5cb1141d710558152333c67dff7",
-    "url": "css/fontawesome/css/regular.min.css"
+    "revision": "f65791dea3d1e31cd6a5f53a3708e098",
+    "url": "css/fontawesome/css/fontawesome.min.css"
   },
   {
     "revision": "3e9e0e28b383f828743cb81eccfc069f",
     "url": "css/fontawesome/css/solid.css"
   },
   {
+    "revision": "9ed1a5cb1141d710558152333c67dff7",
+    "url": "css/fontawesome/css/regular.min.css"
+  },
+  {
     "revision": "f5235e4a5e7aacd8a083a25ea704f8bd",
     "url": "css/fontawesome/css/solid.min.css"
   },
   {
-    "revision": "56bd90e8063dfb67194acbbd299c7833",
-    "url": "css/fontawesome/css/svg-with-js.css"
-  },
-  {
     "revision": "79fa4870b77b8fbcdcf5089eb2ceede6",
     "url": "css/fontawesome/css/svg-with-js.min.css"
+  },
+  {
+    "revision": "56bd90e8063dfb67194acbbd299c7833",
+    "url": "css/fontawesome/css/svg-with-js.css"
   },
   {
     "revision": "a4979986b22144315e388f23fa652918",
@@ -224,24 +228,24 @@ self.__precacheManifest = [
     "url": "css/fontawesome/css/v4-shims.min.css"
   },
   {
-    "revision": "5063b105c7646c8043d58c5289f02cca",
-    "url": "css/fontawesome/webfonts/fa-brands-400.eot"
-  },
-  {
     "revision": "06147b6cd88c7346cecd1edd060cd5de",
     "url": "css/fontawesome/webfonts/fa-brands-400.ttf"
+  },
+  {
+    "revision": "5063b105c7646c8043d58c5289f02cca",
+    "url": "css/fontawesome/webfonts/fa-brands-400.eot"
   },
   {
     "revision": "c5e0f14f88a828261ba01558ce2bf26f",
     "url": "css/fontawesome/webfonts/fa-brands-400.woff"
   },
   {
-    "revision": "cccc9d29470e879e40eb70249d9a2705",
-    "url": "css/fontawesome/webfonts/fa-brands-400.woff2"
-  },
-  {
     "revision": "c1a866ec0e04a5e1915b41fcf261457c",
     "url": "css/fontawesome/webfonts/fa-regular-400.eot"
+  },
+  {
+    "revision": "cccc9d29470e879e40eb70249d9a2705",
+    "url": "css/fontawesome/webfonts/fa-brands-400.woff2"
   },
   {
     "revision": "65b286af947c0d982ca01b40e1fcab38",
@@ -250,6 +254,10 @@ self.__precacheManifest = [
   {
     "revision": "c4f508e7c4f01a9eeba7f08155cde04e",
     "url": "css/fontawesome/webfonts/fa-regular-400.woff"
+  },
+  {
+    "revision": "f5f2566b93e89391da4db79462b8078b",
+    "url": "css/fontawesome/webfonts/fa-regular-400.woff2"
   },
   {
     "revision": "9443c1e7fdf95d739af3f0901224f90a",
@@ -264,24 +272,16 @@ self.__precacheManifest = [
     "url": "css/fontawesome/webfonts/fa-solid-900.woff"
   },
   {
-    "revision": "0bff33a5fd7ec390235476b4859747a0",
-    "url": "css/fontawesome/webfonts/fa-solid-900.ttf"
+    "revision": "44d537ab79f921fde5a28b2c1636f397",
+    "url": "css/fontawesome/webfonts/fa-solid-900.woff2"
   },
   {
     "revision": "9dc193bfa1182f65e9a5ac520b549bdf",
     "url": "css/offcanvas.css"
   },
   {
-    "revision": "44d537ab79f921fde5a28b2c1636f397",
-    "url": "css/fontawesome/webfonts/fa-solid-900.woff2"
-  },
-  {
-    "revision": "f5f2566b93e89391da4db79462b8078b",
-    "url": "css/fontawesome/webfonts/fa-regular-400.woff2"
-  },
-  {
-    "revision": "08ad7a4a944e7564adf9414e9626f501",
-    "url": "css/fontawesome/css/all.min.css"
+    "revision": "0bff33a5fd7ec390235476b4859747a0",
+    "url": "css/fontawesome/webfonts/fa-solid-900.ttf"
   },
   {
     "revision": "9d204f50ec8e5bcc5dcda0132d404b48",

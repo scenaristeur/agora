@@ -16,7 +16,7 @@ class AppView extends BaseView {
   constructor() {
     super();
     this.name = "App"
-    this.webId = ""
+    this.webId = null
     this.share = {}
     this.agoraPod = ""
     this.page = "flux"
