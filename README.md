@@ -72,7 +72,8 @@ git push && git subtree push --prefix dist origin gh-pages
 [ ] https://mstdn.fr/web/accounts/146921, https://joinmastodon.org/ , https://fr.mstdn.wiki/Accueil
 
 
-
+# first step
+https://scenaristeur.github.io/compagent-tuto/
 
 
 # navigation & code splitting in lit-html

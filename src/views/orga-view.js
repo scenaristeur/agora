@@ -29,12 +29,12 @@ class OrgaView extends LitElement {
     <div class="text-center">
     <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="img/orga.png" alt="">
     </div>
-            <p>R${this.webId}R</p>
-            <p>${this.webId!=null}</p>
+<!--            <p>R${this.webId}R</p>
+            <p>${this.webId!=null}</p>-->
     <p>Build Teams to Collabore on Projects</p>
     <!--  <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on unDraw &rarr;</a>
     -->
-    <friends-view name="Friends" ?hidden="${this.webId!=null}">Loading friends</friends-view>
+    <friends-view name="Friends">Loading friends</friends-view>
     </div>
     </div>
 

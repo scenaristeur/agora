@@ -30,7 +30,7 @@ class TalkView extends LitElement {
     <div class="text-center">
     <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="img/talk.png" alt="">
     </div>
-    <p>${this.webId}</p>
+<!--    <p>${this.webId}</p>-->
     <p>A space to realtime exchanges!</p>
     <!--<a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on unDraw &rarr;</a>
   -->  </div>

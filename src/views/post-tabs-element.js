@@ -427,12 +427,26 @@ class PostTabsElement extends LitElement {
           case "Document":
           // https://www.w3.org/wiki/SocialCG/ActivityPub/MediaUpload must normally be uploaded to recipient endpoint
           if(r.message.content != undefined){
-            objects.push({uri: object_uri, file: object_file})
             var file = r.message.content
             var contentType = file.contentType
             var newFilename = r.message.newFilename
             var classe = r.message.type
+            /*
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#'+r.message.type))
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#name'].add(title)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#content'].add(r.message.content)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
+            */
+            // no need to create an Object.ttl, replce by file ?
+            let object_file = app.config.outbox+"objects/"+classe+"/"+newFilename
+            let object_uri = object_file // pas de #this
+            // var object_uri = app.storage+"public/spoggy/"+classe+"/"+newFilename
             console.log("CREATE DOCUMENT WITH",r.message, object_uri)
+            await app.sendFile(object_file, file, contentType)
+            //   await  data[userActivity].as$object.add(namedNode(userMedia))
+
+            objects.push({uri: object_uri, file: object_file})
           }
           break;
           case "Triple":
@@ -440,6 +454,21 @@ class PostTabsElement extends LitElement {
             objects.push({uri: object_uri, file: object_file})
             content = r.message.content
             console.log("CREATE DOCUMENT WITH",r.message, object_uri)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#'+r.message.type))
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#name'].add(title)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
+            //           await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#content'].add(r.message.content)
+
+            //write subject https://github.com/LDflex/LDflex/issues/53
+            r.message.content.forEach(async function(triple, i) {
+            //  console.log(triple)
+              let subject = object_file+"#"+triple.subject
+              let predicate = object_file+"#"+triple.predicate
+              let object = object_file+"#"+triple.object
+              //console.log(subject, predicate, object)
+              await solid.data[subject][predicate].add(namedNode(object))
+            });
           }
 
           break;
@@ -490,7 +519,9 @@ class PostTabsElement extends LitElement {
     app.setAcl(o, aclStringWebIds, agora_pub)
     await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#object'].add(namedNode(o.uri))
     recipients.forEach(async function(to, i) {
-      await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(to))
+      if (o.uri.endsWith("#this")){
+        await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(to))
+      }
     })
     if (agora_pub == true){
       await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
@@ -498,7 +529,7 @@ class PostTabsElement extends LitElement {
     }
   });
 
-this.log = activity_uri+ "DONE"
+  this.log = activity_uri+ "DONE"
   console.log("Activity OK",activity_uri)
   let activity = {url: activity_uri, file: activity_file}
   app.setAcl(activity, aclStringWebIds, agora_pub)
@@ -576,10 +607,10 @@ this.log = activity_uri+ "DONE"
 
     for await (const subject of solid.data[pti].subjects){
       let s = `${subject}`
-      console.log(s)
+      //  console.log(s)
       if(pti != `${subject}`){
 
-        console.log(s)
+        //  console.log(s)
         if (`${subject}`.endsWith('#Agora')){
           instanceTrouvee = true
           console.log(s)
@@ -596,7 +627,7 @@ this.log = activity_uri+ "DONE"
           await solid.data[notification_uri].rdfs$label.add(title)
           await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
           await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#link'].add(namedNode(activity_uri))
-app.log = notification_uri+ "DONE"
+          app.log = notification_uri+ "DONE"
         }
       }
     }
@@ -604,12 +635,12 @@ app.log = notification_uri+ "DONE"
     instanceTrouvee == false ? alert("No Agora Instance found in "+to+" Public Type Index ") : "";
   });
   this.log = "Send OK"
-   this.toggleWrite()
+  this.toggleWrite()
 }
 
 
 async setAcl(o, aclStringWebIds, agora_pub){
-this.log = "Set ACL for ",o.file
+  this.log = "Set ACL for ",o.file
   let aclString = `
   @prefix : <#>.
   @prefix acl: <http://www.w3.org/ns/auth/acl#>.
@@ -633,10 +664,21 @@ this.log = "Set ACL for ",o.file
     this.log = o.file+'.acl Created'
   }catch(e){
     alert(e)
-
   }
 }
 
+/*
+async sendFile(uri, file, contentType){
+await this.fileClient.createFile(uri, file, contentType)
+.then(
+success =>{
+console.log(success)
+//  this.agent.send("Messages", {action: "info", status: "Save file OK", file: success})
+},
+err => {
+console.log(err)
+});
+}*/
 
 async preparePost2(){
   var app = this

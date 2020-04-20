@@ -111,6 +111,8 @@ class InfoElement extends LitElement {
     or on <a href="https://github.com/scenaristeur/agora/blob/master/README.md"
     target="_blank">Agora project</a> repository.
     </p>
+
+    <p><b>Last, but not least :</b> if you install Agora on your device, you can use it as a "Share with..." app... ;-) </p>  
     <p class="lead">
     If all is OK for you,
     <button class="btn btn-info" @click="${this.toggleHidden}">Toggle Help</button> and Login.

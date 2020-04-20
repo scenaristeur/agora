@@ -26,37 +26,23 @@ class ObjectElement extends LitElement {
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
-    <div class="row">
-    <p class="lead">
-    ${this.object.name}
-    </p>
-
-    </div>
     <div class="row" >
-    <!--  SEE LINKIFY-->
-    <small> <div id="content">${this.object.content}</div></small>
+    <div class="col">
+
+    ${this.object.ext == "jpg" ?
+    html`<img src="${this.url}" style='height: auto; width: 75%; object-fit: contain' alt="${this.url}"/>`
+    :html` ` }
+  <small> <div id="content">${this.object.content}</div></small>
     </div>
-    <div class="row mt-2">
-    <button class="btn btn-outline-info btn-sm"  @click="${this.replyTo}">Reply</button>
-    <button class="btn btn-outline-info btn-sm"><i class="fas fa-share-alt" @click="${this.share}"></i></button>
-    <button class="btn btn-outline-info btn-sm"><i class="far fa-thumbs-up" @click="${this.like}"></i></button>
-    <button class="btn btn-outline-info btn-sm"><i class="far fa-thumbs-down" @click="${this.dislike}"></i></button>
     </div>
+
     `;
   }
-
-  like(){
-    alert("// TODO: come back later ;-) ")
-  }
-  dislike(){
-    alert("// TODO: come back later ;-) ")
-  }
-
 
 
   linkify(inputText) {
     // <!--    ${this.linkify(`${this.object.content}`)}-->
-    console.log(inputText)
+    //console.log(inputText)
     //URLs starting with http://, https://, or ftp://
     var replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
     var replacedText = inputText.replace(replacePattern1, ' <small><a href="$1" target="_blank">$1</a></small> ');
@@ -74,11 +60,7 @@ class ObjectElement extends LitElement {
   }
 
 
-  replyTo(){
-    console.log(this.url)
-    this.agent.send("Post", {action: "toggleWrite"})
-    this.agent.send("PostTabs", {action:"setReplyTo", replyTo: this.url })
-  }
+
 
   firstUpdated(){
     var app = this;
@@ -111,10 +93,28 @@ class ObjectElement extends LitElement {
 
   async init(){
     //console.log(this.url)
-    this.object.name = await solid.data[this.url].as$name
-    this.object.content = await solid.data[this.url].as$content
+    this.object.ext = this.url.substr(this.url.lastIndexOf('.') + 1);
+
+    if (this.object.ext == "ttl#this"){
+      let as = "https://www.w3.org/ns/activitystreams#"
+      //  this.object.name = await solid.data[this.url].as$name
+      let type = await solid.data[this.url].as$type
+      this.object.type = `${type}`
+      switch (this.localName(`${type}`)) {
+        case "Triple":
+        this.object.content= "" //"[todo parse triples like "+ this.url+"</small>]"
+        this.requestUpdate()
+        break;
+        case "Note":
+        default:
+        this.object.content = await solid.data[this.url].as$content
         this.linkify(`${this.object.content}`)
-  //  this.requestUpdate()
+      }
+    }else{
+      console.log(this.object.ext,this.url)
+      this.requestUpdate()
+    }
+
   }
 
   localName(strPromise){
@@ -124,43 +124,6 @@ class ObjectElement extends LitElement {
     return ln
   }
 
-
-  share(){
-    if (navigator.share) {
-      navigator.share({
-        title: "Take a look at that Agora Spog : "+this.object.name+"\n\n",
-        text: this.object.content+"\n\n",
-        url: 'https://scenaristeur.github.io/agora?object='+this.url+'\n\n',
-      })
-      .then(() => console.log('Successful share'))
-      .catch((error) => console.log('Error sharing', error));
-    }else{
-      var to = '';
-      var sub = "Agora : "+this.object.name;
-      var body = 'I want to share this link with you :   \n https://scenaristeur.github.io/agora?object='+this.url+'  \n \n '+this.object.content+' \n \n';
-
-      var mailarr = [];
-
-      if(sub!=""){
-        sub = "subject="+encodeURIComponent(sub);
-        mailarr.push(sub);
-      }
-      if(body!=""){
-        body = "body="+encodeURIComponent(body);
-        mailarr.push(body);
-      }
-
-      var mailstr = mailarr.join("&");
-      if(mailstr!="") { mailstr = "?"+mailstr; }
-
-      window.open("mailto:"+to+mailstr);
-
-
-
-
-
-    }
-  }
 
 }
 
