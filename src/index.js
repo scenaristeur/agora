@@ -1,8 +1,15 @@
 import './css/bootstrap/bootstrap.min.css';
-
-//import './css/fontawesome/css/all.css';
 import './styles.css';
 import './views/app-view.js';
+
+import './views/compose-view.js';
+import './views/orga-view.js';
+import './views/flow-view.js';
+import './views/talk-view.js';
+import './views/config-view.js';
+
+
+//import './css/fontawesome/css/all.css';
 //import './views/store-element.js'
 import './views/friends-view.js'
 import './views/friend-view.js'

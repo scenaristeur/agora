@@ -44,12 +44,13 @@ if (!window.customElements) {
 </head>
 
 <body>
-  <header><h4>Agora</h4>
-    <store-element name="Store"></store-element>
-<div class="row">
-    <login-element name="Login"></login-element>
-    <profile-cartouche-element name="ProfileCartouche" webId="${this.webId}"></profile-cartouche-element>
-</div>
+  <header>
+    <div class="row">
+      <h4>Agora</h4>
+      <login-element name="Login"></login-element>
+      <profile-cartouche-element name="ProfileCartouche" webId="${this.webId}"></profile-cartouche-element>
+      <store-element name="Store"></store-element>
+    </div>
   </header>
   <!--<nav>
   <a href="/">Todos</a>

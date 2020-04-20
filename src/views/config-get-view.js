@@ -366,6 +366,7 @@ class ConfigGetView extends LitElement {
           }
         }
       };
+      //app.agent.send("Store", {action:"getConfig"});
     }
 
     configChanged(config){

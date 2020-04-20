@@ -98,3 +98,12 @@ see manifest & sw
 
 # free hossting
 https://zeit.co/pricing
+
+# erreur gh-pages
+
+```
+ git push origin --delete gh-pages
+ git subtree push --prefix dist origin gh-pages
+```
+# illustrations
+https://undraw.co/illustrations
