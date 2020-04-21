@@ -177,9 +177,7 @@ class ConfigGetView extends LitElement {
         this.config.status = "OK"
         this.textColor = "text-success"
         this.agent.send("Store", {action: "setStorage", values: {config: this.config}})
-        if (this.config.status == "OK"){
-          this.agent.send("App", {action: "pageChanged", page: "flux"})
-        }
+        this.agent.send("App", {action: "panelChanged", panel: "last"})
       }
     }
 
@@ -375,10 +373,10 @@ class ConfigGetView extends LitElement {
         config.origin = "store"
         this.config = config
         if (this.config.status == "OK"){
-          this.agent.send("App", {action: "pageChanged", page: "flux"})
+          this.agent.send("App", {action: "panelChanged", panel: "last"})
         }
       }else{
-        this.agent.send("App", {action: "pageChanged", page: "config"})
+        this.agent.send("App", {action: "panelChanged", panel: "Config"})
         this.checkConfig()
       }
     }

@@ -112,19 +112,23 @@ class InfoElement extends LitElement {
     target="_blank">Agora project</a> repository.
     </p>
 
-    <p><b>Last, but not least :</b> if you install Agora on your device, you can use it as a "Share with..." app... ;-) </p>  
+    <p><b>Last, but not least :</b> if you install Agora on your device, you can use it as a "Share with..." app... ;-) </p>
     <p class="lead">
     If all is OK for you,
-    <button class="btn btn-info" @click="${this.toggleHidden}">Toggle Help</button> and Login.
+    <button class="btn btn-info" panel="Init" @click="${this.showPanel}">Toggle Help</button> and Login.
     <!--  <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>-->
     </p>
     </div>
-
+<!--
     <button class="btn btn-info" ?hidden="${!this.hidden}" @click="${this.toggleHidden}">Help</button>
-
+-->
     `;
   }
 
+  showPanel(e){
+    this.agent.send("App", {action: "panelChanged", panel: e.target.getAttribute("panel")})
+  }
+  
   firstUpdated(){
     var app = this;
     this.agent = new HelloAgent(this.name);

@@ -26,6 +26,9 @@ export class BaseView extends LitElement {
             case "pageChanged":
             app.pageChanged(message.page)
             break;
+            case "panelChanged":
+            app.panelChanged(message.panel)
+            break;
             default:
             console.log("Unknown action ",message)
           }

@@ -44,13 +44,9 @@ if (!window.customElements) {
 </head>
 
 <body>
+  <store-element name="Store"></store-element>
   <header>
-    <div class="row">
-      <h4>Agora</h4>
-      <login-element name="Login"></login-element>
-      <profile-cartouche-element name="ProfileCartouche" webId="${this.webId}"></profile-cartouche-element>
-      <store-element name="Store"></store-element>
-    </div>
+    <nav-element name="Nav">Loading Nav</nav-element>
   </header>
   <!--<nav>
   <a href="/">Todos</a>
@@ -83,6 +79,7 @@ if ('serviceWorker' in navigator) {
 <script src="./libs/solid-auth-client.bundle.js"></script>
 <script src="./libs/solid-file-client.bundle.js"></script>
 <script src="./libs/solid-query-ldflex.bundle.js"></script>
+
 
 <!--<script src="views/store-element.js" type="module"></script>-->
 </body>

@@ -30,7 +30,7 @@ class ObjectElement extends LitElement {
     <div class="col">
 
     ${this.object.ext == "jpg" ?
-    html`<img src="${this.url}" style='height: auto; width: 75%; object-fit: contain' alt="${this.url}"/>`
+    html`<img src="${this.url}" style='height: auto; width: 75%; max-width: 300px; object-fit: contain' alt="${this.url}"/>`
     :html` ` }
   <small> <div id="content">${this.object.content}</div></small>
     </div>

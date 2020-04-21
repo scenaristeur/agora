@@ -87,6 +87,9 @@ module.exports = ({ mode, presets }) => {
       },
       entry: {
         "main": './src/index.js',
+  "nav-element": './src/views/nav-element.js',
+
+
 
         "store-element": './src/views/store-element.js',
         "info-element": './src/views/info-element.js',

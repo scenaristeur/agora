@@ -72,6 +72,16 @@ git push && git subtree push --prefix dist origin gh-pages
 [ ] https://mstdn.fr/web/accounts/146921, https://joinmastodon.org/ , https://fr.mstdn.wiki/Accueil
 
 
+# infinite scroller
+https://github.com/GoogleChromeLabs/ui-element-samples/blob/gh-pages/infinite-scroller/index.html
+https://developers.google.com/web/updates/2016/07/infinite-scroller
+
+#expand
+https://developers.google.com/web/updates/2017/03/performant-expand-and-collapse#top_of_page
+https://github.com/GoogleChromeLabs/ui-element-samples/blob/gh-pages/animated-clip/advanced/index.html
+https://codepen.io/martinkrulltott/pen/mejmmj
+https://mdbootstrap.com/docs/jquery/components/panels/
+
 # first step
 https://scenaristeur.github.io/compagent-tuto/
 
