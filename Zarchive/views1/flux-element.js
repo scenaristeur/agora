@@ -23,18 +23,16 @@ class FluxElement extends BaseView {
     this.name = "Flux"
     this.agoraPod = ""
     this.notifications = []
-    this.log = ""
+    this.log = {}
   }
 
   render(){
     return html`
-
+    <!--    POD : ${this.agoraPod}<br>
+    Notifications : ${this.notifications.length}</br>-->
     <div class="row border" style="overflow-y:scroll;position:relative;height: 400px;">
 
-    <div class="lead" ?hidden = "${this.notifications.length != 0}">
-    Loading<br>Activities<br>from<br>${this.agoraPod}
-    <br>${this.log}
-    </div>
+    <div class="lead" ?hidden = "${this.notifications.length != 0}">Loading<br>Activities<br>from<br>${this.agoraPod}</div>
     <ul class="list-group list-group-flush">
     ${this.notifications.map((n,i) => html `
       <li class="list-group-item" id="${this.name}">
@@ -58,43 +56,37 @@ class FluxElement extends BaseView {
     async init(){
       let app = this
       this.log = "Agora Pod : "+this.agoraPod
-      //console.log(this.agoraPod)
+      //      console.log(this.agoraPod)
       let pti_url = await solid.data[this.agoraPod].solid$publicTypeIndex
       this.log = 'Pti url : '+pti_url
-      //console.log(`${pti_url}`)
+      //    console.log(`${pti_url}`)
       let instance = await solid.data[pti_url+"#Agora"].solid$instance
       this.log = 'Instance url : '+instance
-      //console.log(`${instance}`)
+      //    console.log(`${instance}`)
       let inbox = await solid.data[instance].as$inbox
       this.log = 'Inbox : '+inbox
-      //console.log(`${inbox}`)
+      //    console.log(`${inbox}`)
 
       let notifications = []
       for await (const subject of solid.data[inbox].subjects){
-        console.log(`${subject}`)
+        //    console.log(`${subject}`)
         if(`${subject}` != inbox){
           let n = {}
           n.url = `${subject}`+'#this'
-          /* */
+          let published = new Date(await solid.data[n.url].as$published)
+          n.published = `${published}`
+          n.timestamp = published.getTime()
           notifications.push(n)
           app.log = "Notifications : "+notifications.length
         }
       }
-      //console.log(notifications)
-      this.notifications = notifications
-    //  this.log = "Ready"
-      this.notifications.forEach(async function(n)  {
-        let published = new Date(await solid.data[n.url].as$published)
-        n.published = `${published}`
-        n.timestamp = published.getTime()
-      });
-    /*  console.log(notifications)
+      //  console.log(notifications)
       this.log = "Sort Notifications"
       notifications.sort(function(a, b){
         return a.timestamp < b.timestamp;
       });
-      this.notifications = notifications*/
-
+      this.notifications = notifications
+      this.log = "Ready"
     }
 
   }

@@ -6,12 +6,14 @@ class InfoElement extends LitElement {
   static get properties() {
     return {
       name: {type: String},
+      hidden: {type: Boolean}
     };
   }
 
   constructor() {
     super();
     this.name = "Info"
+    this.hidden = true
   }
 
   render(){
@@ -20,7 +22,7 @@ class InfoElement extends LitElement {
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
 
 
-    <div class="jumbotron">
+    <div ?hidden="${this.hidden}" class="jumbotron">
     <h1 class="display-4">Agora</h1>
     <p class="lead">
     The DecentraliShare app !<br>
@@ -30,7 +32,7 @@ class InfoElement extends LitElement {
     on top of the Solid Platform.</p>
     <hr class="my-4">
 
-    <p>If you want to use Agora, you must configure your POD.</p>
+    <p>  If you want to use Agora, you must configure your POD.</p>
     <p>
     Agora needs HIGH CONTROL to your POD to set authorizations on data created.<br>
     Although Agora limits its interaction to a specific folder of your POD,
@@ -113,15 +115,20 @@ class InfoElement extends LitElement {
     <p><b>Last, but not least :</b> if you install Agora on your device, you can use it as a "Share with..." app... ;-) </p>
     <p class="lead">
     If all is OK for you,
-    <button class="btn btn-info" @click="${this.showPanel}">Close Help</button> and Login.
+    <button class="btn btn-info" panel="Init" @click="${this.showPanel}">Toggle Help</button> and Login.
     <!--  <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>-->
     </p>
     </div>
+<!--
+    <button class="btn btn-info" ?hidden="${!this.hidden}" @click="${this.toggleHidden}">Help</button>
+-->
     `;
   }
 
-
-
+  showPanel(e){
+    this.agent.send("App", {action: "panelChanged", panel: e.target.getAttribute("panel")})
+  }
+  
   firstUpdated(){
     var app = this;
     this.agent = new HelloAgent(this.name);
@@ -131,23 +138,25 @@ class InfoElement extends LitElement {
       if (message.hasOwnProperty("action")){
         //  console.log(message)
         switch(message.action) {
-
+          case "hiddenChanged":
+          app.hiddenChanged(message.hidden)
+          break;
           default:
           console.log("Unknown action ",message)
         }
       }
     };
-
+    this.agent.send("Store", {action: "getInfoHidden"})
   }
 
-  showPanel(){
-    this.agent.send("App", {action: "showPanel"})
-    console.log("hide")
-    let values = []
-    values.info = false
-    this.agent.send("Store", {action: "setStorage", values: values})
+  toggleHidden(){
+    this.hidden = !this.hidden
+    this.agent.send("Store", {action: "setStorage", values: {infoHidden: this.hidden}})
   }
-
+  hiddenChanged(hidden){
+    console.log("hiddenChanged", hidden)
+    this.hidden = hidden
+  }
 }
 
 customElements.define('info-element', InfoElement);

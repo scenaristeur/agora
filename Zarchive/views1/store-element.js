@@ -15,25 +15,20 @@ class StoreElement extends BaseView {
     super();
     this.name = "Store"
     this.store = {}
-    this.debug = false
-
+    this.debug = true
+    this.readStorage()
   }
 
   render() {
     return html`
-
-    <div ?hidden = "${!this.debug}">
-    Hello from<b>${this.name}</b><br>
-    store : ${JSON.stringify(this.store)}</br>
-
+    <div ?hidden="${!this.debug}"
     <p>
-    ${this.name} <br>    <button @click="${this.cleanStorage}">Clean</button><br><br>
+    ${this.name} <br>
+    <button @click="${this.cleanStorage}">Clean</button><br><br>
 
+    Info hidden = ${this.store.infoHidden}<br>
     </p>
     </div>
-
-
-
     `;
   }
 
@@ -52,7 +47,9 @@ class StoreElement extends BaseView {
             case "setStorage":
             app.setStorage(message.values)
             break;
-
+            case "getInfoHidden":
+            app.getInfoHidden()
+            break;
             case "getConfig":
             app.getConfig(from)
             break;
@@ -63,23 +60,25 @@ class StoreElement extends BaseView {
       };
     }
 
-    this.readStorage()
-    this.agent.send("App", {action: "initFromStore", store: this.store})
+    //  this.getInfoHidden("Info")
+    //  this.getConfig("Config")
   }
 
   getConfig(from){
     this.agent.sendMulti([from, "PostTabs", "Profile", "Friends", "ProfileCartouche"], {action: "configChanged", config: this.store.config})
   }
 
+  getInfoHidden(from){
+    this.agent.send("Info", {action: "hiddenChanged", hidden: this.store.infoHidden})
+  }
 
   readStorage(){
-    this.store = JSON.parse(localStorage.getItem("agora")) || {info: true, config: {}}
+    this.store = JSON.parse(localStorage.getItem("agora")) || {}
     console.log("STORE : ",this.store)
   }
 
   setStorage(values){
     console.log(values)
-
     for (let [key, value] of Object.entries(values)) {
       console.log(`${key}: ${value}`);
       this.store[key] = value
