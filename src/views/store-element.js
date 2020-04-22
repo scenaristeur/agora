@@ -16,7 +16,7 @@ class StoreElement extends BaseView {
     super();
     this.name = "Store"
     this.store = {}
-    this.debug = true
+    this.debug = false
     this.webId = null
   }
 

@@ -81,16 +81,16 @@ class FabElement extends LitElement {
     ${this.webId != null ?
       html`
       <button type="button"
-       class="btn btn-write btn-info has-tooltip"
-        data-placement="left"
-        @click="${this.toggleWrite}"
-         title="Write"> <i class="fa fa-pen"></i> </button>
+      class="btn btn-write btn-info has-tooltip"
+      data-placement="left"
+      @click="${this.toggleWrite}"
+      title="Write"> <i class="fa fa-pen"></i> </button>
       `
       :html``
 
     }
 
-<!--
+    <!--
     <div class="btn-group-fab" role="group" @click="${this.toggleFab}" aria-label="FAB Menu">
     <div>
 
@@ -130,6 +130,7 @@ class FabElement extends LitElement {
 
   toggleWrite(){
     console.log("toggleWrite")
+    this.agent.send("App", {action: "showPanel", panel: "Compose"})
     this.agent.send("Post", {action: "toggleWrite"})
   }
 

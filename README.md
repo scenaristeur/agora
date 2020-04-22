@@ -118,3 +118,6 @@ https://zeit.co/pricing
 ```
 # illustrations
 https://undraw.co/illustrations
+
+# toaster
+https://github.com/CodeSeven/toastr

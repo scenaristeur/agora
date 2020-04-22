@@ -1,9 +1,6 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
 
-//let data = solid.data
-//console.log("LDFK+LEX",data)
-//import * as auth from 'solid-auth-client';
 import * as SolidFileClient from "solid-file-client"
 import { namedNode } from '@rdfjs/data-model';
 
@@ -16,7 +13,7 @@ class ConfigGetView extends LitElement {
       log: {type: String},
       aclInbox: {type: String},
       textColor: {type: String},
-        debug: {type: Boolean},
+      debug: {type: Boolean},
     };
   }
 
@@ -26,7 +23,7 @@ class ConfigGetView extends LitElement {
     this.config = {}
     this.log = "Init"
     this.textColor = "text-primary"
-    this.debug = true
+    this.debug = false
     this.aclInboxContent = `@prefix : <#>.
     @prefix acl: <http://www.w3.org/ns/auth/acl#>.
     @prefix inbox: <./>.
@@ -393,20 +390,20 @@ class ConfigGetView extends LitElement {
       }
     }
 
-/*    webIdChanged(webId){
-      console.log("CONFIG GET ",webId)
-      this.config.webId = webId
-      if (webId != null){
-        this.log = "Logged"
-        this.agent.send("Store", {action: "getConfig"})
+    /*    webIdChanged(webId){
+    console.log("CONFIG GET ",webId)
+    this.config.webId = webId
+    if (webId != null){
+    this.log = "Logged"
+    this.agent.send("Store", {action: "getConfig"})
 
-        //  this.checkConfig()
-      }else{
-        this.config = {}
-        this.log = "Not Logged"
-      }
-    }*/
+    //  this.checkConfig()
+  }else{
+  this.config = {}
+  this.log = "Not Logged"
+}
+}*/
 
-  }
+}
 
-  customElements.define('config-get-view', ConfigGetView);
+customElements.define('config-get-view', ConfigGetView);

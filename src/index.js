@@ -28,6 +28,12 @@ import './views/media-element.js'
 import './views/triple-element.js'
 import './views/graph-element.js'
 
+//ORGANIZATION
+import './views/friends-view.js'
+import './views/friend-view.js'
+
+// LOG
+import './views/log-element.js'
 
 /*
 import './views/compose-view.js';

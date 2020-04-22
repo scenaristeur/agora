@@ -19,7 +19,7 @@ class AppView extends LitElement {
   constructor() {
     super();
     this.name = "App"
-    this.debug = true
+    this.debug = false
     this.webId = null
     this.query = null
     this.share = {}
@@ -54,8 +54,8 @@ class AppView extends LitElement {
       </header>
 
       <div class="container-fluid">
-      <!-- -->
-      PANEL : ${this.panel} for ${this.webId}
+      <!--
+      PANEL : ${this.panel} for ${this.webId}-->
       <!---->
       <!--
 
@@ -98,6 +98,8 @@ class AppView extends LitElement {
       <!---->
 
       </div>
+
+      <!--      <log-element name="Log">Loading Log</log-element>-->
       `;
     }
 

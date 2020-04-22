@@ -14,8 +14,8 @@
     "type": "git",
     "url": "git+https://github.com/scenaristeur/agora.git"
   },
-  "keywords": [],
-  "author": "Marcus Hellberg <marcus@vaadin.com>",
+  "keywords": ["POD", "Solid Project", "Solid", "ActivityPub"],
+  "author": "Smag0 <scenaristeur@gmail.com>",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/scenaristeur/agora/issues"
@@ -41,22 +41,11 @@
   },
   "dependencies": {
     "@solid/query-ldflex": "^2.10.0",
-    "@vaadin/router": "^1.7.1",
-    "@vaadin/vaadin-button": "^2.2.2",
-    "@vaadin/vaadin-checkbox": "^2.2.13",
-    "@vaadin/vaadin-radio-button": "^1.3.0-alpha1",
-    "@vaadin/vaadin-text-field": "^2.5.5",
     "@webcomponents/webcomponentsjs": "^2.1.3",
     "bootstrap": "^4.4.1",
     "evejs": "github:scenaristeur/evejs",
-    "jquery": "^3.5.0",
     "lit-element": "^2.3.1",
-    "nanoid": "^3.1.3",
-    "popper": "^1.0.1",
-    "pwa-helpers": "^0.9.1",
     "rdf-namespaces": "^1.8.0",
-    "redux": "^4.0.5",
-    "reselect": "^4.0.0",
     "solid-auth-client": "^2.4.1",
     "solid-file-client": "^1.0.2"
   }
