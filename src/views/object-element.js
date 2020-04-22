@@ -111,7 +111,7 @@ class ObjectElement extends LitElement {
         this.linkify(`${this.object.content}`)
       }
     }else{
-      console.log(this.object.ext,this.url)
+    //  console.log(this.object.ext,this.url)
       this.requestUpdate()
     }
 

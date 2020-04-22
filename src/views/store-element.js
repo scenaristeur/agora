@@ -7,7 +7,8 @@ class StoreElement extends BaseView {
     return {
       name: { type: String },
       store: {type: Object},
-      debug: {type: Boolean}
+      debug: {type: Boolean},
+      webId: {type: String}
     };
   }
 
@@ -15,8 +16,8 @@ class StoreElement extends BaseView {
     super();
     this.name = "Store"
     this.store = {}
-    this.debug = false
-
+    this.debug = true
+    this.webId = null
   }
 
   render() {
@@ -25,15 +26,10 @@ class StoreElement extends BaseView {
     <div ?hidden = "${!this.debug}">
     Hello from<b>${this.name}</b><br>
     store : ${JSON.stringify(this.store)}</br>
-
     <p>
     ${this.name} <br>    <button @click="${this.cleanStorage}">Clean</button><br><br>
-
     </p>
     </div>
-
-
-
     `;
   }
 
@@ -52,9 +48,11 @@ class StoreElement extends BaseView {
             case "setStorage":
             app.setStorage(message.values)
             break;
-
             case "getConfig":
             app.getConfig(from)
+            break;
+            case "webIdChanged":
+            app.webIdChanged(message.webId)
             break;
             default:
             console.log("Unknown action ",message)
@@ -66,6 +64,30 @@ class StoreElement extends BaseView {
     this.readStorage()
     this.agent.send("App", {action: "initFromStore", store: this.store})
   }
+
+  webIdChanged(webId){
+    console.log("WEBID CHANGED",webId, this.webId)
+    //  this.webId = webId
+    if (webId != null){
+      console.log("WEBID NON NULL",webId, this.webId)
+      if (webId == this.webId){
+        console.log("WEBID IDENTIQUE")
+      }else{
+        console.log("WEBID DIFFERENT", webId, this.webId)
+        this.store.config.webId = webId
+        this.store.config.status = "WebId has changed : ",+webId
+        this.agent.send("App", {action: "showPanel", panel: "Config"})
+        this.agent.send("Config", {action: "newConfig", config: this.store.config})
+
+      }
+    }else{
+      console.log("WEBID CHANGED IS NULL",this.webId)
+      this.store.config = {}
+    }
+    console.log(this.webId)
+    this.populateStorage()
+  }
+
 
   getConfig(from){
     this.agent.sendMulti([from, "PostTabs", "Profile", "Friends", "ProfileCartouche"], {action: "configChanged", config: this.store.config})

@@ -71,7 +71,7 @@ class FluxElement extends BaseView {
 
       let notifications = []
       for await (const subject of solid.data[inbox].subjects){
-        console.log(`${subject}`)
+    //    console.log(`${subject}`)
         if(`${subject}` != inbox){
           let n = {}
           n.url = `${subject}`+'#this'

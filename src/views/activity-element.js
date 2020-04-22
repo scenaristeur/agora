@@ -123,7 +123,7 @@ class ActivityElement extends LitElement {
 
         objects = [...objects, `${object}`]
       }
-      console.log("OBJECTS",objects)
+//      console.log("OBJECTS",objects)
       this.activity.objects = objects // = await solid.data[this.url].as$object
       this.activity.target = await solid.data[this.url].as$target
       this.activity.summary = await solid.data[this.url].as$summary

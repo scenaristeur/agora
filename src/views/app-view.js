@@ -19,7 +19,7 @@ class AppView extends LitElement {
   constructor() {
     super();
     this.name = "App"
-    this.debug = false
+    this.debug = true
     this.webId = null
     this.query = null
     this.share = {}
@@ -38,7 +38,7 @@ class AppView extends LitElement {
       return html`
       <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
       <link href="css/fontawesome/css/all.css" rel="stylesheet">
-
+      <fab-element name="Fab" ?hidden="${this.webId == null}">Loading Fab for ${this.webId}</fab-element>
       <store-element name="Store">Store Loading</store-element>
       <div ?hidden = "${!this.debug}">
       Hello from<b>${this.name}</b><br>
@@ -49,18 +49,21 @@ class AppView extends LitElement {
       <header>
       <button class="btn btn-outline-info"  @click="${this.showDefault}">Agora</button>
       <button class="btn btn-outline-info" panel="Info" @click="${this.showFromAtt}">Help</button>
-
+      <login-element name="Login">Loading Login</login-element>
       <!--      <nav-element name="Nav">Loading Nav</nav-element>-->
       </header>
 
       <div class="container-fluid">
       <!-- -->
-      PANEL : ${this.panel}
+      PANEL : ${this.panel} for ${this.webId}
       <!---->
+      <!--
+
+      HIDDEN TEMPORARY FOR DEV-->
       <flux-element name="Flux" agoraPod="${this.agoraPod}" ?hidden="${this.panel != 'Flow'}">Loading Flux</flux-element>
       <friends-view name="Friends" ?hidden="${this.panel != 'Organization'}">Loading Organization</friends-view>
       <post-element name="Post" .share="${this.share}" ?hidden="${this.panel != 'Compose'}">Loading Post</post-element>
-      <config-view name="Config" webId="${this.webId}" ?hidden="${this.webId == null || this.panel != "Config"}"></config-view>
+      <config-get-view name="Config" webId="${this.webId}" ?hidden="${this.webId == null || this.panel != "Config"}">Loading Config for ${this.webId}</config-get-view>
       <profile-element ?hidden="${this.panel != "Profile"}" name="Profile">Loading Profil</profile-element>
       <!---->
 
@@ -69,7 +72,7 @@ class AppView extends LitElement {
       ${this.panels.map((p, i) =>
         html `
         <div class="col-md-6">
-        <panel-element name="${p.name}+'_'+${i}" .p="${p}">Loading ${p.name}</panel-element>
+        <panel-element name="${p.name}" .p="${p}">Loading ${p.name}</panel-element>
         </div>
         `)
       }
@@ -123,6 +126,9 @@ class AppView extends LitElement {
       };
     }
 
+    webIdChanged(webId){
+      this.webId = webId
+    }
     initFromStore(store){
       console.log("STORE in app",store)
       store.info == true ? this.panel = "Info" : ""
