@@ -29,7 +29,7 @@ class AppView extends LitElement {
       {name: "Flow", image: "/img/flow.png", text:"Show Public, Group & Personnal Activities."},
       {name: "Compose", image: "/img/compose.png", text:"Create & compose new Notes, Medias, Triples & Graphs!"},
       {name: "Organization", image: "/img/orga.png", text:"Build Teams to collaborate on projects."},
-      {name: "Talk", image: "/img/talk.png", text:"A space to realtime exchanges!"}]
+      {name: "Talk", image: "/img/talk.png", text:"A space to realtime exchanges! (TODO)"}]
       this.onLoad()
 
     }
@@ -55,8 +55,8 @@ class AppView extends LitElement {
 
       <div class="container-fluid">
       <!--
-      PANEL : ${this.panel} for ${this.webId}-->
-      <!---->
+      PANEL : ${this.panel} for ${this.webId}
+      -->
       <!--
 
       HIDDEN TEMPORARY FOR DEV-->
@@ -136,7 +136,7 @@ class AppView extends LitElement {
       store.info == true ? this.panel = "Info" : ""
     }
 
-    showPanel(panel = "Default"){
+    showPanel(panel = "Flow"){
       this.panel = panel
       //
     }

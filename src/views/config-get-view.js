@@ -174,7 +174,7 @@ class ConfigGetView extends LitElement {
         }
       }
 
-      console.log(Object.values(this.config))
+      //  console.log(Object.values(this.config))
       if( Object.values(this.config).includes("undefined")){
         this.log = this.log +" CONFIGURATION NOT OK"
         this.textColor = "text-danger"
@@ -185,8 +185,32 @@ class ConfigGetView extends LitElement {
         this.log = "CONFIGURATION OK"
         this.config.status = "OK"
         this.textColor = "text-success"
+        let friends = []
+        let followers = []
+        let following = []
+        for await (const friend of solid.data[this.config.webId].friends){
+          let f = `${friend}`
+          friends = [... friends, f]
+        }
+        this.config.friends = friends
+
+        this.config.followers_uri = this.config.followers+"index.ttl#this"
+        for await (const f_er of solid.data[this.config.followers_uri].as$items){
+          let fer = `${f_er}`
+          followers = [... followers, fer]
+        }
+        this.config.followersList = followers
+
+        this.config.following_uri = this.config.following+"index.ttl#this"
+        for await (const f_ing of solid.data[this.config.following_uri].as$items){
+          let fing = `${f_ing}`
+          following = [... following, fing]
+        }
+        this.config.followingList = following
+
         this.agent.send("Store", {action: "setStorage", values: {config: this.config}})
         this.agent.send("App", {action: "showPanel"})
+        this.agent.send("Friends", {action: "configChanged", config: this.config})
       }
     }
 

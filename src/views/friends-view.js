@@ -60,8 +60,7 @@ class FriendsView extends LitElement {
       </div>
 
       <div ?hidden="${this.tab != "following"}">
-      Following
-      ${this.following.map((f, i) => html`
+        ${this.following.map((f, i) => html`
         <div class="col">
         <friend-view name="${"Following_"+i}" f_webId=${f}>Loading Friend</friend-view>
         </div>
@@ -69,16 +68,12 @@ class FriendsView extends LitElement {
         </div>
 
         <div ?hidden="${this.tab != "followers"}">
-        Followers
         ${this.followers.map((f, i) => html`
           <div class="col">
           <friend-view name="${"Followers_"+i}" f_webId=${f}>Loading Friend</friend-view>
           </div>
           `)}
           </div>
-
-
-
 
           </div>
 
@@ -100,8 +95,12 @@ class FriendsView extends LitElement {
         configChanged(config){
           console.log("CONFIG",config)
           this.config = config
-          this.getFollowers()
-          this.getFollowing()
+          //  this.getFollowers()
+          //  this.getFollowing()
+          this.friends = this.config.friends
+          this.followers = this.config.followersList
+          this.following = this.config.followingList
+          console.log("HIIIHAAAA",this.followers)
         }
 
         firstUpdated(){
@@ -113,9 +112,6 @@ class FriendsView extends LitElement {
             if (message.hasOwnProperty("action")){
               //  console.log(message)
               switch(message.action) {
-                case "webIdChanged":
-                app.webIdChanged(message.webId)
-                break;
                 case "configChanged":
                 app.configChanged(message.config)
                 break;
@@ -124,46 +120,6 @@ class FriendsView extends LitElement {
               }
             }
           };
-        }
-
-        async webIdChanged(webId){
-          this.webId = webId
-          if (webId != null){
-            this.getFriends()
-
-          }else{
-            this.friends = []
-          }
-        }
-
-        async getFriends(){
-          let friends = []
-          for await (const f of solid.data[this.webId].friends){
-            friends = [... friends, `${f}`]
-          }
-          this.friends = friends
-        }
-
-        async getFollowers(){
-          let followers = []
-          console.log(this.config)
-          let user_followers = this.config.followers+'index.ttl#this'
-          console.log(user_followers)
-          for await (const fer of solid.data[user_followers].as$items){
-            followers = [... followers, `${fer}`]
-          }
-          this.followers = followers
-        }
-
-        async getFollowing(){
-          let following = []
-          console.log(this.config)
-          let user_following = this.config.following+'index.ttl#this'
-          console.log(user_following)
-          for await (const fing of solid.data[user_following].as$items){
-            following = [... following, `${fing}`]
-          }
-          this.following = following
         }
 
       }
