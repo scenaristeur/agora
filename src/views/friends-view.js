@@ -47,81 +47,76 @@ class FriendsView extends LitElement {
     </li>
     </ul>
     </div>
-    <div class="card-body">
 
-    <div class="row" style="overflow-y:scroll;position:relative;height: 300px;">
+    <div style="overflow-y:scroll;position:relative;height: 80wh;">
 
-    <div class="row" ?hidden="${this.tab != "friends"}">
+    <div class="card-deck" ?hidden="${this.tab != "friends"}">
     ${this.friends.map((f, i) => html`
-      <div class="col-2 mb-2">
       <friend-view name="${"Friend_"+i}" f_webId=${f}>Loading Friend</friend-view>
-      </div>
-      `)}
-      </div>
+      `
+    )}
+    </div>
 
-      <div class="row" ?hidden="${this.tab != "following"}">
-      ${this.following.map((f, i) => html`
-        <div class="col-2 mb-2">
-        <friend-view name="${"Following_"+i}" f_webId=${f}>Loading Friend</friend-view>
-        </div>
-        `)}
-        </div>
+    <div class="card-deck" ?hidden="${this.tab != "following"}">
+    ${this.following.map((f, i) => html`
+      <friend-view name="${"Following_"+i}" f_webId=${f}>Loading Following</friend-view>
+      `
+    )}
+    </div>
 
-        <div class="row" ?hidden="${this.tab != "followers"}">
-        ${this.followers.map((f, i) => html`
-          <div class="col-2 mb-2">
-          <friend-view name="${"Followers_"+i}" f_webId=${f}>Loading Friend</friend-view>
-          </div>
-          `)}
-          </div>
+    <div class="card-deck" ?hidden="${this.tab != "followers"}">
+    ${this.followers.map((f, i) => html`
+      <friend-view name="${"Followers_"+i}" f_webId=${f}>Loading Followers</friend-view>
+      `
+    )}
+    </div>
 
-          </div>
-          
-          </div>
-          </div>
-          `;
+    </div>
+
+    </div>
+    `;
+  }
+
+  openTab(e){
+    this.tab = e.target.getAttribute("tab")
+    //console.log(this.tab)
+    let tablinks = this.shadowRoot.querySelectorAll(".nav-link");
+    for (let i = 0; i < tablinks.length; i++) {
+      tablinks[i].classList.remove("active");
+    }
+    e.target.classList.add("active")
+  }
+
+  configChanged(config){
+     console.log("CONFIG",config)
+    this.config = config
+    //  this.getFollowers()
+    //  this.getFollowing()
+    this.friends = this.config.friends || []
+    this.followers = this.config.followersList || []
+    this.following = this.config.followingList || []
+    //console.log("HIIIHAAAA",this.followers)
+  }
+
+  firstUpdated(){
+    var app = this;
+    this.agent = new HelloAgent(this.name);
+    //console.log(this.agent)
+    this.agent.receive = function(from, message) {
+      //  console.log("messah",message)
+      if (message.hasOwnProperty("action")){
+        //  console.log(message)
+        switch(message.action) {
+          case "configChanged":
+          app.configChanged(message.config)
+          break;
+          default:
+          console.log("Unknown action ",message)
         }
-
-        openTab(e){
-          this.tab = e.target.getAttribute("tab")
-          //console.log(this.tab)
-          let tablinks = this.shadowRoot.querySelectorAll(".nav-link");
-          for (let i = 0; i < tablinks.length; i++) {
-            tablinks[i].classList.remove("active");
-          }
-          e.target.classList.add("active")
-        }
-
-        configChanged(config){
-          //  console.log("CONFIG",config)
-          this.config = config
-          //  this.getFollowers()
-          //  this.getFollowing()
-          this.friends = this.config.friends
-          this.followers = this.config.followersList
-          this.following = this.config.followingList
-          //console.log("HIIIHAAAA",this.followers)
-        }
-
-        firstUpdated(){
-          var app = this;
-          this.agent = new HelloAgent(this.name);
-          //console.log(this.agent)
-          this.agent.receive = function(from, message) {
-            //  console.log("messah",message)
-            if (message.hasOwnProperty("action")){
-              //  console.log(message)
-              switch(message.action) {
-                case "configChanged":
-                app.configChanged(message.config)
-                break;
-                default:
-                console.log("Unknown action ",message)
-              }
-            }
-          };
-        }
-
       }
+    };
+  }
 
-      customElements.define('friends-view', FriendsView);
+}
+
+customElements.define('friends-view', FriendsView);

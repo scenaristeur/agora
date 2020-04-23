@@ -208,6 +208,9 @@ class ConfigGetView extends LitElement {
         }
         this.config.followingList = following
 
+let storage = await solid.data[this.config.webId].publicTypeIndex
+this.config.storage = `${storage}`
+
         this.agent.send("Store", {action: "setStorage", values: {config: this.config}})
         this.agent.send("App", {action: "showPanel"})
         this.agent.send("Friends", {action: "configChanged", config: this.config})

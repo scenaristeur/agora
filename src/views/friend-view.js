@@ -1,8 +1,5 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
-//let data = solid.data
-//console.log("LDFK+LEX",data)
-
 
 class FriendView extends LitElement {
 
@@ -21,25 +18,40 @@ class FriendView extends LitElement {
     this.friend = {webId:"", name:"", photo: ""}
   }
 
+  render1(){
+    return html`
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="css/fontawesome/css/all.css" rel="stylesheet">
+
+    <div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    </div>
+    </div>
+    `}
+
+
+
   render(){
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
 
-
-
-    <div class="card">
+    <div class="card bg-light m-3" style="width: 8rem;">
     ${this.friend.photo.length > 0 ?
       html`<img class="rounded-circle card-img-top"
       src="//images.weserv.nl/?url=${this.friend.photo}&w=100&h=100"
-      style="height:10rem"
+      style="height:5rem,width:5rem"
       title="${this.friend.photo}"
       alt="no image">`
       :html`<i class="fas fa-user-circle fa-2x" title="${this.friend.name}"></i>`
     }
 
     <!--    <img class="card-img-top" src="//images.weserv.nl/?url=${this.friend.photo}&w=150&h=150"  alt="${this.friend.name}">-->
-    <div class="card-body">
+    <div class="card-body p-1">
     <!--  <h5 class="card-title">${this.friend.name}</h5>
     <p class="card-text"> ${this.friend.webId} With supporting text below as a natural lead-in to additional content.</p>-->
     <button class="btn btn-outline-info btn-sm" webId="${this.friend.webId}"

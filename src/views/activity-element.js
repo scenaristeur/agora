@@ -90,7 +90,7 @@ class ActivityElement extends LitElement {
       }else{
         var to = '';
         var sub = "Agora : "+this.activity.summary;
-        var body = 'I want to share this link with you :   \n https://scenaristeur.github.io/agora?object='+this.url+'  \n \n '+this.object.content+' \n \n';
+        var body = 'I want to share this link with you :   \n https://scenaristeur.github.io/agora?activity='+this.url+'  \n \n ';
         var mailarr = [];
         if(sub!=""){
           sub = "subject="+encodeURIComponent(sub);
@@ -139,6 +139,7 @@ class ActivityElement extends LitElement {
 
     replyTo(){
       console.log(this.url)
+      this.agent.send("App", {action: "showPanel", panel:"Compose"})
       this.agent.send("Post", {action: "toggleWrite"})
       this.agent.send("PostTabs", {action:"setReplyTo", replyTo: this.url })
     }

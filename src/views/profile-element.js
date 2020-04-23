@@ -10,16 +10,16 @@ class ProfileElement extends LitElement {
   static get properties() {
     return {
       name: {type: String},
-      webId: {type: String}, // webId : current loged user
-      p_config : {type: Object}, // p_webId : the user that the profile-element shows
+      config: {type: Object}, // config : current loged user
+      p_config : {type: Object}, // p_config : the user that the profile-element shows
     };
   }
 
   constructor() {
     super();
     this.name = "Profile"
-    this.webId = null
-    this.p_config = {}
+    this.config = {}
+    this.p_config = {storage: "Loading..."}
   }
 
   render(){
@@ -47,20 +47,24 @@ class ProfileElement extends LitElement {
 
     <img class="card-img-top" src="${this.p_config.photo}" alt="Card image cap">
     <div class="card-body">
-    <h5 class="card-title">Username: ${this.p_config.name}</h5>
+    <h5 class="card-title"><b>${this.p_config.name}</b></h5>
 
     <p class="card-text">
 
     User  webId :<b>${this.p_config.webId}</b><br>
+    Storage : <a
+    href="https://scenaristeur.github.io/spoggy-simple/?source=${this.p_config.storage}"
+    target="_blank" >${this.p_config.storage}</a><br>
+<!--stringVariable.substring(0, stringVariable.lastIndexOf('#'));-->
     Role: ${this.p_config.role}<br>
-    Organisation: ${this.p_config.organisation}<br>
+    Organisation: ${this.p_config.organization}<br>
     <br>
-    <br>  Your WebId : ${this.webId}<br>
+    <br>  Your WebId : ${this.config.webId}<br>
     </p>
 
-    ${this.webId != null ?
+    ${this.config.webId != null ?
       html`
-      ${this.webId != this.p_config.webId ?
+      ${this.config.webId != this.p_config.webId ?
         html `<button class="btn btn-outline-info btn-sm" @click="${this.follow}"><i class="fas fa-user-plus"></i>Follow</button>
         `
         :html `
@@ -112,7 +116,6 @@ class ProfileElement extends LitElement {
 
     configChanged(config){
       this.config = config
-      this.webId = config.webId
     }
 
     async  follow(){
@@ -134,9 +137,7 @@ class ProfileElement extends LitElement {
     async profileChanged(profile){
       console.log("USER",profile)
       this.p_config = profile
-      console.log(this.p_config)
       this.p_config.pti = await solid.data[this.p_config.webId].publicTypeIndex
-      console.log(this.p_config)
       for await (const subject of solid.data[this.p_config.pti].subjects){
         if(this.p_config.pti != `${subject}`)
         /*let s = `${subject}`
@@ -156,7 +157,13 @@ class ProfileElement extends LitElement {
           this.p_config.liked = `${liked}`
         }
       }
+      let storage = await solid.data[this.p_config.webId].storage
+      this.p_config.storage = `${storage}`
+this.p_config.organization =  await solid.data[this.p_config.webId]["http://www.w3.org/2006/vcard/ns#organization-name"]
+this.p_config.role =  await solid.data[this.p_config.webId]["http://www.w3.org/2006/vcard/ns#role"]
+
       console.log("P_PROFILE",this.p_config)
+      this.requestUpdate()
     }
 
   }

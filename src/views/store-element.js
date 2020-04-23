@@ -70,8 +70,10 @@ class StoreElement extends BaseView {
     //  this.webId = webId
     if (webId != null){
       console.log("WEBID NON NULL",webId, this.webId)
-      if (webId == this.webId){
+      if (webId == this.store.config.webId){
         console.log("WEBID IDENTIQUE")
+        this.store.config.status = "WebId from store : ",+webId
+        this.agent.send("App", {action: "showPanel", panel: "Flow"})
       }else{
         console.log("WEBID DIFFERENT", webId, this.webId)
         this.store.config.webId = webId
@@ -83,6 +85,8 @@ class StoreElement extends BaseView {
     }else{
       console.log("WEBID CHANGED IS NULL",this.webId)
       this.store.config = {}
+      this.agent.send("Friends", {action: "configChanged", config: this.store.config})
+      this.agent.send("Profile", {action: "configChanged", config: this.store.config})
     }
     console.log(this.webId)
     this.populateStorage()

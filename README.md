@@ -121,3 +121,6 @@ https://undraw.co/illustrations
 
 # toaster
 https://github.com/CodeSeven/toastr
+
+# ldflex-query, solid context
+https://github.com/solid/context/blob/master/context.json
