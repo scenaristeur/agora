@@ -93,8 +93,8 @@ class FriendsView extends LitElement {
     //  this.getFollowers()
     //  this.getFollowing()
     this.friends = this.config.friends || []
-    this.followers = this.config.followersList || []
-    this.following = this.config.followingList || []
+    this.followers = this.config.followers || []
+    this.following = this.config.following || []
     //console.log("HIIIHAAAA",this.followers)
   }
 

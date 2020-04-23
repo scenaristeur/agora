@@ -14,6 +14,7 @@ class ConfigGetView extends LitElement {
       aclInbox: {type: String},
       textColor: {type: String},
       debug: {type: Boolean},
+      fc : {type: Object}
     };
   }
 
@@ -22,6 +23,7 @@ class ConfigGetView extends LitElement {
     this.name = "Config GET"
     this.config = {}
     this.log = "Init"
+    this.fc = new SolidFileClient(solid.auth)
     this.textColor = "text-primary"
     this.debug = false
     this.aclInboxContent = `@prefix : <#>.
@@ -124,22 +126,39 @@ class ConfigGetView extends LitElement {
     }
 
     newConfig(config){
-      console.log("")
+      console.log("NEW CONFIG",config)
       this.config = config
       this.checkConfig()
     }
 
     async checkConfig(){
+      console.log("CHECKKKKKK CONFIGGGGGG")
       this.textColor = "text-primary"
-      this.log = "Checking PublicTypeIndex"
+      this.log = "Init check"
       this.config.date = new Date();
-      this.config.status = "unknown"
+
       this.config.origin = "pod"
+      this.config.storage= "undefined"
       this.config.pti= "undefined"
+      this.config.instance= "undefined"
+      this.config.inbox= "undefined"
+      this.config.acl_inbox= "undefined"
+      this.config.outbox= "undefined"
+      this.config.followers_folder= "undefined"
+      this.config.acl_followers= "undefined"
+      this.config.following_folder= "undefined"
+      this.config.liked= "undefined"
+      this.config.status = "Unknown"
+
+      this.log = "Checking Storage"
+      let storage = await solid.data[this.config.webId].storage
+      this.config.storage = `${storage}`
+
+      this.log = "Checking PublicTypeIndex"
       let pti = await solid.data[this.config.webId].publicTypeIndex
       this.config.pti = `${pti}`
+
       this.log = "Checking Instances"
-      this.config.instance= "undefined"
       for await (const subject of solid.data[this.config.pti].subjects){
         if(this.config.pti != `${subject}`)
         /*let s = `${subject}`
@@ -149,32 +168,62 @@ class ConfigGetView extends LitElement {
         if (`${subject}`.endsWith('#Agora')){
           let instance  = await solid.data[`${subject}`].solid$instance
           this.config.instance = `${instance}`
+
           this.log = "Checking Inbox"
-          this.config.inbox= "undefined"
           let inbox = await solid.data[this.config.instance].as$inbox
           this.config.inbox = `${inbox}`
+
           this.log = "Checking Outbox"
-          this.config.outbox= "undefined"
           let outbox = await solid.data[this.config.instance].as$outbox
           this.config.outbox = `${outbox}`
-          this.log = "Checking Followers"
-          this.config.followers= "undefined"
-          let followers = await solid.data[this.config.instance].as$followers
-          this.config.followers = `${followers}`
-          this.log = "Checking Following"
-          this.config.following= "undefined"
-          let following = await solid.data[this.config.instance].as$following
-          this.config.following = `${following}`
+
+          this.log = "Checking Followers Folder"
+          let followers_folder = await solid.data[this.config.instance].as$followers
+          this.config.followers_folder = `${followers_folder}`
+
+          this.log = "Checking Following Folder"
+          let following_folder = await solid.data[this.config.instance].as$following
+          this.config.following_folder = `${following_folder}`
+
           this.log = "Checking Liked"
-          this.config.liked= "undefined"
           let liked = await solid.data[this.config.instance].as$liked
           this.config.liked = `${liked}`
-          this.log = "Cool, your configuration seems OK"
+
+          await this.createFollowIndexes()
           await this.checkAcl()
+
+          //
+          let friends = []
+          let followers = []
+          let following = []
+
+          this.log = "Checking Friends"
+          for await (const friend of solid.data[this.config.webId].friends){
+            let f = `${friend}`
+            friends = [... friends, f]
+          }
+          this.config.friends = friends
+
+          this.log = "Checking Followers"
+          this.config.followers_uri = this.config.followers_folder+"index.ttl#this"
+          for await (const f_er of solid.data[this.config.followers_uri].as$items){
+            let fer = `${f_er}`
+            followers = [... followers, fer]
+          }
+          this.config.followers = followers
+
+          this.log = "Checking Following"
+          this.config.following_uri = this.config.following_folder+"index.ttl#this"
+          for await (const f_ing of solid.data[this.config.following_uri].as$items){
+            let fing = `${f_ing}`
+            following = [... following, fing]
+          }
+          this.config.following = following
+
         }
       }
-
-      //  console.log(Object.values(this.config))
+      console.log("COOOOOOOOOOON",this.config)
+      console.log(Object.values(this.config))
       if( Object.values(this.config).includes("undefined")){
         this.log = this.log +" CONFIGURATION NOT OK"
         this.textColor = "text-danger"
@@ -185,51 +234,44 @@ class ConfigGetView extends LitElement {
         this.log = "CONFIGURATION OK"
         this.config.status = "OK"
         this.textColor = "text-success"
-        let friends = []
-        let followers = []
-        let following = []
-        for await (const friend of solid.data[this.config.webId].friends){
-          let f = `${friend}`
-          friends = [... friends, f]
-        }
-        this.config.friends = friends
 
-        this.config.followers_uri = this.config.followers+"index.ttl#this"
-        for await (const f_er of solid.data[this.config.followers_uri].as$items){
-          let fer = `${f_er}`
-          followers = [... followers, fer]
-        }
-        this.config.followersList = followers
-
-        this.config.following_uri = this.config.following+"index.ttl#this"
-        for await (const f_ing of solid.data[this.config.following_uri].as$items){
-          let fing = `${f_ing}`
-          following = [... following, fing]
-        }
-        this.config.followingList = following
-
-let storage = await solid.data[this.config.webId].publicTypeIndex
-this.config.storage = `${storage}`
-
+        console.log("CONFIG SEND TO STORE", this.config)
         this.agent.send("Store", {action: "setStorage", values: {config: this.config}})
         this.agent.send("App", {action: "showPanel"})
-        this.agent.send("Friends", {action: "configChanged", config: this.config})
-        this.agent.send("Profile", {action: "configChanged", config: this.config})
+        this.agent.sendMulti(["Friends", "Profile", "PostTabs"], {action: "configChanged", config: this.config})
       }
     }
+
+    async createFollowIndexes(){
+      // creation des fichiers
+      await this.fc.createFile (this.config.followers_folder+"index.ttl", "", "text/turtle") .then (success => {
+        this.log = "Created "+this.config.followers_folder+"index.ttl"
+      }, err => {
+        this.log = err
+        alert(err + "... Are you sure you grant AGORA to FULL CONTROL ? see HELP !")
+        this.log = err +"... Are you sure you grant AGORA to FULL CONTROL ? Please see HELP !"
+      });
+      await this.fc.createFile (this.config.following_folder+"index.ttl", "", "text/turtle") .then (success => {
+        this.log = "Created "+this.config.following_folder+"index.ttl"
+      }, err => {
+        this.log = err
+        alert(err + "... Are you sure you grant AGORA to FULL CONTROL ? see HELP !")
+        this.log = err +"... Are you sure you grant AGORA to FULL CONTROL ? Please see HELP !"
+      });
+    }
+
 
     async checkAcl(){
       let app = this
       this.log = "ACL INBOX & FOLLOWERS VERIFICATION"
-      this.config.acl_inbox= "undefined"
-      this.config.acl_followers= "undefined"
+
       let inboxacl = this.config.inbox+".acl"
-      let followersacl = this.config.followers+".acl"
+      let followersacl = this.config.followers_folder+".acl"
       console.log(inboxacl)
       console.log(followersacl)
-      let fc = new SolidFileClient(solid.auth)
 
-      await fc.createFile (inboxacl, this.aclInboxContent, "text/turtle") .then (success => {
+
+      await this.fc.createFile (inboxacl, this.aclInboxContent, "text/turtle") .then (success => {
         this.log = "Created "+inboxacl
         this.config.acl_inbox = inboxacl
       }, err => {
@@ -238,7 +280,7 @@ this.config.storage = `${storage}`
         this.log = err +"... Are you sure you grant AGORA to FULL CONTROL ? Please see HELP !"
       });
 
-      await fc.createFile (followersacl, this.aclInboxContent, "text/turtle") .then (success => {
+      await this.fc.createFile (followersacl, this.aclInboxContent, "text/turtle") .then (success => {
         this.log = "Created "+followersacl
         this.config.acl_followers = followersacl
       }, err => {
@@ -246,16 +288,10 @@ this.config.storage = `${storage}`
         alert(err + "... Are you sure you grant AGORA to FULL CONTROL ? see HELP !")
         this.log = err +"... Are you sure you grant AGORA to FULL CONTROL ? Please see HELP !"
       });
-
-
-
     }
 
     async openConfigBox(){
-      console.log(this.config.pti)
-      this.storage = await solid.data[this.config.webId].storage
-      console.log(`${this.storage}`)
-      this.path = this.storage+"public/agora/"
+      this.path = this.config.storage+"public/agora/"
       console.log(this.path)
       this.showModal()
       await this.requestUpdate()
@@ -283,9 +319,7 @@ this.config.storage = `${storage}`
       }else{
         this.hideModal()
         this.log = "Creating Folders"
-        let fc = new SolidFileClient(solid.auth)
-        console.log(this.fc)
-        let root = this.path
+          let root = this.path
         let inbox = this.shadowRoot.getElementById("staticInbox").value
         let outbox = this.shadowRoot.getElementById("staticOutbox").value
         console.log(root,inbox, outbox)
@@ -293,7 +327,7 @@ this.config.storage = `${storage}`
         this.log = "Creating Inbox Folder"
 
         let file = inbox+".acl"
-        await fc.createFile (file, this.aclInboxContent, "text/turtle") .then (success => {
+        await this.fc.createFile (file, this.aclInboxContent, "text/turtle") .then (success => {
           this.log = "Created "+file
         }, err => {
           this.log = err
@@ -303,16 +337,16 @@ this.config.storage = `${storage}`
         try{
           this.log = "outbox Folder creation : "+outbox
 
-          if( !(await fc.itemExists(outbox)) ) {
-            await fc.createFolder(outbox) // only create if it doesn't already exist
+          if( !(await this.fc.itemExists(outbox)) ) {
+            await this.fc.createFolder(outbox) // only create if it doesn't already exist
           }
           this.log = "outbox/objects Folder creation : "+outbox+"objects/"
-          if( !(await fc.itemExists(outbox+"objects/")) ) {
-            await fc.createFolder(outbox+"objects/") // only create if it doesn't already exist
+          if( !(await this.fc.itemExists(outbox+"objects/")) ) {
+            await this.fc.createFolder(outbox+"objects/") // only create if it doesn't already exist
           }
           this.log = "outbox/activities Folder creation : "+outbox+"activities/"
-          if( !(await fc.itemExists(outbox+"activities/")) ) {
-            await fc.createFolder(outbox+"activities/") // only create if it doesn't already exist
+          if( !(await this.fc.itemExists(outbox+"activities/")) ) {
+            await this.fc.createFolder(outbox+"activities/") // only create if it doesn't already exist
           }
         }catch(e){
           this.log=e
@@ -321,8 +355,8 @@ this.config.storage = `${storage}`
 
 
         try{
-          if( !(await fc.itemExists(root+"followers/")) ) {
-            await fc.createFolder(root+"followers/") // only create if it doesn't already exist
+          if( !(await this.fc.itemExists(root+"followers/")) ) {
+            await this.fc.createFolder(root+"followers/") // only create if it doesn't already exist
           }
         }catch(e){
           this.log=e
@@ -330,8 +364,8 @@ this.config.storage = `${storage}`
         }
 
         try{
-          if( !(await fc.itemExists(root+"following/")) ) {
-            await fc.createFolder(root+"following/") // only create if it doesn't already exist
+          if( !(await this.fc.itemExists(root+"following/")) ) {
+            await this.fc.createFolder(root+"following/") // only create if it doesn't already exist
           }
         }catch(e){
           this.log=e
@@ -339,8 +373,8 @@ this.config.storage = `${storage}`
         }
 
         try{
-          if( !(await fc.itemExists(root+"liked/")) ) {
-            await fc.createFolder(root+"liked/") // only create if it doesn't already exist
+          if( !(await this.fc.itemExists(root+"liked/")) ) {
+            await this.fc.createFolder(root+"liked/") // only create if it doesn't already exist
           }
         }catch(e){
           this.log=e
@@ -370,6 +404,7 @@ this.config.storage = `${storage}`
         }
 
       }
+      console.log("FOLDERS CREATED")
       this.checkConfig()
     }
 
@@ -405,7 +440,7 @@ this.config.storage = `${storage}`
     }
 
     configChanged(config){
-      console.log("CONFIG CHANGED", config)
+      console.log("CONFIG CHANGED FROM ANOTHER AGENT", config)
       if (config != undefined && config.webId == this.config.webId){
         config.origin = "store"
         this.config = config

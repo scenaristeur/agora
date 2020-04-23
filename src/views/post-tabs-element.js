@@ -1,21 +1,10 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
-
-//import { PodHelper } from '../tools/pod-helper.js';
-/*import { fetchDocument } from 'tripledoc';*/
-//import { solid, schema, rdf, rdfs } from 'rdf-namespaces';
 import { namedNode } from '@rdfjs/data-model';
-//import  data  from "@solid/query-ldflex";
-
+/*
 import * as auth from 'solid-auth-client';
-import * as SolidFileClient from "solid-file-client"
+import * as SolidFileClient from "solid-file-client"*/
 import { v4 as uuidv4 } from 'uuid';
-
-
-import './note-element.js'
-import './media-element.js'
-import './graph-element.js'
-import './triple-element.js'
 
 
 class PostTabsElement extends LitElement {
@@ -40,7 +29,7 @@ class PostTabsElement extends LitElement {
 
   constructor() {
     super();
-    this.fileClient = new SolidFileClient(auth)
+    this.fileClient = new SolidFileClient(solid.auth)
     this.webId = null
     this.subelements = ["Note", "Media", "Triple"] //, "Media", "Triple"] , "Graph"
     this.requetes = {}
@@ -145,11 +134,11 @@ class PostTabsElement extends LitElement {
     <triple-element name="Triple"></triple-element>
     </div>
 
-    <div id="Graph" class="tabcontent" style="height: 40vh">
+  <!--  <div id="Graph" class="tabcontent" style="height: 40vh">
     <h3 class="text-primary">Graph</h3>
     <p class="text-primary">todo.</p>
     <graph-element name="Graph"></graph-element>
-    </div>
+    </div>-->
 
     <div class="tab">
     <button class="tablinks active" tabName='Note' @click="${this.openTab}"><i class="far fa-sticky-note"></i></button>
@@ -260,13 +249,17 @@ class PostTabsElement extends LitElement {
 
     addNote(){
       this.log = "Add Note"
+      var id = new Date().toISOString ()
+
+          this.requetes = []
       let confid = this.shadowRoot.getElementById("confid").value
       console.log(confid)
       var title = this.shadowRoot.getElementById('title').value.trim();
       if (title.length == 0){
         alert ("Don't you want to provide a  beautiful title to your wonder post ?")
       }else{
-        var id = new Date().toISOString ()
+
+
         this.requetes[id] = this.subelements.length
         console.log(this.requetes)
         this.log = "Ask SubElements Content"
@@ -328,7 +321,7 @@ class PostTabsElement extends LitElement {
       if(this.share.title != undefined){
         this.title = this.share.title
       }
-      this.agent.send("Store", {action: "getConfig"})
+      this.agent.send("Store", {action: "getConfig"}) //nedded because of lazy loading of this element
     }
 
     configChanged(config){

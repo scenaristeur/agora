@@ -8,7 +8,7 @@ class StoreElement extends BaseView {
       name: { type: String },
       store: {type: Object},
       debug: {type: Boolean},
-      webId: {type: String}
+    //  webId: {type: String}
     };
   }
 
@@ -17,7 +17,7 @@ class StoreElement extends BaseView {
     this.name = "Store"
     this.store = {}
     this.debug = false
-    this.webId = null
+  //  this.webId = null
   }
 
   render() {
@@ -66,16 +66,18 @@ class StoreElement extends BaseView {
   }
 
   webIdChanged(webId){
-    console.log("WEBID CHANGED",webId, this.webId)
+    console.log("WEBID CHANGED",webId, this.store.config.webId)
     //  this.webId = webId
     if (webId != null){
-      console.log("WEBID NON NULL",webId, this.webId)
-      if (webId == this.store.config.webId){
-        console.log("WEBID IDENTIQUE")
-        this.store.config.status = "WebId from store : ",+webId
+      console.log("WEBID NON NULL",webId, this.store.config.webId)
+      if (webId == this.store.config.webId &&  !Object.values(this.store.config).includes("undefined")){
+        console.log("WEBID IDENTIQUE & NOTHING UNDEFINED --> ACCUEIL")
+      //  this.store.config.status = "WebId from store : ",+webId
         this.agent.send("App", {action: "showPanel", panel: "Flow"})
+        this.agent.sendMulti(["Friends", "Profile", "PostTabs"], {action: "configChanged", config: this.store.config})
+
       }else{
-        console.log("WEBID DIFFERENT", webId, this.webId)
+        console.log("WEBID DIFFERENT --> New CONFIG", webId, this.store.config.webId)
         this.store.config.webId = webId
         this.store.config.status = "WebId has changed : ",+webId
         this.agent.send("App", {action: "showPanel", panel: "Config"})
@@ -83,18 +85,18 @@ class StoreElement extends BaseView {
 
       }
     }else{
-      console.log("WEBID CHANGED IS NULL",this.webId)
+      console.log("WEBID CHANGED IS NULL --> nettoyage FRIENDS & PROFILE",this.webId)
       this.store.config = {}
-      this.agent.send("Friends", {action: "configChanged", config: this.store.config})
-      this.agent.send("Profile", {action: "configChanged", config: this.store.config})
+      this.agent.sendMulti(["Friends", "Profile", "PostTabs"], {action: "configChanged", config: this.store.config})
+
     }
-    console.log(this.webId)
-    this.populateStorage()
+    //console.log(this.webId)
+    //this.populateStorage()
   }
 
 
   getConfig(from){
-    this.agent.sendMulti([from, "PostTabs", "Profile", "Friends", "ProfileCartouche"], {action: "configChanged", config: this.store.config})
+    this.agent.send(from, {action: "configChanged", config: this.store.config})
   }
 
 

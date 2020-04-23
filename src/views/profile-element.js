@@ -1,7 +1,5 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
-//let data = solid.data
-//console.log("LDFK+LEX",data)
 import { namedNode } from '@rdfjs/data-model';
 
 
@@ -123,9 +121,9 @@ class ProfileElement extends LitElement {
       //  alert("// TODO: come back later ;-) ")
       console.log("CONFIG", this.config)
       console.log("P_CONFIG", this.p_config)
-      let profile_followers = this.p_config.followers+'index.ttl#this'
+      let profile_followers = this.p_config.followers_folder+'index.ttl#this'
       console.log(profile_followers)
-      let user_following = this.config.following+'index.ttl#this'
+      let user_following = this.config.following_folder+'index.ttl#this'
       console.log(user_following)
       await solid.data[user_following].as$items.add(namedNode(this.p_config.webId))
       console.log("!!! Must first set authenticated agent to publisher in config")
@@ -149,10 +147,10 @@ class ProfileElement extends LitElement {
           this.p_config.inbox = `${inbox}`
           let outbox = await solid.data[this.p_config.instance].as$outbox
           this.p_config.outbox = `${outbox}`
-          let followers = await solid.data[this.p_config.instance].as$followers
-          this.p_config.followers = `${followers}`
-          let following = await solid.data[this.p_config.instance].as$following
-          this.p_config.following = `${following}`
+          let followers_folder = await solid.data[this.p_config.instance].as$followers
+          this.p_config.followers_folder = `${followers_folder}`
+          let following_folder = await solid.data[this.p_config.instance].as$following
+          this.p_config.following_folder = `${following_folder}`
           let liked = await solid.data[this.p_config.instance].as$liked
           this.p_config.liked = `${liked}`
         }
