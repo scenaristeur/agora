@@ -51,6 +51,7 @@ class AppView extends LitElement {
       <button class="btn btn-outline-info" panel="Info" @click="${this.showFromAtt}">Help</button>
       <login-element name="Login">Loading Login</login-element>
       <!--      <nav-element name="Nav">Loading Nav</nav-element>-->
+      v. a1
       </header>
 
       <div class="container-fluid">
@@ -136,7 +137,7 @@ class AppView extends LitElement {
       store.info == true ? this.panel = "Info" : ""
     }
 
-    showPanel(panel = "Flow"){
+    showPanel(panel = "Organization"){
       this.panel = panel
       //
     }

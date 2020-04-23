@@ -211,6 +211,7 @@ class ConfigGetView extends LitElement {
         this.agent.send("Store", {action: "setStorage", values: {config: this.config}})
         this.agent.send("App", {action: "showPanel"})
         this.agent.send("Friends", {action: "configChanged", config: this.config})
+        this.agent.send("Profile", {action: "configChanged", config: this.config})
       }
     }
 

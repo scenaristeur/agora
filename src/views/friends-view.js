@@ -51,32 +51,32 @@ class FriendsView extends LitElement {
 
     <div class="row" style="overflow-y:scroll;position:relative;height: 300px;">
 
-    <div ?hidden="${this.tab != "friends"}">
+    <div class="row" ?hidden="${this.tab != "friends"}">
     ${this.friends.map((f, i) => html`
-      <div class="col">
+      <div class="col-2 mb-2">
       <friend-view name="${"Friend_"+i}" f_webId=${f}>Loading Friend</friend-view>
       </div>
       `)}
       </div>
 
-      <div ?hidden="${this.tab != "following"}">
-        ${this.following.map((f, i) => html`
-        <div class="col">
+      <div class="row" ?hidden="${this.tab != "following"}">
+      ${this.following.map((f, i) => html`
+        <div class="col-2 mb-2">
         <friend-view name="${"Following_"+i}" f_webId=${f}>Loading Friend</friend-view>
         </div>
         `)}
         </div>
 
-        <div ?hidden="${this.tab != "followers"}">
+        <div class="row" ?hidden="${this.tab != "followers"}">
         ${this.followers.map((f, i) => html`
-          <div class="col">
+          <div class="col-2 mb-2">
           <friend-view name="${"Followers_"+i}" f_webId=${f}>Loading Friend</friend-view>
           </div>
           `)}
           </div>
 
           </div>
-
+          
           </div>
           </div>
           `;
@@ -84,7 +84,7 @@ class FriendsView extends LitElement {
 
         openTab(e){
           this.tab = e.target.getAttribute("tab")
-          console.log(this.tab)
+          //console.log(this.tab)
           let tablinks = this.shadowRoot.querySelectorAll(".nav-link");
           for (let i = 0; i < tablinks.length; i++) {
             tablinks[i].classList.remove("active");
@@ -93,20 +93,20 @@ class FriendsView extends LitElement {
         }
 
         configChanged(config){
-          console.log("CONFIG",config)
+          //  console.log("CONFIG",config)
           this.config = config
           //  this.getFollowers()
           //  this.getFollowing()
           this.friends = this.config.friends
           this.followers = this.config.followersList
           this.following = this.config.followingList
-          console.log("HIIIHAAAA",this.followers)
+          //console.log("HIIIHAAAA",this.followers)
         }
 
         firstUpdated(){
           var app = this;
           this.agent = new HelloAgent(this.name);
-          console.log(this.agent)
+          //console.log(this.agent)
           this.agent.receive = function(from, message) {
             //  console.log("messah",message)
             if (message.hasOwnProperty("action")){

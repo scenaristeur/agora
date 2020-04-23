@@ -1,17 +1,13 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
-////let data = solid.data
-//console.log("LDFK+LEX",data)
-//import './activity-element.js'
-//let data = solid.data
-//console.log("LDFK+LEX",data)
 
 class NotificationLineElement extends LitElement {
 
   static get properties() {
     return {
       name: {type: String},
-      notification: {type: Object}
+      notification: {type: Object},
+      creator: {type: Object}
     };
   }
 
@@ -19,6 +15,7 @@ class NotificationLineElement extends LitElement {
     super();
     this.name = "NotificationLine"
     this.notification = {}
+    this.creator = {}
   }
 
   render(){
@@ -32,16 +29,16 @@ class NotificationLineElement extends LitElement {
 
     <div class="row">
     <div class="col-2">
-    ${this.notification.photo != "undefined"?
+    ${this.creator.photo != "undefined"?
     html`<img class="rounded-circle ml-0" width="32px"
-    src="//images.weserv.nl/?url=${this.notification.photo}&w=32&h=32"
-    title="${this.notification.creatorName}"
+    src="//images.weserv.nl/?url=${this.creator.photo}&w=32&h=32"
+    title="${this.creator.name}"
     alt="no image"
-    webId="${this.notification.attributedTo}"
+    webId="${this.creator.webId}"
     @click="${this.showProfile}">`
     :html`<i class="fas fa-user-circle fa-2x"
-    title="${this.notification.creatorName}"
-    webId="${this.notification.attributedTo}"
+    title="${this.creator.name}"
+    webId="${this.creator.webId}"
     @click="${this.showProfile}"></i>`
   }
 
@@ -49,7 +46,10 @@ class NotificationLineElement extends LitElement {
   </div>
 
   <div class="col">
-  <small class="text-muted">${this.notification.creatorName}</small>
+  <small class="text-muted" webId="${this.notification.attributedTo}"
+  @click="${this.showProfile}">
+  ${this.creator.name}
+  </small>
   <activity-element name="${this.name+'_activity'}"
   url="${this.notification.link}">Loading activity ${this.notification.link}...
   </activity-element>
@@ -62,13 +62,18 @@ class NotificationLineElement extends LitElement {
 }
 
 
+showProfile(){
+  this.agent.send("App", {action: "showPanel", panel: "Profile"})
+  this.agent.send("Profile", {action: "profileChanged", profile: this.creator})
+}
+
 delay(published){
   let diff = new Date().getTime() - new Date(published).getTime()
   let minute = 1000 * 60;
   let minutes = Math.floor(diff/minute);
   let heures = Math.floor(minutes/60);
   let jours = Math.floor(heures/24);
-  let mois = Math.floor(jours/31); //*
+  let mois = Math.floor(jours/31);
   let annees = Math.floor(mois/12);
   let duree = ""
   annees > 0 ? duree+= annees+"y" :
@@ -80,12 +85,7 @@ delay(published){
   return duree
 }
 
-showProfile(e){
-  let webId = e.target.getAttribute("webId")
-  console.log(webId)
-  this.agent.send("App", {action: "pageChanged", page: "profile"})
-  this.agent.send("Profile", {action: "profileChanged", webId: webId})
-}
+
 
 firstUpdated(){
   var app = this;
@@ -109,14 +109,14 @@ firstUpdated(){
 
 async init(){
   //    console.log(this.notification.url)
-  this.notification.attributedTo = await solid.data[this.notification.url].as$attributedTo
+  this.creator.webId = await solid.data[this.notification.url].as$attributedTo
   this.notification.summary = await solid.data[this.notification.url].as$summary
   this.notification.type = await solid.data[this.notification.url].as$type
   let link = await solid.data[this.notification.url].as$link
   this.notification.link = `${link}`
-  this.notification.creatorName = await solid.data[this.notification.attributedTo].vcard$fn || `${this.notification.attributedTo}`.split("/")[2].split('.')[0];
-  let photo = await solid.data[this.notification.attributedTo].vcard$hasPhoto
-  this.notification.photo = `${photo}` //!= "undefined" ? `${photo}` : "https://solid.github.io/solid-ui/src/icons/noun_15059.svg"
+  this.creator.name = await solid.data[this.creator.webId].vcard$fn || `${this.creator.webId}`.split("/")[2].split('.')[0];
+  let photo = await solid.data[this.creator.webId].vcard$hasPhoto
+  this.creator.photo = `${photo}` //!= "undefined" ? `${photo}` : "https://solid.github.io/solid-ui/src/icons/noun_15059.svg"
 
   //  console.log(this.notification)
   this.requestUpdate()

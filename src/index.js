@@ -35,6 +35,8 @@ import './views/friend-view.js'
 // LOG
 import './views/log-element.js'
 
+// PROFILE
+import './views/profile-element.js'
 /*
 import './views/compose-view.js';
 import './views/orga-view.js';
