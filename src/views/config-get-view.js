@@ -309,9 +309,9 @@ class ConfigGetView extends LitElement {
 
     async createFolders(){
 
-      if (!this.path.includes(this.storage+"public/")){
+      if (!this.path.includes(this.config.storage+"public/")){
         alert("Error the path must be in your /public folder")
-        this.path = this.storage+"public/agora/"
+        this.path = this.config.storage+"public/agora/"
         this.shadowRoot.getElementById("pathInput").value = this.path
         console.log(this.path)
         await this.requestUpdate()
