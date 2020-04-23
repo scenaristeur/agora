@@ -26,10 +26,10 @@ class AppView extends LitElement {
     this.agoraPod = "https://agora.solid.community/profile/card#me"
     this.panel = "Flow"
     this.panels = [
-      {name: "Flow", image: "/img/flow.png", text:"Show Public, Group & Personnal Activities."},
-      {name: "Compose", image: "/img/compose.png", text:"Create & compose new Notes, Medias, Triples & Graphs!"},
-      {name: "Organization", image: "/img/orga.png", text:"Build Teams to collaborate on projects."},
-      {name: "Talk", image: "/img/talk.png", text:"A space to realtime exchanges! (TODO)"}]
+      {name: "Flow", image: "./img/flow.png", text:"Show Public, Group & Personnal Activities."},
+      {name: "Compose", image: "./img/compose.png", text:"Create & compose new Notes, Medias, Triples & Graphs!"},
+      {name: "Organization", image: "./img/orga.png", text:"Build Teams to collaborate on projects."},
+      {name: "Talk", image: "./img/talk.png", text:"A space to realtime exchanges! (TODO)"}]
       this.onLoad()
 
     }
@@ -51,7 +51,7 @@ class AppView extends LitElement {
       <button class="btn btn-outline-info" panel="Info" @click="${this.showFromAtt}">Help</button>
       <login-element name="Login">Loading Login</login-element>
       <!--      <nav-element name="Nav">Loading Nav</nav-element>-->
-      v. a1
+      v.a2
       </header>
 
       <div class="container-fluid">
