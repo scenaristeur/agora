@@ -1,9 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
 import { namedNode } from '@rdfjs/data-model';
-/*
-import * as auth from 'solid-auth-client';
-import * as SolidFileClient from "solid-file-client"*/
+
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -19,16 +17,18 @@ class PostTabsElement extends LitElement {
       webId: {type: String},
       info: {type: String},
       replyTo: {type: Object},
-      friends: {type: Array},
+      config: {type: Object},
       share: {type: Object},
       confidentialite: {type: Array},
       title: {type: String},
-      log: {type: String}
+      log: {type: String},
+      debug: {type: Boolean}
     };
   }
 
   constructor() {
     super();
+    this.debug = false
     this.fileClient = new SolidFileClient(solid.auth)
     this.webId = null
     this.subelements = ["Note", "Media", "Triple"] //, "Media", "Triple"] , "Graph"
@@ -36,7 +36,7 @@ class PostTabsElement extends LitElement {
     this.responses = []
     this.info = ""
     this.replyTo = {}
-    this.friends = []
+    this.config = {friends: [{webId: "OL", name: "POL"}]}
     this.share = {}
     this.confidentialite = [{level: "Public", selected: true, value: "public", description: "Everyone", icon:"fas fa-globe"},
     {level: "Not listed", value: "not_listed", description: "Not listed in public ?", icon: "fas fa-lock-open"},
@@ -91,6 +91,12 @@ class PostTabsElement extends LitElement {
       width: 100%;
     }
     </style>
+
+    <div ?hidden = "${!this.debug}">
+    Hello from<b>${this.name}</b><br>
+    config : ${JSON.stringify(this.config)}</br>
+    </div>
+
     <div class="container">
     <div class="row">
 
@@ -134,7 +140,7 @@ class PostTabsElement extends LitElement {
     <triple-element name="Triple"></triple-element>
     </div>
 
-  <!--  <div id="Graph" class="tabcontent" style="height: 40vh">
+    <!--  <div id="Graph" class="tabcontent" style="height: 40vh">
     <h3 class="text-primary">Graph</h3>
     <p class="text-primary">todo.</p>
     <graph-element name="Graph"></graph-element>
@@ -175,17 +181,19 @@ class PostTabsElement extends LitElement {
     </select>
     <hr>
 
-    <select id="recipients" class="custom-select" multiple> <!--multiple-->
-    <option disabled>Select Multi Recipient</option>
-    <!--  <option  value="#me">Personnal (Me)</option>
-    <option selected value="https://www.w3.org/ns/activitystreams#Public">Public (Agora)</option>-->
-    ${this.friends.map(f =>
-      html `
-      <option value="${f.webId}"> ${f.name} </option>
-      `)}
-      <!--      <option value="someone" disabled>Someone Else (todo)</option>-->
-      </select>
+    !! Only public / Agora posts are available for now, WIP !!
 
+    <!--    <select id="recipients" class="custom-select" multiple>
+    <option disabled>Select Multi Recipient</option>
+
+    ${this.config.friends.map(f =>
+      html `
+      <option value="${f}">${f}</option>
+      `)}
+      </select>
+      -->
+      <!--  <option  value="#me">Personnal (Me)</option>
+      <option selected value="https://www.w3.org/ns/activitystreams#Public">Public (Agora)</option>-->
 
 
       </div>
@@ -247,11 +255,11 @@ class PostTabsElement extends LitElement {
       console.log(e.target.value)
     }
 
+
     addNote(){
       this.log = "Add Note"
       var id = new Date().toISOString ()
-
-          this.requetes = []
+      this.requetes = []
       let confid = this.shadowRoot.getElementById("confid").value
       console.log(confid)
       var title = this.shadowRoot.getElementById('title').value.trim();
@@ -318,15 +326,16 @@ class PostTabsElement extends LitElement {
           }
         }
       };
-      if(this.share.title != undefined){
+      if(this.share.title != "undefined" && this.share.title != null){
         this.title = this.share.title
       }
       this.agent.send("Store", {action: "getConfig"}) //nedded because of lazy loading of this element
     }
 
     configChanged(config){
+      console.log("CONFIG CHANGED",config)
       this.config = config
-      this.friends = config.friends || []
+      //      this.requestUpdate()
     }
 
     async setReplyTo(message){
@@ -374,7 +383,7 @@ class PostTabsElement extends LitElement {
         }
         return acc;
       }, []);
-      //  console.log("RECIPIENTS",recipients)
+      console.log("RECIPIENTS",recipients)
       console.log(this.responses)
       var title = this.shadowRoot.getElementById('title').value.trim();
       var tags = this.shadowRoot.getElementById('tags').value.split(',');
@@ -455,7 +464,7 @@ class PostTabsElement extends LitElement {
 
             //write subject https://github.com/LDflex/LDflex/issues/53
             r.message.content.forEach(async function(triple, i) {
-            //  console.log(triple)
+              //  console.log(triple)
               let subject = object_file+"#"+triple.subject
               let predicate = object_file+"#"+triple.predicate
               let object = object_file+"#"+triple.object
