@@ -183,7 +183,7 @@ class PostTabsElement extends LitElement {
 
     !! Only public / Agora posts are available for now, WIP !!
 
-    <!--    <select id="recipients" class="custom-select" multiple>
+        <select id="recipients" class="custom-select" multiple>
     <option disabled>Select Multi Recipient</option>
 
     ${this.config.friends.map(f =>
@@ -191,7 +191,7 @@ class PostTabsElement extends LitElement {
       <option value="${f}">${f}</option>
       `)}
       </select>
-      -->
+
       <!--  <option  value="#me">Personnal (Me)</option>
       <option selected value="https://www.w3.org/ns/activitystreams#Public">Public (Agora)</option>-->
 

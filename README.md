@@ -68,6 +68,7 @@ git push && git subtree push --prefix dist origin gh-pages
 
 
 # todo
+[ ] retrieve Link for Acl creation https://github.com/solid/node-solid-server/issues/1418#issuecomment-618056227
 [ ]  review post,post-tabs...
 [ ] https://mstdn.fr/web/accounts/146921, https://joinmastodon.org/ , https://fr.mstdn.wiki/Accueil
 
