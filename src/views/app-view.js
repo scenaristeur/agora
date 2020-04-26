@@ -54,7 +54,7 @@ class AppView extends LitElement {
       <button class="btn btn-outline-info" panel="Info" @click="${this.showFromAtt}">Help</button>
       <login-element name="Login">Loading Login</login-element>
       <!--      <nav-element name="Nav">Loading Nav</nav-element>-->
-      v.a5
+      v.a6
       </header>
 
       <div class="container-fluid">
