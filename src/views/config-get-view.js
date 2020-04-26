@@ -148,6 +148,7 @@ class ConfigGetView extends LitElement {
       this.config.acl_followers= "undefined"
       this.config.following_folder= "undefined"
       this.config.liked= "undefined"
+      this.config.disliked= "undefined"
       this.config.status = "Unknown"
 
       this.log = "Checking Storage"
@@ -188,6 +189,10 @@ class ConfigGetView extends LitElement {
           this.log = "Checking Liked"
           let liked = await solid.data[this.config.instance].as$liked
           this.config.liked = `${liked}`
+
+          this.log = "Checking Disliked"
+          let disliked = await solid.data[this.config.instance].as$disliked
+          this.config.disliked = `${disliked}`
 
           await this.createFollowIndexes()
           await this.checkAcl()
@@ -382,6 +387,15 @@ class ConfigGetView extends LitElement {
         }
 
         try{
+          if( !(await this.fc.itemExists(root+"disliked/")) ) {
+            await this.fc.createFolder(root+"disliked/") // only create if it doesn't already exist
+          }
+        }catch(e){
+          this.log=e
+          alert(e)
+        }
+
+        try{
 
           let id = "#Agora"
           let inst_uri = this.config.pti+id
@@ -396,6 +410,7 @@ class ConfigGetView extends LitElement {
           await solid.data[inst_index].as$following.set(namedNode(root+'following/'))
           await solid.data[inst_index].as$followers.set(namedNode(root+'followers/'))
           await solid.data[inst_index].as$liked.set(namedNode(root+'liked/'))
+          await solid.data[inst_index].as$disliked.set(namedNode(root+'disliked/'))
           this.log = "YAHOOOOOOOOOOO, AGORA IS READY, AND WELL CONFIGURED !!!"
         }
         catch(e){

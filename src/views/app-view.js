@@ -1,6 +1,9 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
 
+// test but no LIMIT, order, FILTER... import './test-rdfeasy-element.js'
+
+
 class AppView extends LitElement {
 
   static get properties() {
@@ -55,6 +58,12 @@ class AppView extends LitElement {
       </header>
 
       <div class="container-fluid">
+
+      <!--
+
+      <test-rdfeasy-element name="RdfEasy">Loading RDFeasy</test-rdfeasy-element>
+      -->
+
       <!--
       PANEL : ${this.panel} for ${this.webId}
       -->

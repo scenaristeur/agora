@@ -28,7 +28,7 @@ class ActivityElement extends LitElement {
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
 
     <div class="row" id="${this.url}">
-      <p class="lead">
+    <p class="lead">
     ${this.activity.summary}
     </p>
     </div>
@@ -52,6 +52,9 @@ class ActivityElement extends LitElement {
 
     like(){
       alert("// TODO: come back later ;-) ")
+      console.log(this.url)
+      let conf = JSON.parse(localStorage.getItem("agora")).config
+      console.log(conf.liked)
     }
     dislike(){
       alert("// TODO: come back later ;-) ")
@@ -75,6 +78,7 @@ class ActivityElement extends LitElement {
         }
       };
       //  this.init()
+
     }
 
 
@@ -118,15 +122,14 @@ class ActivityElement extends LitElement {
 
     async init(){
       //console.log(this.url)
-      let objects = []
-      for await (const object of solid.data[this.url].as$object){
-
-        objects = [...objects, `${object}`]
-      }
-//      console.log("OBJECTS",objects)
-      this.activity.objects = objects // = await solid.data[this.url].as$object
       this.activity.target = await solid.data[this.url].as$target
       this.activity.summary = await solid.data[this.url].as$summary
+      let objects = []
+      for await (const object of solid.data[this.url].as$object){
+        objects = [...objects, `${object}`]
+      }
+      //      console.log("OBJECTS",objects)
+      this.activity.objects = objects // = await solid.data[this.url].as$object
       this.requestUpdate()
     }
 

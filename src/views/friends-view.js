@@ -51,6 +51,8 @@ class FriendsView extends LitElement {
     <div style="overflow-y:scroll;position:relative;height: 80wh;">
 
     <div class="card-deck" ?hidden="${this.tab != "friends"}">
+    friends ${this.friends.length}
+
     ${this.friends.map((f, i) => html`
       <friend-view name="${"Friend_"+i}" f_webId=${f}>Loading Friend</friend-view>
       `
@@ -58,6 +60,7 @@ class FriendsView extends LitElement {
     </div>
 
     <div class="card-deck" ?hidden="${this.tab != "following"}">
+    following : ${this.following.length}
     ${this.following.map((f, i) => html`
       <friend-view name="${"Following_"+i}" f_webId=${f}>Loading Following</friend-view>
       `
@@ -65,6 +68,7 @@ class FriendsView extends LitElement {
     </div>
 
     <div class="card-deck" ?hidden="${this.tab != "followers"}">
+    followers: ${this.followers.length}
     ${this.followers.map((f, i) => html`
       <friend-view name="${"Followers_"+i}" f_webId=${f}>Loading Followers</friend-view>
       `
@@ -88,7 +92,7 @@ class FriendsView extends LitElement {
   }
 
   configChanged(config){
-     console.log("CONFIG",config)
+    console.log("CONFIG",config)
     this.config = config
     //  this.getFollowers()
     //  this.getFollowing()

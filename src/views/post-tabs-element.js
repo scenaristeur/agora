@@ -22,7 +22,8 @@ class PostTabsElement extends LitElement {
       confidentialite: {type: Array},
       title: {type: String},
       log: {type: String},
-      debug: {type: Boolean}
+      debug: {type: Boolean},
+      friends: {type: Array}
     };
   }
 
@@ -36,8 +37,9 @@ class PostTabsElement extends LitElement {
     this.responses = []
     this.info = ""
     this.replyTo = {}
-    this.config = {friends: [{webId: "OL", name: "POL"}]}
+    this.config = {}
     this.share = {}
+    this.friends = []
     this.confidentialite = [{level: "Public", selected: true, value: "public", description: "Everyone", icon:"fas fa-globe"},
     {level: "Not listed", value: "not_listed", description: "Not listed in public ?", icon: "fas fa-lock-open"},
     {level: "Followers", value: "followers", description: "Only your followers", icon: "fas fa-lock"},
@@ -183,10 +185,10 @@ class PostTabsElement extends LitElement {
 
     !! Only public / Agora posts are available for now, WIP !!
 
-        <select id="recipients" class="custom-select" multiple>
+    <select id="recipients" class="custom-select" multiple>
     <option disabled>Select Multi Recipient</option>
 
-    ${this.config.friends.map(f =>
+    ${this.friends.map(f =>
       html `
       <option value="${f}">${f}</option>
       `)}
@@ -335,6 +337,7 @@ class PostTabsElement extends LitElement {
     configChanged(config){
       console.log("CONFIG CHANGED",config)
       this.config = config
+      this.friends = this.config.friends || []
       //      this.requestUpdate()
     }
 
@@ -630,6 +633,25 @@ class PostTabsElement extends LitElement {
           await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
           await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#link'].add(namedNode(activity_uri))
           app.log = notification_uri+ "DONE"
+
+          //  var dateObj = new Date();
+          //  var messageId = "#Msg"+dateObj.getTime()
+          var month = ("0" + (dateObj.getUTCMonth() + 1)).slice(-2); //months from 1-12
+          var day = ("0" + dateObj.getUTCDate()).slice(-2);
+          var year = dateObj.getUTCFullYear();
+          var path = recip_inbox+[year, month, day, ""].join("/")
+          console.log(path)
+
+          //  var url = path+"chat.ttl"+messageId
+          //  this._lastPost = url
+          //var date = dateObj.toISOString()
+          var index = path+"index.ttl#this"
+          console.log(date)
+          //  console.log(url)
+          console.log(index)
+        //  await solid.data[index]['https://www.w3.org/ns/activitystreams#published'].add(date)
+          await solid.data[index]['https://www.w3.org/ns/activitystreams#item'].add(namedNode(notification_uri))
+
         }
       }
     }
@@ -660,7 +682,7 @@ async setAcl(o, aclStringWebIds, agora_pub){
   ${agora_pub == true ?   "acl:agentClass <http://xmlns.com/foaf/0.1/Agent> ;" : ""}
   acl:mode acl:Read.`
 
-  console.log(aclString)
+//  console.log(aclString)
   try{
     await this.fileClient.createFile (o.file+'.acl', aclString, "text/turtle")
     this.log = o.file+'.acl Created'

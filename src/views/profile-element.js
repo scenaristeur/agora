@@ -53,7 +53,7 @@ class ProfileElement extends LitElement {
     Storage : <a
     href="https://scenaristeur.github.io/spoggy-simple/?source=${this.p_config.storage}"
     target="_blank" >${this.p_config.storage}</a><br>
-<!--stringVariable.substring(0, stringVariable.lastIndexOf('#'));-->
+    <!--stringVariable.substring(0, stringVariable.lastIndexOf('#'));-->
     Role: ${this.p_config.role}<br>
     Organisation: ${this.p_config.organization}<br>
     <br>
@@ -126,7 +126,7 @@ class ProfileElement extends LitElement {
       let user_following = this.config.following_folder+'index.ttl#this'
       console.log(user_following)
       await solid.data[user_following].as$items.add(namedNode(this.p_config.webId))
-      console.log("!!! Must first set authenticated agent to publisher in config")
+    //  console.log("!!! Must first set authenticated agent to publisher in config")
       await solid.data[profile_followers].as$items.add(namedNode(this.config.webId))
     }
 
@@ -153,12 +153,14 @@ class ProfileElement extends LitElement {
           this.p_config.following_folder = `${following_folder}`
           let liked = await solid.data[this.p_config.instance].as$liked
           this.p_config.liked = `${liked}`
+          let disliked = await solid.data[this.p_config.instance].as$disliked
+          this.p_config.disliked = `${disliked}`
         }
       }
       let storage = await solid.data[this.p_config.webId].storage
       this.p_config.storage = `${storage}`
-this.p_config.organization =  await solid.data[this.p_config.webId]["http://www.w3.org/2006/vcard/ns#organization-name"]
-this.p_config.role =  await solid.data[this.p_config.webId]["http://www.w3.org/2006/vcard/ns#role"]
+      this.p_config.organization =  await solid.data[this.p_config.webId]["http://www.w3.org/2006/vcard/ns#organization-name"]
+      this.p_config.role =  await solid.data[this.p_config.webId]["http://www.w3.org/2006/vcard/ns#role"]
 
       console.log("P_PROFILE",this.p_config)
       this.requestUpdate()
