@@ -6,18 +6,27 @@ class ModeleElement extends LitElement {
   static get properties() {
     return {
       name: {type: String},
+      debug: {type: Boolean}
     };
   }
 
   constructor() {
     super();
     this.name = "Modele"
+    this.debug = true
   }
 
   render(){
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
+
+    <div ?hidden = "${!this.debug}">
+    Hello from<b>${this.name}</b><br>
+    debug : ${this.debug}
+  <!--  config : ${JSON.stringify(this.config)}</br> -->
+    </div>
+
     <div class="container-fluid">
     Hello <b>${this.name}</b> from app-element
     </div>

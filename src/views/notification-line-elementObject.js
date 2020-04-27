@@ -6,7 +6,6 @@ class NotificationLineElement extends LitElement {
   static get properties() {
     return {
       name: {type: String},
-      url: {type: String},
       notification: {type: Object},
       creator: {type: Object}
     };
@@ -15,7 +14,6 @@ class NotificationLineElement extends LitElement {
   constructor() {
     super();
     this.name = "NotificationLine"
-    this.url = {}
     this.notification = {}
     this.creator = {}
   }
@@ -110,11 +108,7 @@ firstUpdated(){
 }
 
 async init(){
-  this.notification.url = this.url
-    // console.log(this.notification.url)
-  let published = new Date(await solid.data[this.notification.url].as$published)
-  this.notification.published = `${published}`
-  this.notification.timestamp = published.getTime()
+  //    console.log(this.notification.url)
   this.creator.webId = await solid.data[this.notification.url].as$attributedTo
   this.notification.summary = await solid.data[this.notification.url].as$summary
   this.notification.type = await solid.data[this.notification.url].as$type
@@ -124,7 +118,7 @@ async init(){
   let photo = await solid.data[this.creator.webId].vcard$hasPhoto
   this.creator.photo = `${photo}` //!= "undefined" ? `${photo}` : "https://solid.github.io/solid-ui/src/icons/noun_15059.svg"
 
-   //console.log(this.notification)
+  //  console.log(this.notification)
   this.requestUpdate()
 }
 
