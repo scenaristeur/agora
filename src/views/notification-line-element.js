@@ -44,7 +44,8 @@ class NotificationLineElement extends LitElement {
     @click="${this.showProfile}"></i>`
   }
 
-  <p class="text-muted small">${this.delay(this.notification.published)}</p>
+  <!--  <p class="text-muted small">${this.delay(this.notification.published)}</p>-->
+  <p class="text-muted small">${this.notification.published}</p>
   </div>
 
   <div class="col">
@@ -111,7 +112,7 @@ firstUpdated(){
 
 async init(){
   this.notification.url = this.url
-    // console.log(this.notification.url)
+  // console.log(this.notification.url)
   let published = new Date(await solid.data[this.notification.url].as$published)
   this.notification.published = `${published}`
   this.notification.timestamp = published.getTime()
@@ -124,7 +125,7 @@ async init(){
   let photo = await solid.data[this.creator.webId].vcard$hasPhoto
   this.creator.photo = `${photo}` //!= "undefined" ? `${photo}` : "https://solid.github.io/solid-ui/src/icons/noun_15059.svg"
 
-   //console.log(this.notification)
+  //console.log(this.notification)
   this.requestUpdate()
 }
 

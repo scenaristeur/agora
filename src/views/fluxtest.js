@@ -15,6 +15,7 @@ class FluxElement extends LitElement {
       notifications: {type: Array},
       end: {type: Object},
       loop: {type: Object},
+      chargees: {type: Array}
     };
   }
 
@@ -24,15 +25,16 @@ class FluxElement extends LitElement {
     this.agoraPod = ""
     this.counter = 0
     this.offset = 0
-    this.debug = false
+    this.debug = true
     let dateObj = new Date();
     this.date = {}
     this.date.month = ("0" + (dateObj.getUTCMonth() + 1)).slice(-2); //months from 1-12
     this.date.day = ("0" + dateObj.getUTCDate()).slice(-2);
     this.date.year = dateObj.getUTCFullYear();
     this.notifications = []
+    this.chargees = []
     this.loop = new Date();
-    this.end = new Date("04/23/2020"); // 09 AVRIL
+    this.end = new Date("04/26/2020"); // 09 AVRIL
     this.fc = new SolidFileClient(solid.auth)
   }
 
@@ -71,7 +73,8 @@ class FluxElement extends LitElement {
     <!--    config : ${JSON.stringify(this.config)}</br>-->
     counter : ${this.counter}<br>
     offset: ${this.offset}<br>
-    notifications: ${this.notifications.length}
+    notifications: ${this.notifications.length}<br>
+    date: ${this.loop}
     </div>
 
     <div id="scroller">
@@ -177,53 +180,184 @@ class FluxElement extends LitElement {
 
   }
 
-  async  loadItems(c) {
+
+
+async loadItems(c){
+  let month = ("0" + (this.loop.getUTCMonth() + 1)).slice(-2); //months from 1-12
+  let day = ("0" + this.loop.getUTCDate()).slice(-2);
+  let year = this.loop.getUTCFullYear();
+
+  let path = this.inbox+[year, month, day, "index.ttl#this"].join("/")
+let chargees = []
+  if( await this.fc.itemExists(path) ) {
+    for await (const notif of solid.data[path]['https://www.w3.org/ns/activitystreams#item']){
+      chargees.push(`${notif}`)
+    }
+  }
+  this.chargees = chargees
+/*
+  for (let i = 0 ; i<c; i++){
+  this.chargees = [...this.chargees, path]
+}*/
+  console.log(this.chargees)
+
+  console.log("CHARGEES LENGTH",this.chargees.length)
+  this.scroller.appendChild(app.sentinel);
+
+  while(this.chargees.length > 0){
+    let current = this.chargees.pop()
+    console.log("current",current, "chargees length",this.chargees.length)
+    this.addItem(current)
+  }
+
+
+  var newDate = this.loop.setDate(this.loop.getDate() - 1);
+  this.loop = new Date(newDate);
+  console.log("Changement de date",this.loop)
+
+}
+
+
+  async  loadItems4(c) {
     let app = this
-    while(this.loop >= this.end && c > 0){
+    console.log("Chargement de ",c)
+
+    while(this.loop >= this.end && this.chargees < c){
+      this.sentinel.innerHTML = "Loading "+this.loop.toLocaleDateString()
+      let month = ("0" + (this.loop.getUTCMonth() + 1)).slice(-2); //months from 1-12
+      let day = ("0" + this.loop.getUTCDate()).slice(-2);
+      let year = this.loop.getUTCFullYear();
+      let path = this.inbox+[year, month, day, "index.ttl#this"].join("/")
+
+      /* for (let i = 0 ; i<c; i++){
+      this.chargees = [...this.chargees, path]
+    }*/
+
+    if( await this.fc.itemExists(path) ) {
+      for await (const notif of solid.data[path]['https://www.w3.org/ns/activitystreams#item']){
+        console.log(`${notif}`)
+        this.chargees = [...this.chargees, `${notif}`]
+        this.addItem(`${notif}`)
+      }
+    }
+
+
+    var newDate = this.loop.setDate(this.loop.getDate() - 1);
+    this.loop = new Date(newDate);
+
+    console.log("CHARGEES LENGTH",this.chargees.length)
+
+    while(this.chargees.length > 0){
+      let current = this.chargees.pop()
+      console.log("current",current, "chargees length",this.chargees.length)
+      this.addItem(current)
+    }
+
+  }
+
+  if(this.loop < this.end){
+    this.sentinel.innerHTML = "No older message"
+  }
+
+}
+
+
+async  loadItems3(c) {
+  let app = this
+  console.log("Chargement de ",c)
+  while(this.loop >= this.end){
+    console.log("loading notif from",this.loop)
+    if (this.chargees.length != 0){
+      console.log("chargees.length", chargees.length)
+      while (this.chargees.length > 0)
+      {
+        // do stuff to each element stored in current
+        let current = this.chargees.pop()
+        console.log(this.chargees.length, current)
+        this.addItem(current)
+      }
+    }else{
+      let month = ("0" + (this.loop.getUTCMonth() + 1)).slice(-2); //months from 1-12
+      let day = ("0" + this.loop.getUTCDate()).slice(-2);
+      let year = this.loop.getUTCFullYear();
+
+      let path = this.inbox+[year, month, day, "index.ttl#this"].join("/")
+
+      if( await this.fc.itemExists(path) ) {
+        for await (const notif of solid.data[path]['https://www.w3.org/ns/activitystreams#item']){
+          this.chargees = [... this.chargees, `${notif}`]
+        }
+      }
+
+      var newDate = this.loop.setDate(this.loop.getDate() - 1);
+      this.loop = new Date(newDate);
+      console.log("Changement de date",this.loop)
+    }
+  }
+
+}
+
+async  loadItems2(c) {
+  let app = this
+
+  if (this.chargees.length == 0){
+    console.log("CHARGEES VIDES", this.chargees.length)
+    while(this.loop >= this.end && c > 0){ //
       console.log(this.loop, c);
       this.sentinel.innerHTML = "Loading "+this.loop.toLocaleDateString()
       let month = ("0" + (this.loop.getUTCMonth() + 1)).slice(-2); //months from 1-12
       let day = ("0" + this.loop.getUTCDate()).slice(-2);
       let year = this.loop.getUTCFullYear();
 
-      this.path = this.inbox+[year, month, day, "index.ttl#this"].join("/")
-      console.log(this.path)
-      let notifications = this.notifications
+      let path = this.inbox+[year, month, day, "index.ttl#this"].join("/")
+      console.log("PATH",path)
+      //  let notifications = this.notifications
 
-      if( await this.fc.itemExists(this.path) ) {
-        for await (const notif of solid.data[this.path]['https://www.w3.org/ns/activitystreams#item']){
+      //  await solid.data.clearCache()
+      if( await this.fc.itemExists(path) ) {
+        for await (const notif of solid.data[path]['https://www.w3.org/ns/activitystreams#item']){
           console.log(`${notif}`)
 
-          if (!notifications.includes(`${notif}`)){
-            notifications.push(`${notif}`)
+          if (!this.chargees.includes(`${notif}`)){
+            //  notifications.push(`${notif}`)
+            this.chargees = [... this.chargees, `${notif}`]
+            console.log(this.chargees)
             app.scroller.appendChild(app.sentinel);
             this.addItem(`${notif}`)
+          }else{
+            console.log(("deja include", this.chargees.length))
           }
-
           c--
-
         }
+      }else{
+        console.log("DON't EXIST : ",path)
       }
-      this.notifications = notifications
+      //  this.notifications = notifications
       //  console.log(this.notifications)
 
       //this.addItem(`${notif}`)
+      console.log("C : ",c)
+
       var newDate = this.loop.setDate(this.loop.getDate() - 1);
       this.loop = new Date(newDate);
-    }
 
-    if(this.loop == this.end){
-      this.sentinel.innerHTML = "No older message"
     }
-    /*    let d = new Date();
-    d.setDate(d.getDate() - this.offset);
-    console.log("new date",d, this.offset, this.notifications.length)
-    console.log(new Date(d) > new Date('15/04/2020 00:00'))
+  }else{
+    console.log("CHARGEES ",this.chargees)
+  }
 
-    while (new Date(d) > new Date('15/04/2020 00:00')){
-    this.offset++
-    this.loadItems(n)
-  }*/
+  if(this.loop < this.end){
+    this.sentinel.innerHTML = "No older message"
+  }
+  /*    let d = new Date();
+  d.setDate(d.getDate() - this.offset);
+  console.log("new date",d, this.offset, this.notifications.length)
+  console.log(new Date(d) > new Date('15/04/2020 00:00'))
+
+  while (new Date(d) > new Date('15/04/2020 00:00')){
+  this.offset++
+  this.loadItems(n)
+}*/
 }
 
 
@@ -248,8 +382,8 @@ initObserver(){
       app.loadItems(10);
       // appendChild will move the existing element, so there is no need to
       // remove it first.
-      //  app.scroller.appendChild(app.sentinel);
-      //  app.loadItems(5);
+      app.scroller.appendChild(app.sentinel);
+      app.loadItems(5);
       //ChromeSamples.setStatus('Loaded up to item ' + counter);
     }
   });

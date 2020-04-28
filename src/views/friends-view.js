@@ -59,29 +59,34 @@ class FriendsView extends LitElement {
     )}
     </div>
 
-<!--
+
     <div class="card-deck" ?hidden="${this.tab != "following"}">
     following : ${this.following.length}
-    ${this.following.map((f, i) => html`
-      <friend-view name="${"Following_"+i}" f_webId=${f}>Loading Following</friend-view>
-      `
-    )}
+
     </div>
 
     <div class="card-deck" ?hidden="${this.tab != "followers"}">
     followers: ${this.followers.length}
-    ${this.followers.map((f, i) => html`
-      <friend-view name="${"Followers_"+i}" f_webId=${f}>Loading Followers</friend-view>
-      `
-    )}
-    </div>-->
+
+    </div>
 
     </div>
 
     </div>
     `;
   }
+/*
 
+${this.following.map((f, i) => html`
+  <friend-view name="${"Following_"+i}" f_webId=${f}>Loading Following</friend-view>
+  `
+)}
+
+${this.followers.map((f, i) => html`
+  <friend-view name="${"Followers_"+i}" f_webId=${f}>Loading Followers</friend-view>
+  `
+)}
+*/
   openTab(e){
     this.tab = e.target.getAttribute("tab")
     //console.log(this.tab)
