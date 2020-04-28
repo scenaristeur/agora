@@ -17,7 +17,7 @@ class ProfileElement extends LitElement {
     super();
     this.name = "Profile"
     this.config = {}
-    this.p_config = {storage: "Loading..."}
+    this.p_config = {storage: "Loading...", friends: [], followers: [], following: []}
   }
 
   render(){
@@ -39,7 +39,8 @@ class ProfileElement extends LitElement {
       cursor: pointer;
     }
     </style>
-
+    <div class="row">
+    <div class="col">
     <div class="card" style="width: 18rem;">
     <i @click="${this.close}" class="close fas fa-window-close"></i>
 
@@ -67,6 +68,10 @@ class ProfileElement extends LitElement {
         `
         :html `
         <button class="brn btn-outline-primary btn-sm" @click="${this.edit}">Edit My Profile (WIP)</button>
+        <button class="brn btn-outline-primary btn-sm" @click="${this.showConfig}">Configuration</button>
+
+
+
         `}
         `
         :html``
@@ -74,8 +79,35 @@ class ProfileElement extends LitElement {
 
       </div>
       </div>
+      </div>
+
+
+
+      </div>
+
       `;
     }
+
+
+    /*
+    <!--  <div class="row">
+    <div class="col">
+    ${this.p_config.friends.lengh} Friends
+    </div>
+    <div class="col">
+    ${this.p_config.followers.lengh} Followers
+    </div>
+    <div class="col">
+    ${this.p_config.following.lengh} Following
+    </div>
+    </div>-->
+    */
+
+    showConfig(){
+      this.agent.send("App", {action: "showPanel", panel: "Config"})
+      this.agent.send("Config", {action: "newConfig", config: this.config})
+    }
+
 
     edit(){
       alert("// TODO: come back later ;-) ")
@@ -126,7 +158,7 @@ class ProfileElement extends LitElement {
       let user_following = this.config.following_folder+'index.ttl#this'
       console.log(user_following)
       await solid.data[user_following].as$items.add(namedNode(this.p_config.webId))
-    //  console.log("!!! Must first set authenticated agent to publisher in config")
+      //  console.log("!!! Must first set authenticated agent to publisher in config")
       await solid.data[profile_followers].as$items.add(namedNode(this.config.webId))
     }
 

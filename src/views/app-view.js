@@ -54,10 +54,10 @@ class AppView extends LitElement {
       <button class="btn btn-outline-info" panel="Info" @click="${this.showFromAtt}">Help</button>
       <login-element name="Login">Loading Login</login-element>
       <!--      <nav-element name="Nav">Loading Nav</nav-element>-->
-      v.a7
+      v.a8
       </header>
 
-      <div class="container-fluid">
+      <div class="container-fluid"  style="padding-left:0px;padding-right:0px">
 
       <!--
 
@@ -75,6 +75,9 @@ class AppView extends LitElement {
       <post-element name="Post" .share="${this.share}" ?hidden="${this.panel != 'Compose'}">Loading Post</post-element>
       <config-get-view name="Config" webId="${this.webId}" ?hidden="${this.webId == null || this.panel != "Config"}">Loading Config for ${this.webId}</config-get-view>
       <profile-element ?hidden="${this.panel != "Profile"}" name="Profile">Loading Profil</profile-element>
+    <!--  <activity-element name="Shared_activity"
+      ?hidden="${this.panel != 'SharedActivity' }">Loading activity...
+      </activity-element>-->
       <!---->
 
       <!-- DEFAULT -->
@@ -162,6 +165,7 @@ class AppView extends LitElement {
 
     onLoad() {
       var parsedUrl = new URL(window.location.toString());
+let shared_activity = null
       console.log(parsedUrl)
       this.share.title = parsedUrl.searchParams.get("title") || null
       this.share.text = parsedUrl.searchParams.get("text") || null
@@ -171,11 +175,17 @@ class AppView extends LitElement {
         this.panel = "Share"
       }else{
         this.query = parsedUrl.searchParams.get("query") || null
+        shared_activity = parsedUrl.searchParams.get("activity") || null
       }
       console.log(this.share)
       if (parsedUrl.searchParams.get("oldapi")) {
         alert("Your browser is using the deprecated 'url_template' Web Share "
         + "Target API.");
+      }
+      if (shared_activity != null){
+        console.log("Single activity Shared")
+        this.showPanel("SharedActivity")
+        this.agent.send("Shared_activity", {action: "SharedActivity", activity: shared_activity})
       }
 
     }

@@ -119,19 +119,20 @@ class FluxElement extends LitElement {
 
       if (!notifications.includes(`${notif}`)){
         notifications.push(`${notif}`)
-      //  this.scroller.appendChild(this.sentinel);
+        //  this.scroller.appendChild(this.sentinel);
         //  this.addItem(`${notif}`)
         var newItem1 = document.createElement('notification-line-element');
         newItem1.classList.add('item');
         //newItem1.textContent = i+' Item ' + this.counter++;
         newItem1.setAttribute("url", `${notif}`)
+        newItem1.setAttribute("name", "Notif_"+notifications.length)
         this.scroller.prepend(newItem1);
 
       }
 
     }
     this.notifications = notifications
-  //  console.log("NEW ! ", this.notifications)
+    //  console.log("NEW ! ", this.notifications)
   }
 
 
@@ -171,6 +172,7 @@ class FluxElement extends LitElement {
     newItem1.classList.add('item');
     //newItem1.textContent = i+' Item ' + this.counter++;
     newItem1.setAttribute("url", i)
+    newItem1.setAttribute("name", "Notif_"+this.notifications.length)
     this.scroller.appendChild(newItem1);
 
   }
@@ -178,13 +180,13 @@ class FluxElement extends LitElement {
   async  loadItems(c) {
     let app = this
     while(this.loop >= this.end && c > 0){
-    //  console.log(this.loop, c);
+      //  console.log(this.loop, c);
       let month = ("0" + (this.loop.getUTCMonth() + 1)).slice(-2); //months from 1-12
       let day = ("0" + this.loop.getUTCDate()).slice(-2);
       let year = this.loop.getUTCFullYear();
 
       this.path = this.inbox+[year, month, day, "index.ttl#this"].join("/")
-  //    console.log(this.path)
+      //    console.log(this.path)
       let notifications = this.notifications
 
       if( await this.fc.itemExists(this.path) ) {
@@ -202,7 +204,7 @@ class FluxElement extends LitElement {
         }
       }
       this.notifications = notifications
-    //  console.log(this.notifications)
+      //  console.log(this.notifications)
 
       //this.addItem(`${notif}`)
       var newDate = this.loop.setDate(this.loop.getDate() - 1);

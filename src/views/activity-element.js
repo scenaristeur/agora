@@ -114,7 +114,7 @@ class ActivityElement extends LitElement {
     updated(changedProperties) {
       changedProperties.forEach((oldValue, propName) => {
         //  console.log(`${propName} changed. oldValue: ${oldValue}`);
-        if (`${propName}` == "url" && this.url != "undefined"){
+        if (`${propName}` == "url" && this.url != "undefined" && this.url != null){
           this.init()
         }
       });
@@ -142,7 +142,7 @@ class ActivityElement extends LitElement {
 
     replyTo(){
       console.log(this.url)
-      this.agent.send("App", {action: "showPanel", panel:"Compose"})
+      this.agent.send("App", {action: "showPanel", panel: "Compose"})
       this.agent.send("Post", {action: "toggleWrite"})
       this.agent.send("PostTabs", {action:"setReplyTo", replyTo: this.url })
     }

@@ -342,6 +342,7 @@ class PostTabsElement extends LitElement {
     }
 
     async setReplyTo(message){
+      console.log(message)
       if (message.replyTo != undefined){
         this.replyTo ={}
         this.replyTo.url  = message.replyTo
@@ -649,7 +650,7 @@ class PostTabsElement extends LitElement {
           console.log(date)
           //  console.log(url)
           console.log(index)
-        //  await solid.data[index]['https://www.w3.org/ns/activitystreams#published'].add(date)
+          //  await solid.data[index]['https://www.w3.org/ns/activitystreams#published'].add(date)
           await solid.data[index]['https://www.w3.org/ns/activitystreams#item'].add(namedNode(notification_uri))
 
         }
@@ -660,6 +661,7 @@ class PostTabsElement extends LitElement {
   });
   this.log = "Send OK"
   this.toggleWrite()
+  this.agent.send("App", {action: "showPanel", panel: "Flow"})
 }
 
 
@@ -682,7 +684,7 @@ async setAcl(o, aclStringWebIds, agora_pub){
   ${agora_pub == true ?   "acl:agentClass <http://xmlns.com/foaf/0.1/Agent> ;" : ""}
   acl:mode acl:Read.`
 
-//  console.log(aclString)
+  //  console.log(aclString)
   try{
     await this.fileClient.createFile (o.file+'.acl', aclString, "text/turtle")
     this.log = o.file+'.acl Created'

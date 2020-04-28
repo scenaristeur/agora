@@ -22,7 +22,7 @@ class PostElement extends LitElement {
   }
 
   render () {
-    console.log('Dialog visible:', this.dialogVisible)
+    //  console.log('Dialog visible:', this.dialogVisible)
     return html`
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
@@ -59,11 +59,15 @@ class PostElement extends LitElement {
     //  console.log(this.dialogVisible)
     var messRep = {action:"setReplyTo" }
     this.agent.send("PostTabs", messRep)
+    if (this.dialogVisible == false){
+      this.agent.send("App", {action: "showPanel", panel: "Flow"})
+    }
   }
 
   closeDialog (e) {
     //  console.log(e)
     this.dialogVisible = false
+    this.agent.send("App", {action: "showPanel", panel: "Flow"})
   }
 
 
