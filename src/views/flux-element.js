@@ -32,7 +32,7 @@ class FluxElement extends LitElement {
     this.date.year = dateObj.getUTCFullYear();
     this.notifications = []
     this.loop = new Date();
-    this.end = new Date("04/09/2020"); // 09 AVRIL
+    this.end = new Date("04/23/2020"); // 09 AVRIL
     this.fc = new SolidFileClient(solid.auth)
   }
 
@@ -180,18 +180,19 @@ class FluxElement extends LitElement {
   async  loadItems(c) {
     let app = this
     while(this.loop >= this.end && c > 0){
-      //  console.log(this.loop, c);
+      console.log(this.loop, c);
+      this.sentinel.innerHTML = "Loading "+this.loop.toLocaleDateString()
       let month = ("0" + (this.loop.getUTCMonth() + 1)).slice(-2); //months from 1-12
       let day = ("0" + this.loop.getUTCDate()).slice(-2);
       let year = this.loop.getUTCFullYear();
 
       this.path = this.inbox+[year, month, day, "index.ttl#this"].join("/")
-      //    console.log(this.path)
+      console.log(this.path)
       let notifications = this.notifications
 
       if( await this.fc.itemExists(this.path) ) {
         for await (const notif of solid.data[this.path]['https://www.w3.org/ns/activitystreams#item']){
-          //    console.log(`${notif}`)
+          console.log(`${notif}`)
 
           if (!notifications.includes(`${notif}`)){
             notifications.push(`${notif}`)
@@ -211,7 +212,9 @@ class FluxElement extends LitElement {
       this.loop = new Date(newDate);
     }
 
-
+    if(this.loop < this.end){
+      this.sentinel.innerHTML = "No older message"
+    }
     /*    let d = new Date();
     d.setDate(d.getDate() - this.offset);
     console.log("new date",d, this.offset, this.notifications.length)

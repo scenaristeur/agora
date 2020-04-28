@@ -59,6 +59,7 @@ class FriendsView extends LitElement {
     )}
     </div>
 
+<!--
     <div class="card-deck" ?hidden="${this.tab != "following"}">
     following : ${this.following.length}
     ${this.following.map((f, i) => html`
@@ -73,7 +74,7 @@ class FriendsView extends LitElement {
       <friend-view name="${"Followers_"+i}" f_webId=${f}>Loading Followers</friend-view>
       `
     )}
-    </div>
+    </div>-->
 
     </div>
 
