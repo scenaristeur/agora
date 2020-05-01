@@ -48,6 +48,32 @@ class ConfigGetView extends LitElement {
     acl:accessTo <./>;
     acl:default <./>;
     acl:mode acl:Read.`
+
+this.aclFollowers = `
+@prefix : <#>.
+@prefix n0: <http://www.w3.org/ns/auth/acl#>.
+@prefix fol: <./>.
+@prefix c: </profile/card#>.
+
+:AppendRead
+    a n0:Authorization;
+    n0:accessTo fol:;
+    n0:default fol:;
+    n0:mode n0:Append, n0:Read.
+:ControlReadWrite
+    a n0:Authorization;
+    n0:accessTo fol:;
+    n0:agent c:me;
+    n0:default fol:;
+    n0:mode n0:Control, n0:Read, n0:Write.
+:ReadWrite
+    a n0:Authorization;
+    n0:accessTo fol:;
+    n0:agentClass n0:AuthenticatedAgent;
+    n0:default fol:;
+    n0:mode n0:Read, n0:Write.`
+
+
   }
 
   render() {
@@ -210,8 +236,8 @@ class ConfigGetView extends LitElement {
           this.config.friends = friends
 
           this.log = "Checking Followers"
-          this.config.followers_uri = this.config.followers_folder+"index.ttl#this"
-          for await (const f_er of solid.data[this.config.followers_uri].as$items){
+        //  this.config.followers_uri = this.config.followers_folder+"index.ttl#this"
+          for await (const f_er of solid.data[this.config.followers_folder].ldp$contains){
             let fer = `${f_er}`
             followers = [... followers, fer]
           }
@@ -249,9 +275,9 @@ class ConfigGetView extends LitElement {
 
     async createFollowIndexes(){
       // creation des fichiers
-      let followers_index = this.config.followers_folder+"index.ttl"
+    //  let followers_index = this.config.followers_folder+"index.ttl"
       let following_index = this.config.following_folder+"index.ttl"
-      if( !(await this.fc.itemExists(followers_index)) ) {
+    /*  if( !(await this.fc.itemExists(followers_index)) ) {
         await this.fc.createFile (followers_index, "", "text/turtle") .then (success => {
           this.log = "Created "+followers_index
         }, err => {
@@ -259,7 +285,7 @@ class ConfigGetView extends LitElement {
           alert(err + "... Are you sure you grant AGORA to FULL CONTROL ? see HELP !")
           this.log = err +"... Are you sure you grant AGORA to FULL CONTROL ? Please see HELP !"
         });
-      }
+      }*/
 
       if( !(await this.fc.itemExists(following_index)) ) {
         await this.fc.createFile (following_index, "", "text/turtle") .then (success => {
@@ -292,7 +318,7 @@ class ConfigGetView extends LitElement {
         this.log = err +"... Are you sure you grant AGORA to FULL CONTROL ? Please see HELP !"
       });
 
-      await this.fc.createFile (followersacl, this.aclInboxContent, "text/turtle") .then (success => {
+      await this.fc.createFile (followersacl, this.aclFollowers, "text/turtle") .then (success => {
         this.log = "Created "+followersacl
         this.config.acl_followers = followersacl
       }, err => {

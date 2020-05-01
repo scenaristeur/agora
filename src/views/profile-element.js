@@ -24,6 +24,7 @@ class ProfileElement extends LitElement {
     this.friends = []
     this.followers = []
     this.following = []
+    this.fileClient = new SolidFileClient(solid.auth)
   }
 
   render(){
@@ -167,77 +168,117 @@ class ProfileElement extends LitElement {
       //  alert("// TODO: come back later ;-) ")
       console.log("CONFIG", this.config)
       console.log("P_CONFIG", this.p_config)
-      let profile_followers = this.p_config.followers_folder+'index.ttl#this'
-      console.log(profile_followers)
+      /*  let profile_followers = this.p_config.followers_folder+'index.ttl#this'
+      console.log(profile_followers)*/
       let user_following = this.config.following_folder+'index.ttl#this'
       console.log(user_following)
       await solid.data[user_following].as$items.add(namedNode(this.p_config.webId))
       //  console.log("!!! Must first set authenticated agent to publisher in config")
-      await solid.data[profile_followers].as$items.add(namedNode(this.config.webId))
+      //  await solid.data[profile_followers].as$items.add(namedNode(this.config.webId))
+      console.log(this.config.webId.split("/")[2])
+      let followFile = this.p_config.followers_folder+this.config.webId.split("/")[2]+".ttl"
+
+      try{
+        await this.fileClient.createFile (followFile, "", "text/turtle")
+        console.log(`${followFile}`)
+      }catch(e){
+        alert(e)
+      }
+
+
+
+      /*
+      let aclString = `
+      @prefix : <#>.
+      @prefix acl: <http://www.w3.org/ns/auth/acl#>.
+      @prefix c: </profile/card#>.
+
+      :ControlReadWrite
+      a acl:Authorization;
+      acl:accessTo <${o.file}>;
+      acl:agent c:me;
+      acl:mode acl:Control, acl:Read, acl:Write.
+      :Read
+      a acl:Authorization;
+      acl:accessTo <${o.file}>;
+      ${aclStringWebIds.length > 0 ?   ` acl:agent ${aclStringWebIds};`  : "" }
+      ${agora_pub == true ?   "acl:agentClass <http://xmlns.com/foaf/0.1/Agent> ;" : ""}
+      acl:mode acl:Read.`
+
+      //  console.log(aclString)
+      try{
+      await this.fileClient.createFile (o.file+'.acl', aclString, "text/turtle")
+      this.log = o.file+'.acl Created'
+    }catch(e){
+    alert(e)
+  }
+  */
+
+
+}
+
+
+
+async profileChanged(profile){
+  console.log("USER",profile)
+  this.p_config = profile
+  this.p_config.pti = await solid.data[this.p_config.webId].publicTypeIndex
+  for await (const subject of solid.data[this.p_config.pti].subjects){
+    if(this.p_config.pti != `${subject}`)
+    /*let s = `${subject}`
+    console.log(s)*/
+    if (`${subject}`.endsWith('#Agora')){
+      let instance  = await solid.data[`${subject}`].solid$instance
+      this.p_config.instance = `${instance}`
+      let inbox = await solid.data[this.p_config.instance].as$inbox
+      this.p_config.inbox = `${inbox}`
+      let outbox = await solid.data[this.p_config.instance].as$outbox
+      this.p_config.outbox = `${outbox}`
+      let followers_folder = await solid.data[this.p_config.instance].as$followers
+      this.p_config.followers_folder = `${followers_folder}`
+      let following_folder = await solid.data[this.p_config.instance].as$following
+      this.p_config.following_folder = `${following_folder}`
+      let liked = await solid.data[this.p_config.instance].as$liked
+      this.p_config.liked = `${liked}`
+      let disliked = await solid.data[this.p_config.instance].as$disliked
+      this.p_config.disliked = `${disliked}`
     }
+  }
+  let storage = await solid.data[this.p_config.webId].storage
+  this.p_config.storage = `${storage}`
+  this.p_config.organization =  await solid.data[this.p_config.webId]["http://www.w3.org/2006/vcard/ns#organization-name"]
+  this.p_config.role =  await solid.data[this.p_config.webId]["http://www.w3.org/2006/vcard/ns#role"]
+  /*  this.friends = this.p_config.friends || []
+  this.followers = this.p_config.followers || []
+  this.following = this.p_config.following || []*/
+
+  this.friends = []
+  this.followers = []
+  this.following = []
 
 
-
-    async profileChanged(profile){
-      console.log("USER",profile)
-      this.p_config = profile
-      this.p_config.pti = await solid.data[this.p_config.webId].publicTypeIndex
-      for await (const subject of solid.data[this.p_config.pti].subjects){
-        if(this.p_config.pti != `${subject}`)
-        /*let s = `${subject}`
-        console.log(s)*/
-        if (`${subject}`.endsWith('#Agora')){
-          let instance  = await solid.data[`${subject}`].solid$instance
-          this.p_config.instance = `${instance}`
-          let inbox = await solid.data[this.p_config.instance].as$inbox
-          this.p_config.inbox = `${inbox}`
-          let outbox = await solid.data[this.p_config.instance].as$outbox
-          this.p_config.outbox = `${outbox}`
-          let followers_folder = await solid.data[this.p_config.instance].as$followers
-          this.p_config.followers_folder = `${followers_folder}`
-          let following_folder = await solid.data[this.p_config.instance].as$following
-          this.p_config.following_folder = `${following_folder}`
-          let liked = await solid.data[this.p_config.instance].as$liked
-          this.p_config.liked = `${liked}`
-          let disliked = await solid.data[this.p_config.instance].as$disliked
-          this.p_config.disliked = `${disliked}`
-        }
-      }
-      let storage = await solid.data[this.p_config.webId].storage
-      this.p_config.storage = `${storage}`
-      this.p_config.organization =  await solid.data[this.p_config.webId]["http://www.w3.org/2006/vcard/ns#organization-name"]
-      this.p_config.role =  await solid.data[this.p_config.webId]["http://www.w3.org/2006/vcard/ns#role"]
-      /*  this.friends = this.p_config.friends || []
-      this.followers = this.p_config.followers || []
-      this.following = this.p_config.following || []*/
-
-      this.friends = []
-      this.followers = []
-      this.following = []
-
-
-      for await (const friend of solid.data[this.p_config.webId].friends){
-        let f = `${friend}`
-        this.friends = [... this.friends, f]
-      }
-
-      this.p_config.followers_uri = this.p_config.followers_folder+"index.ttl#this"
-      for await (const f_er of solid.data[this.p_config.followers_uri].as$items){
-        let fer = `${f_er}`
-        this.followers = [... this.followers, fer]
-      }
-
-      this.p_config.following_uri = this.p_config.following_folder+"index.ttl#this"
-      for await (const f_ing of solid.data[this.p_config.following_uri].as$items){
-        let fing = `${f_ing}`
-        this.following = [... this.following, fing]
-      }
-      
-
-      console.log("P_PROFILE",this.p_config)
-      this.requestUpdate()
-    }
-
+  for await (const friend of solid.data[this.p_config.webId].friends){
+    let f = `${friend}`
+    this.friends = [... this.friends, f]
   }
 
-  customElements.define('profile-element', ProfileElement);
+  //  this.p_config.followers_uri = this.p_config.followers_folder+"index.ttl#this"
+  for await (const f_er of solid.data[this.p_config.followers_folder].ldp$contains){
+    let fer = `${f_er}`
+    this.followers = [... this.followers, fer]
+  }
+
+  this.p_config.following_uri = this.p_config.following_folder+"index.ttl#this"
+  for await (const f_ing of solid.data[this.p_config.following_uri].as$items){
+    let fing = `${f_ing}`
+    this.following = [... this.following, fing]
+  }
+
+
+  console.log("P_PROFILE",this.p_config)
+  this.requestUpdate()
+}
+
+}
+
+customElements.define('profile-element', ProfileElement);
