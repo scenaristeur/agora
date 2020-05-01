@@ -10,6 +10,9 @@ class ProfileElement extends LitElement {
       name: {type: String},
       config: {type: Object}, // config : current loged user
       p_config : {type: Object}, // p_config : the user that the profile-element shows
+      friends: {type: Array},
+      followers: {type: Array},
+      following: {type: Array}
     };
   }
 
@@ -17,7 +20,10 @@ class ProfileElement extends LitElement {
     super();
     this.name = "Profile"
     this.config = {}
-    this.p_config = {storage: "Loading...", friends: [], followers: [], following: []}
+    this.p_config = {storage: "Loading..."}
+    this.friends = []
+    this.followers = []
+    this.following = []
   }
 
   render(){
@@ -81,6 +87,14 @@ class ProfileElement extends LitElement {
       </div>
       </div>
 
+      <div class="col">
+      <div class="card" style="width: 18rem;">
+      <ul class="list-group list-group-flush">
+      <li class="list-group-item">${this.friends.length} friends</li>
+      <li class="list-group-item">${this.followers.length} followers</li>
+      <li class="list-group-item">${this.following.length} following</li>
+      </ul>
+      </div>
 
 
       </div>
@@ -193,6 +207,32 @@ class ProfileElement extends LitElement {
       this.p_config.storage = `${storage}`
       this.p_config.organization =  await solid.data[this.p_config.webId]["http://www.w3.org/2006/vcard/ns#organization-name"]
       this.p_config.role =  await solid.data[this.p_config.webId]["http://www.w3.org/2006/vcard/ns#role"]
+      /*  this.friends = this.p_config.friends || []
+      this.followers = this.p_config.followers || []
+      this.following = this.p_config.following || []*/
+
+      this.friends = []
+      this.followers = []
+      this.following = []
+
+
+      for await (const friend of solid.data[this.p_config.webId].friends){
+        let f = `${friend}`
+        this.friends = [... this.friends, f]
+      }
+
+      this.p_config.followers_uri = this.p_config.followers_folder+"index.ttl#this"
+      for await (const f_er of solid.data[this.p_config.followers_uri].as$items){
+        let fer = `${f_er}`
+        this.followers = [... this.followers, fer]
+      }
+
+      this.p_config.following_uri = this.p_config.following_folder+"index.ttl#this"
+      for await (const f_ing of solid.data[this.p_config.following_uri].as$items){
+        let fing = `${f_ing}`
+        this.following = [... this.following, fing]
+      }
+      
 
       console.log("P_PROFILE",this.p_config)
       this.requestUpdate()

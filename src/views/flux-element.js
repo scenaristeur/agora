@@ -189,41 +189,25 @@ class FluxElement extends LitElement {
       this.path = this.inbox+[year, month, day, "index.ttl#this"].join("/")
       console.log(this.path)
       let notifications = this.notifications
-
       if( await this.fc.itemExists(this.path) ) {
         for await (const notif of solid.data[this.path]['https://www.w3.org/ns/activitystreams#item']){
-          console.log(`${notif}`)
-
+        //  console.log(`${notif}`)
           if (!notifications.includes(`${notif}`)){
             notifications.push(`${notif}`)
             app.scroller.appendChild(app.sentinel);
             this.addItem(`${notif}`)
           }
-
           c--
-
         }
       }
       this.notifications = notifications
-      //  console.log(this.notifications)
-
-      //this.addItem(`${notif}`)
       var newDate = this.loop.setDate(this.loop.getDate() - 1);
       this.loop = new Date(newDate);
     }
 
-    if(this.loop == this.end){
+    if(this.loop < this.end){
       this.sentinel.innerHTML = "No older message"
     }
-    /*    let d = new Date();
-    d.setDate(d.getDate() - this.offset);
-    console.log("new date",d, this.offset, this.notifications.length)
-    console.log(new Date(d) > new Date('15/04/2020 00:00'))
-
-    while (new Date(d) > new Date('15/04/2020 00:00')){
-    this.offset++
-    this.loadItems(n)
-  }*/
 }
 
 

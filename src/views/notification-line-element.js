@@ -44,8 +44,8 @@ class NotificationLineElement extends LitElement {
     @click="${this.showProfile}"></i>`
   }
 
-  <!--  <p class="text-muted small">${this.delay(this.notification.published)}</p>-->
-  <p class="text-muted small">${this.notification.published}</p>
+ <p class="text-muted small">${this.delay(this.notification.published)}</p>
+<!--   <p class="text-muted small">${this.notification.published}</p>-->
   </div>
 
   <div class="col">

@@ -53,8 +53,13 @@ class AppView extends LitElement {
       <button class="btn btn-outline-info"  @click="${this.showDefault}">Agora</button>
       <button class="btn btn-outline-info" panel="Info" @click="${this.showFromAtt}">Help</button>
       <login-element name="Login">Loading Login</login-element>
+      <button class="btn btn-outline-info"
+      ?hidden="${this.webId == null}"
+      @click="${this.showProfile}">Profile <br> ${this.webId}</button>
+      <button class="btn btn-outline-info" ?hidden="${this.webId == null}" @click="${this.showConfig}">Config</button>
+
       <!--      <nav-element name="Nav">Loading Nav</nav-element>-->
-      v.a8
+      v.a9
       </header>
 
       <div class="container-fluid"  style="padding-left:0px;padding-right:0px">
@@ -75,7 +80,7 @@ class AppView extends LitElement {
       <post-element name="Post" .share="${this.share}" ?hidden="${this.panel != 'Compose'}">Loading Post</post-element>
       <config-get-view name="Config" webId="${this.webId}" ?hidden="${this.webId == null || this.panel != "Config"}">Loading Config for ${this.webId}</config-get-view>
       <profile-element ?hidden="${this.panel != "Profile"}" name="Profile">Loading Profil</profile-element>
-    <!--  <activity-element name="Shared_activity"
+      <!--  <activity-element name="Shared_activity"
       ?hidden="${this.panel != 'SharedActivity' }">Loading activity...
       </activity-element>-->
       <!---->
@@ -154,6 +159,16 @@ class AppView extends LitElement {
       //
     }
 
+    showProfile(){
+      this.panel = "Profile"
+      this.agent.send("Profile", {action: "profileChanged", profile:{webId: this.webId}})
+    }
+
+    showConfig(){
+      this.panel = "Config"
+      this.agent.send("Config", {action: "newConfig", config:{webId: this.webId}})
+    }
+
     showFromAtt(e){
       this.panel = e.target.getAttribute("panel")
     }
@@ -165,7 +180,7 @@ class AppView extends LitElement {
 
     onLoad() {
       var parsedUrl = new URL(window.location.toString());
-let shared_activity = null
+      let shared_activity = null
       console.log(parsedUrl)
       this.share.title = parsedUrl.searchParams.get("title") || null
       this.share.text = parsedUrl.searchParams.get("text") || null

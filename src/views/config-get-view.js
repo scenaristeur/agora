@@ -25,7 +25,7 @@ class ConfigGetView extends LitElement {
     this.log = "Init"
     this.fc = new SolidFileClient(solid.auth)
     this.textColor = "text-primary"
-    this.debug = false
+    this.debug = true
     this.aclInboxContent = `@prefix : <#>.
     @prefix acl: <http://www.w3.org/ns/auth/acl#>.
     @prefix inbox: <./>.
@@ -242,27 +242,34 @@ class ConfigGetView extends LitElement {
 
         console.log("CONFIG SEND TO STORE", this.config)
         this.agent.send("Store", {action: "setStorage", values: {config: this.config}})
-        this.agent.send("App", {action: "showPanel"})
+        // temporary commented for dev  this.agent.send("App", {action: "showPanel"})
         this.agent.sendMulti(["Friends", "Profile", "PostTabs"], {action: "configChanged", config: this.config})
       }
     }
 
     async createFollowIndexes(){
       // creation des fichiers
-      await this.fc.createFile (this.config.followers_folder+"index.ttl", "", "text/turtle") .then (success => {
-        this.log = "Created "+this.config.followers_folder+"index.ttl"
-      }, err => {
-        this.log = err
-        alert(err + "... Are you sure you grant AGORA to FULL CONTROL ? see HELP !")
-        this.log = err +"... Are you sure you grant AGORA to FULL CONTROL ? Please see HELP !"
-      });
-      await this.fc.createFile (this.config.following_folder+"index.ttl", "", "text/turtle") .then (success => {
-        this.log = "Created "+this.config.following_folder+"index.ttl"
-      }, err => {
-        this.log = err
-        alert(err + "... Are you sure you grant AGORA to FULL CONTROL ? see HELP !")
-        this.log = err +"... Are you sure you grant AGORA to FULL CONTROL ? Please see HELP !"
-      });
+      let followers_index = this.config.followers_folder+"index.ttl"
+      let following_index = this.config.following_folder+"index.ttl"
+      if( !(await this.fc.itemExists(followers_index)) ) {
+        await this.fc.createFile (followers_index, "", "text/turtle") .then (success => {
+          this.log = "Created "+followers_index
+        }, err => {
+          this.log = err
+          alert(err + "... Are you sure you grant AGORA to FULL CONTROL ? see HELP !")
+          this.log = err +"... Are you sure you grant AGORA to FULL CONTROL ? Please see HELP !"
+        });
+      }
+
+      if( !(await this.fc.itemExists(following_index)) ) {
+        await this.fc.createFile (following_index, "", "text/turtle") .then (success => {
+          this.log = "Created "+following_index
+        }, err => {
+          this.log = err
+          alert(err + "... Are you sure you grant AGORA to FULL CONTROL ? see HELP !")
+          this.log = err +"... Are you sure you grant AGORA to FULL CONTROL ? Please see HELP !"
+        });
+      }
     }
 
 
@@ -324,7 +331,7 @@ class ConfigGetView extends LitElement {
       }else{
         this.hideModal()
         this.log = "Creating Folders"
-          let root = this.path
+        let root = this.path
         let inbox = this.shadowRoot.getElementById("staticInbox").value
         let outbox = this.shadowRoot.getElementById("staticOutbox").value
         console.log(root,inbox, outbox)
