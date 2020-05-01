@@ -25,7 +25,7 @@ class ConfigGetView extends LitElement {
     this.log = "Init"
     this.fc = new SolidFileClient(solid.auth)
     this.textColor = "text-primary"
-    this.debug = true
+    this.debug = false
     this.aclInboxContent = `@prefix : <#>.
     @prefix acl: <http://www.w3.org/ns/auth/acl#>.
     @prefix inbox: <./>.

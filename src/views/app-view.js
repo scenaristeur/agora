@@ -55,7 +55,8 @@ class AppView extends LitElement {
       <login-element name="Login">Loading Login</login-element>
       <button class="btn btn-outline-info"
       ?hidden="${this.webId == null}"
-      @click="${this.showProfile}">Profile <br> ${this.webId}</button>
+      title="${this.webId}"
+      @click="${this.showProfile}">Profile</button>
       <button class="btn btn-outline-info" ?hidden="${this.webId == null}" @click="${this.showConfig}">Config</button>
 
       <!--      <nav-element name="Nav">Loading Nav</nav-element>-->
