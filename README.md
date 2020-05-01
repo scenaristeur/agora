@@ -1,53 +1,7 @@
 # agora
 
-# install
-```
-git clone https://github.com/scenaristeur/agora.git
-cd agora
-npm install
-
-```
-
-
-During install you will certainely get this error about evejs :
-```
-ERROR in ./src/agents/hello-agent.js
-Module not found: Error: Can't resolve 'evejs/dist/eve.custom.js' in 'C:\Users\Smag\Documents\dev\agora\src\agents'
-@ ./src/agents/hello-agent.js 2:0-43 6:2-5 8:15-18 12:37-40
-@ ./src/views/friends-view.js
-@ ./src/index.js
-```
-so YOU NEED TO BUILD EVEJS
-
-# Build a minimal browser version in dist/eve.custom.js
-```
-npm install -g browserify
-cd node_modules/evejs
-browserify custom.js -o dist/eve.custom.js -s eve
-```
-
-then cd back to agora & relaunch npm install
-```
-cd ../..
-npm install
-```
-
-# Run dev server on http://localhost:9000
-```
-npm run dev
-```
-
-#Build for prod in /dist folder
-```
-npm run prod
-```
-
-# publish to gh & /dist to gh-pages
-```
-git add .
-git commit -m "my modif"
-git push && git subtree push --prefix dist origin gh-pages
-```
+1. [Data Structure](https://github.com/scenaristeur/agora/wiki/Data-Structure)
+2. [Install Localy & contribute](https://github.com/scenaristeur/agora/wiki/Install)
 
 
 # flow
