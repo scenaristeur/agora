@@ -269,7 +269,7 @@ this.aclFollowers = `
         console.log("CONFIG SEND TO STORE", this.config)
         this.agent.send("Store", {action: "setStorage", values: {config: this.config}})
         // temporary commented for dev  this.agent.send("App", {action: "showPanel"})
-        this.agent.sendMulti(["Friends", "Profile", "PostTabs"], {action: "configChanged", config: this.config})
+        this.agent.sendMulti(["Friends", "Profile", "PostTabs", "Groups"], {action: "configChanged", config: this.config})
       }
     }
 

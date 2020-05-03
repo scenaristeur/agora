@@ -118,7 +118,7 @@ class FluxElement extends LitElement {
       //    console.log(`${notif}`)
 
       if (!notifications.includes(`${notif}`)){
-        notifications.push(`${notif}`)
+        notifications = [...notifications `${notif}`] //.push()
         //  this.scroller.appendChild(this.sentinel);
         //  this.addItem(`${notif}`)
         var newItem1 = document.createElement('notification-line-element');

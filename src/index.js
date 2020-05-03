@@ -41,6 +41,10 @@ import './views/profile-element.js'
 // Websocket
 import './views/websocket-element.js'
 
+// Groups
+import './views/groups-view.js'
+import './views/group-view.js'
+
 /*
 import './views/compose-view.js';
 import './views/orga-view.js';

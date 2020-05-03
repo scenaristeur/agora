@@ -23,8 +23,8 @@ class ModeleElement extends LitElement {
 
     <div ?hidden = "${!this.debug}">
     Hello from<b>${this.name}</b><br>
-    debug : ${this.debug}
-  <!--  config : ${JSON.stringify(this.config)}</br> -->
+    debug : ${this.debug}<br>
+  <!--  config : ${JSON.stringify(this.config)}<br> -->
     </div>
 
     <div class="container-fluid">
