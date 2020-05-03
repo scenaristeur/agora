@@ -35,8 +35,11 @@ class GroupsView extends LitElement {
     groupindex : ${this.config.group_index}<br>
     </div>
 
-    <div class="container-fluid">
+    <div class="container">
 
+
+    <div class="input-group ml-3 mb-3">
+    <div class="row">
     <input type="text" id="groupName" class="form-control"
     placeholder="Group's name"
     aria-label="Group's name" aria-describedby="basic-addon2">
@@ -45,19 +48,19 @@ class GroupsView extends LitElement {
     aria-label="Purpose, Role of the group" aria-describedby="basic-addon3">
     <div class="input-group-append">
 
-    <div class="input-group mb-3">
-
     <button class="btn btn-outline-secondary" type="button" @click=${this.addGroup}>Add Group</button>
     </div>
     </div>
+    </div>
 
-    <br>
     Group length : ${this.groups.length}
 
+    <div class="card-deck">
     ${this.groups.map((g, i) => html`
       <group-view name="${"Group_"+i}" uri=${g}>Loading Group</group-view>
       `
     )}
+    </div>
 
 
 
@@ -80,7 +83,7 @@ class GroupsView extends LitElement {
     await solid.data[g_uri].vcard$hasMember.add(namedNode(this.config.webId))
     await solid.data[g_uri].vcard$hasMember.add(namedNode("https://spoggy-test3.solid.community/profile/card#me"))
     await solid.data[g_uri].vcard$hasMember.add(namedNode("https://spoggy-test9.solid.community/profile/card#me"))
-    
+
     this.shadowRoot.getElementById("groupName").value = ""
     this.shadowRoot.getElementById("groupRole").value = ""
     await this.updateGroups()

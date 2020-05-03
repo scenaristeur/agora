@@ -74,7 +74,7 @@ class StoreElement extends BaseView {
         console.log("WEBID IDENTIQUE & NOTHING UNDEFINED --> ACCUEIL")
       //  this.store.config.status = "WebId from store : ",+webId
         this.agent.send("App", {action: "showPanel", panel: "Flow"})
-        this.agent.sendMulti(["Friends", "Profile", "PostTabs", "Groups"], {action: "configChanged", config: this.store.config})
+        this.agent.sendMulti(["Friends", "Profile", "PostTabs", "Groups", "Inbox"], {action: "configChanged", config: this.store.config})
 
       }else{
         console.log("WEBID DIFFERENT --> New CONFIG", webId, this.store.config.webId)
@@ -87,7 +87,7 @@ class StoreElement extends BaseView {
     }else{
       console.log("WEBID CHANGED IS NULL --> nettoyage FRIENDS & PROFILE",this.webId)
       this.store.config = {}
-      this.agent.sendMulti(["Friends", "Profile", "PostTabs", "Groups"], {action: "configChanged", config: this.store.config})
+      this.agent.sendMulti(["Friends", "Profile", "PostTabs", "Groups", "Inbox"], {action: "configChanged", config: this.store.config})
 
     }
     //console.log(this.webId)

@@ -1,21 +1,23 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
 
-class ModeleElement extends LitElement {
+class MessageView extends LitElement {
 
   static get properties() {
     return {
       name: {type: String},
       debug: {type: Boolean},
-      config: {type: Object}
+      //  config: {type: Object},
+      uri: {type: String}
     };
   }
 
   constructor() {
     super();
-    this.name = "Modele"
+    this.name = "Message"
     this.debug = true
-    this.config = {}
+    //  this.config = {}
+    this.uri = ""
   }
 
   render(){
@@ -26,11 +28,12 @@ class ModeleElement extends LitElement {
     <div ?hidden = "${!this.debug}">
     Hello from<b>${this.name}</b><br>
     debug : ${this.debug}<br>
-    config : ${JSON.stringify(this.config)}<br>
+    message uri : ${this.uri}<br>
     </div>
 
     <div class="container-fluid">
-    Hello <b>${this.name}</b> from app-element
+
+    message uri : ${this.uri}
     </div>
     `;
   }
@@ -61,4 +64,4 @@ class ModeleElement extends LitElement {
 
 }
 
-customElements.define('modele-element', ModeleElement);
+customElements.define('message-view', MessageView);

@@ -45,6 +45,10 @@ import './views/websocket-element.js'
 import './views/groups-view.js'
 import './views/group-view.js'
 
+// Inbox
+import './views/inbox-view.js'
+import './views/message-view.js'
+
 /*
 import './views/compose-view.js';
 import './views/orga-view.js';

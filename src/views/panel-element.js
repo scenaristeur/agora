@@ -20,17 +20,17 @@ class PanelElement extends LitElement {
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
 
-    <div class="card shadow mb-4" >
-    <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">${this.p.name}</h6>
+    <div class="card shadow mb-4" panel="${this.p.name}" @click="${this.showPanel}">
+    <div class="card-header py-3" panel="${this.p.name}" >
+    <h6 class="m-0 font-weight-bold text-primary" panel="${this.p.name}" >${this.p.name}</h6>
     </div>
-    <div class="card-body">
-    <div class="text-center">
-    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="height: 10rem;" src="${this.p.image}" alt="">
+    <div class="card-body" panel="${this.p.name}" >
+    <div class="text-center" panel="${this.p.name}" @click="${this.showPanel}">
+    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" panel="${this.p.name}" style="height: 10rem;" src="${this.p.image}" alt="">
     </div>
     <p>${this.p.text}</p>
-    <button class="btn btn-outline-info"  panel="${this.p.name}" @click="${this.showPanel}">${this.p.name}</button>
-    </div>
+  <!--  <button class="btn btn-outline-info"  panel="${this.p.name}" @click="${this.showPanel}">${this.p.name}</button>
+  -->  </div>
     </div>
 
     `;

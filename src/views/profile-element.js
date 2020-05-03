@@ -95,14 +95,6 @@ class ProfileElement extends LitElement {
       </ul>
       </div>
 
-      <!--   <div class="col">
-      <div class="card" style="width: 18rem;"> -->
-
-      <groups-view name="Groups">Loading groups</groups-view>
-
-    <!--  </div>
-      </div>-->
-
 
       </div>
 

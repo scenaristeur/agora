@@ -35,8 +35,8 @@ class PostElement extends LitElement {
       class="btn btn-primary btn-sm"
       @click="${this.toggleDialog.bind(this)}"><i class="fa fa-pen"></i></button>
 
-      ( Write Note, Load Media , then go back to Agora/Flow panel, and refresh manually, Sorry the auto refresh is Work in progress )
-      <post-dialog-element ?opened="${this.dialogVisible}"
+  <!--    ( Write Note, Load Media , then go back to Agora/Flow panel, and refresh manually, Sorry the auto refresh is Work in progress )
+  -->    <post-dialog-element ?opened="${this.dialogVisible}"
       @dialog.accept="${this.closeDialog.bind(this)}"
       @dialog.cancel="${this.closeDialog.bind(this)}"
       .share="${this.share}">

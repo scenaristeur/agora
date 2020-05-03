@@ -33,22 +33,28 @@ class GroupView extends LitElement {
     <!--  config : ${JSON.stringify(this.config)}<br> -->
     </div>
 
-    <div class="container-fluid">
-    <b><a href="${this.group.uri}" target="_blank">${this.group.name}</a></b>
-    <p>
-    ${this.group.role}
-    </p>
-
-    ${this.group.members.map((m, i) => html`
-      <friend-view name="${"Member_"+i}" f_webId=${m}>Loading Member</friend-view>
-
-      `
-    )}
 
 
+
+    <div class="card" style="width: 18rem;">
+  <!--  <img class="card-img-top" src="..." alt="Card image cap">-->
+    <div class="card-body">
+    <h5 class="card-title"><a href="${this.group.uri}" target="_blank">${this.group.name}</a></h5>
+    <p class="card-text">${this.group.role}</p>
+    <p class="card-text"><small class="text-muted">${this.group.members.length} members</small></p>
     </div>
+    </div>
+
+
     `;
   }
+
+/*
+<!--  ${this.group.members.map((m, i) => html`
+    <friend-view name="${"Member_"+i}" f_webId=${m}>Loading Member</friend-view>
+    `
+  )}-->
+  */
 
   firstUpdated(){
     var app = this;
@@ -76,7 +82,7 @@ class GroupView extends LitElement {
     let role = await solid.data[this.uri].vcard$role
     this.group.name = `${name}`
     this.group.role = `${role}`
-    console.log(this.group)
+  //  console.log(this.group)
     await  this.updateMembers()
   }
 
@@ -89,7 +95,7 @@ class GroupView extends LitElement {
     }
     this.group.members =  []
     this.group.members = members
-    console.log("GROUP Members",this.group)
+//    console.log("GROUP Members",this.group)
     this.requestUpdate()
   }
 
