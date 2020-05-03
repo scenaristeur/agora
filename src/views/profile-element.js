@@ -77,8 +77,6 @@ class ProfileElement extends LitElement {
         <button class="brn btn-outline-primary btn-sm" @click="${this.edit}">Edit My Profile (WIP)</button>
         <button class="brn btn-outline-primary btn-sm" @click="${this.showConfig}">Configuration</button>
 
-
-
         `}
         `
         :html``
@@ -96,6 +94,14 @@ class ProfileElement extends LitElement {
       <li class="list-group-item">${this.following.length} following</li>
       </ul>
       </div>
+
+      <!--   <div class="col">
+      <div class="card" style="width: 18rem;"> -->
+
+      <groups-view name="Groups">Loading groups</groups-view>
+
+    <!--  </div>
+      </div>-->
 
 
       </div>

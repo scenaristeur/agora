@@ -18,7 +18,7 @@ class GroupsView extends LitElement {
   constructor() {
     super();
     this.name = "Groups View"
-    this.debug = true
+    this.debug = false
     this.config = {}
     this.groups = []
   }
@@ -37,12 +37,16 @@ class GroupsView extends LitElement {
 
     <div class="container-fluid">
 
-
-    <div class="input-group mb-3">
     <input type="text" id="groupName" class="form-control"
     placeholder="Group's name"
     aria-label="Group's name" aria-describedby="basic-addon2">
+    <input type="text" id="groupRole" class="form-control"
+    placeholder="Purpose, Role of the group"
+    aria-label="Purpose, Role of the group" aria-describedby="basic-addon3">
     <div class="input-group-append">
+
+    <div class="input-group mb-3">
+
     <button class="btn btn-outline-secondary" type="button" @click=${this.addGroup}>Add Group</button>
     </div>
     </div>
@@ -64,18 +68,21 @@ class GroupsView extends LitElement {
   async addGroup(){
     let g_name = this.shadowRoot.getElementById("groupName").value.trim() //.replace(/[^a-zA-Z0-9]/g,'_');
     let g_id = uuidv4();
+    let g_role = this.shadowRoot.getElementById("groupRole").value.trim()
     let g_uri = this.config.group_folder+g_id+".ttl"
     console.log(this.config.group_index, g_uri)
     await solid.data[this.config.group_index].as$item.add(namedNode(g_uri))
     await solid.data[g_uri].rdf$type.add(namedNode("http://www.w3.org/2006/vcard/ns#Group"))
-    await solid.data[g_uri].rdfs$label.add(g_name)
+    await solid.data[g_uri].vcard$title.add(g_name)
+    await solid.data[g_uri].vcard$role.add(g_role)
+    await solid.data[g_uri].vcard$hasUID.add(g_id)
+
     await solid.data[g_uri].vcard$hasMember.add(namedNode(this.config.webId))
     await solid.data[g_uri].vcard$hasMember.add(namedNode("https://spoggy-test3.solid.community/profile/card#me"))
     await solid.data[g_uri].vcard$hasMember.add(namedNode("https://spoggy-test9.solid.community/profile/card#me"))
-
-
-
-    this.shadowRoot.getElementById("groupName").value=""
+    
+    this.shadowRoot.getElementById("groupName").value = ""
+    this.shadowRoot.getElementById("groupRole").value = ""
     await this.updateGroups()
   }
 
@@ -118,6 +125,7 @@ class GroupsView extends LitElement {
     this.groups =  []
     this.groups = groups
     console.log("GROUPS",this.groups)
+    this.requestUpdate()
   }
 
 }

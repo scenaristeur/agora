@@ -15,7 +15,7 @@ class GroupView extends LitElement {
   constructor() {
     super();
     this.name = "Group"
-    this.debug = true,
+    this.debug = false,
     this.uri = ""
     this.group = {members: []}
   }
@@ -35,10 +35,12 @@ class GroupView extends LitElement {
 
     <div class="container-fluid">
     <b><a href="${this.group.uri}" target="_blank">${this.group.name}</a></b>
-
+    <p>
+    ${this.group.role}
+    </p>
 
     ${this.group.members.map((m, i) => html`
-      -  <friend-view name="${"Member_"+i}" f_webId=${m}>Loading Member</friend-view>
+      <friend-view name="${"Member_"+i}" f_webId=${m}>Loading Member</friend-view>
 
       `
     )}
@@ -70,8 +72,10 @@ class GroupView extends LitElement {
 
   async init(){
     this.group.uri = this.uri
-    let name = await solid.data[this.uri].rdfs$label
+    let name = await solid.data[this.uri].vcard$title
+    let role = await solid.data[this.uri].vcard$role
     this.group.name = `${name}`
+    this.group.role = `${role}`
     console.log(this.group)
     await  this.updateMembers()
   }
@@ -86,7 +90,7 @@ class GroupView extends LitElement {
     this.group.members =  []
     this.group.members = members
     console.log("GROUP Members",this.group)
-      this.requestUpdate()
+    this.requestUpdate()
   }
 
 

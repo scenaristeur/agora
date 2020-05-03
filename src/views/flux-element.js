@@ -118,7 +118,7 @@ class FluxElement extends LitElement {
       //    console.log(`${notif}`)
 
       if (!notifications.includes(`${notif}`)){
-        notifications = [...notifications `${notif}`] //.push()
+        notifications = [...notifications, `${notif}`] //.push()
         //  this.scroller.appendChild(this.sentinel);
         //  this.addItem(`${notif}`)
         var newItem1 = document.createElement('notification-line-element');
@@ -193,7 +193,7 @@ class FluxElement extends LitElement {
         for await (const notif of solid.data[this.path]['https://www.w3.org/ns/activitystreams#item']){
         //  console.log(`${notif}`)
           if (!notifications.includes(`${notif}`)){
-            notifications.push(`${notif}`)
+            notifications = [...notifications, `${notif}`]
             app.scroller.appendChild(app.sentinel);
             this.addItem(`${notif}`)
           }
