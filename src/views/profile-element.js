@@ -12,7 +12,8 @@ class ProfileElement extends LitElement {
       p_config : {type: Object}, // p_config : the user that the profile-element shows
       friends: {type: Array},
       followers: {type: Array},
-      following: {type: Array}
+      following: {type: Array},
+      dontFollowYet: {type: Boolean}
     };
   }
 
@@ -25,6 +26,7 @@ class ProfileElement extends LitElement {
     this.followers = []
     this.following = []
     this.fileClient = new SolidFileClient(solid.auth)
+    this.dontFollowYet = true
   }
 
   render(){
@@ -68,149 +70,229 @@ class ProfileElement extends LitElement {
     <br>  Your WebId : ${this.config.webId}<br>
     </p>
 
-    ${this.config.webId != null ?
-      html`
-      ${this.config.webId != this.p_config.webId ?
-        html `<button class="btn btn-outline-info btn-sm" @click="${this.follow}"><i class="fas fa-user-plus"></i>Follow</button>
-        `
-        :html `
-        <button class="brn btn-outline-primary btn-sm" @click="${this.edit}">Edit My Profile (WIP)</button>
-        <button class="brn btn-outline-primary btn-sm" @click="${this.showConfig}">Configuration</button>
+    <div ?hidden="${this.config.webId != this.p_config.webId}"
+    <button class="brn btn-outline-primary btn-sm" @click="${this.edit}">Edit My Profile (WIP)</button>
+    <button class="brn btn-outline-primary btn-sm" @click="${this.showConfig}">Configuration</button>
 
-        `}
-        `
-        :html``
-      }
-
-      </div>
-      </div>
-      </div>
-
-      <div class="col">
-      <div class="card" style="width: 18rem;">
-      <ul class="list-group list-group-flush">
-      <li class="list-group-item">${this.friends.length} friends</li>
-      <li class="list-group-item">${this.followers.length} followers</li>
-      <li class="list-group-item">${this.following.length} following</li>
-      </ul>
-      </div>
-
-
-      </div>
-
-      `;
-    }
-
-
-    /*
-    <!--  <div class="row">
-    <div class="col">
-    ${this.p_config.friends.lengh} Friends
     </div>
-    <div class="col">
-    ${this.p_config.followers.lengh} Followers
+
+
     </div>
-    <div class="col">
-    ${this.p_config.following.lengh} Following
     </div>
-    </div>-->
-    */
+    </div>
 
-    showConfig(){
-      this.agent.send("App", {action: "showPanel", panel: "Config"})
-      this.agent.send("Config", {action: "newConfig", config: this.config})
-    }
+    <div class="col">
+    <div class="card" style="width: 18rem;">
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item">${this.friends.length} friends</li>
+    <li class="list-group-item">${this.followers.length} followers
+
+    <div ?hidden="${this.config.webId == this.p_config.webId}">
+    dontFollowYet :
+    ${this.dontFollowYet == true ?
+      html`<button class="btn btn-outline-info btn-sm" @click="${this.follow}"><i class="fas fa-user-plus"></i>Follow</button>`
+      :html`<button class="btn btn-outline-info btn-sm" @click="${this.unfollow}"><i class="fas fa-user-minus"></i>UnFollow</button>`
+
+    } <br>
+    </div>
 
 
-    edit(){
-      alert("// TODO: come back later ;-) ")
-    }
 
-    close(){
-      this.agent.send("App", {action: "showPanel"})
-    }
 
-    firstUpdated(){
-      var app = this;
-      this.agent = new HelloAgent(this.name);
-      console.log(this.agent)
-      this.agent.receive = function(from, message) {
-        //  console.log("messah",message)
-        if (message.hasOwnProperty("action")){
-          //  console.log(message)
-          switch(message.action) {
-            case "profileChanged":
-            app.profileChanged(message.profile)
-            break;
-            case "configChanged":
-            app.configChanged(message.config)
-            break;
-            default:
-            console.log("Unknown action ",message)
-          }
+
+
+    <ul class="list-group list-group-flush">
+    ${this.followers.map((f, i) => html`
+      <li class="list-group-item">
+      ${f}
+      </li>
+      `
+    )}
+    </ul>
+
+
+    </li>
+
+    <li class="list-group-item">${this.following.length} following</li>
+    </ul>
+    </div>
+
+
+    </div>
+
+    `;
+  }
+
+
+  /*
+  <!--  <div class="row">
+  <div class="col">
+  ${this.p_config.friends.lengh} Friends
+  </div>
+  <div class="col">
+  ${this.p_config.followers.lengh} Followers
+  </div>
+  <div class="col">
+  ${this.p_config.following.lengh} Following
+  </div>
+  </div>-->
+  */
+
+  showConfig(){
+    this.agent.send("App", {action: "showPanel", panel: "Config"})
+    this.agent.send("Config", {action: "newConfig", config: this.config})
+  }
+
+
+  edit(){
+    alert("// TODO: come back later ;-) ")
+  }
+
+  close(){
+    this.agent.send("App", {action: "showPanel"})
+  }
+
+  firstUpdated(){
+    var app = this;
+    this.agent = new HelloAgent(this.name);
+    console.log(this.agent)
+    this.agent.receive = function(from, message) {
+      //  console.log("messah",message)
+      if (message.hasOwnProperty("action")){
+        //  console.log(message)
+        switch(message.action) {
+          case "profileChanged":
+          app.profileChanged(message.profile)
+          break;
+          case "configChanged":
+          app.configChanged(message.config)
+          break;
+          default:
+          console.log("Unknown action ",message)
         }
-      };
-    }
-
-    init(){
-      console.log("TODO check if user webId follow this profile")
-
-    }
-
-    configChanged(config){
-      this.config = config
-    }
-
-    async  follow(){
-      // Must create a follow Activity with accept ?
-      //  alert("// TODO: come back later ;-) ")
-      console.log("CONFIG", this.config)
-      console.log("P_CONFIG", this.p_config)
-      /*  let profile_followers = this.p_config.followers_folder+'index.ttl#this'
-      console.log(profile_followers)*/
-      let user_following = this.config.following_folder+'index.ttl#this'
-      console.log(user_following)
-      await solid.data[user_following].as$items.add(namedNode(this.p_config.webId))
-      //  console.log("!!! Must first set authenticated agent to publisher in config")
-      //  await solid.data[profile_followers].as$items.add(namedNode(this.config.webId))
-      console.log(this.config.webId.split("/")[2])
-      let followFile = this.p_config.followers_folder+this.config.webId.split("/")[2]+".ttl"
-
-      try{
-        await this.fileClient.createFile (followFile, "", "text/turtle")
-        console.log(`${followFile}`)
-      }catch(e){
-        alert(e)
       }
+    };
+  }
+
+  init(){
+    console.log("TODO check if user webId follow this profile")
+
+  }
+
+  configChanged(config){
+    this.config = config
+
+  }
+
+  async unfollow(){
+    //  alert("todo")
+
+    console.log("CONFIG", this.config)
+    console.log("P_CONFIG", this.p_config)
+    /*  let profile_followers = this.p_config.followers_folder+'index.ttl#this'
+    console.log(profile_followers)*/
+    let user_following = this.config.following_folder+'index.ttl'
+    let user_following_this = user_following+"#this"
+    let p_webid = this.p_config.webId
+    let w_node = namedNode(p_webid)
+    console.log(user_following)
+    console.log(p_webid, w_node)
+
+    await solid.data[user_following_this].as$items.delete(namedNode(p_webid))
+    /*  try{
+    await solid.data.from(user_following)[user_following_this]["https://www.w3.org/ns/activitystreams#items"].delete(w_node)
+    // await solid.data[user_following].as$items.namedNode().delete()
+    // await solid.data.from("https://spoggy-test2.solid.community/public/agora/following/index.ttl")[https://spoggy-test2.solid.community/public/agora/following/index.ttl#this].as$items.delete()
+  }catch(e){
+  console.log(e)
+}*/
+
+//  console.log("!!! Must first set authenticated agent to publisher in config")
+//  await solid.data[profile_followers].as$items.add(namedNode(this.config.webId))
+
+
+console.log(this.config.webId.split("/")[2])
+let followFile = this.p_config.followers_folder+this.config.webId.split("/")[2]+".ttl"
+
+try{
+  await this.fileClient.deleteFile (followFile)
+  console.log(`${followFile}`)
+}catch(e){
+  alert(e)
+}
 
 
 
-      /*
-      let aclString = `
-      @prefix : <#>.
-      @prefix acl: <http://www.w3.org/ns/auth/acl#>.
-      @prefix c: </profile/card#>.
 
-      :ControlReadWrite
-      a acl:Authorization;
-      acl:accessTo <${o.file}>;
-      acl:agent c:me;
-      acl:mode acl:Control, acl:Read, acl:Write.
-      :Read
-      a acl:Authorization;
-      acl:accessTo <${o.file}>;
-      ${aclStringWebIds.length > 0 ?   ` acl:agent ${aclStringWebIds};`  : "" }
-      ${agora_pub == true ?   "acl:agentClass <http://xmlns.com/foaf/0.1/Agent> ;" : ""}
-      acl:mode acl:Read.`
 
-      //  console.log(aclString)
-      try{
-      await this.fileClient.createFile (o.file+'.acl', aclString, "text/turtle")
-      this.log = o.file+'.acl Created'
-    }catch(e){
+}
+
+async  follow(){
+  // Must create a follow Activity with accept ?
+  //  alert("// TODO: come back later ;-) ")
+  console.log("CONFIG", this.config)
+  console.log("P_CONFIG", this.p_config)
+  /*  let profile_followers = this.p_config.followers_folder+'index.ttl#this'
+  console.log(profile_followers)*/
+  let user_following = this.config.following_folder+'index.ttl#this'
+  console.log(user_following)
+  await solid.data[user_following].as$items.add(namedNode(this.p_config.webId))
+  //  console.log("!!! Must first set authenticated agent to publisher in config")
+  //  await solid.data[profile_followers].as$items.add(namedNode(this.config.webId))
+  console.log(this.config.webId.split("/")[2])
+  let followFile = this.p_config.followers_folder+this.config.webId.split("/")[2]+".ttl"
+
+  try{
+    await this.fileClient.createFile (followFile, "", "text/turtle")
+    console.log(`${followFile}`)
+  }catch(e){
     alert(e)
   }
+
+
+
+  /*
+  let aclString = `
+  @prefix : <#>.
+  @prefix acl: <http://www.w3.org/ns/auth/acl#>.
+  @prefix c: </profile/card#>.
+
+  :ControlReadWrite
+  a acl:Authorization;
+  acl:accessTo <${o.file}>;
+  acl:agent c:me;
+  acl:mode acl:Control, acl:Read, acl:Write.
+  :Read
+  a acl:Authorization;
+  acl:accessTo <${o.file}>;
+  ${aclStringWebIds.length > 0 ?   ` acl:agent ${aclStringWebIds};`  : "" }
+  ${agora_pub == true ?   "acl:agentClass <http://xmlns.com/foaf/0.1/Agent> ;" : ""}
+  acl:mode acl:Read.`
   */
+/*
+  let aclString = `
+  @prefix : <#>.
+  @prefix acl: <http://www.w3.org/ns/auth/acl#>.
+  @prefix c: </profile/card#>.
+
+  :ControlReadWrite
+  a acl:Authorization;
+  acl:accessTo <${followFile}>;
+  acl:agent c:me, <${this.config.webId}>;
+  acl:mode n0:Control, acl:Read, acl:Write.
+  :ReadWrite
+  a acl:Authorization;
+  acl:accessTo <${followFile}>;
+  acl:mode acl:Read, acl:Write.`
+
+    console.log(aclString)
+  try{
+    await this.fileClient.createFile (followFile+'.acl', aclString, "text/turtle")
+    console.log(followFile+'.acl Created')
+  }catch(e){
+    alert(e)
+  }*/
+
 
 
 }
@@ -263,8 +345,15 @@ async profileChanged(profile){
   //  this.p_config.followers_uri = this.p_config.followers_folder+"index.ttl#this"
   for await (const f_er of solid.data[this.p_config.followers_folder].ldp$contains){
     let fer = `${f_er}`
+    fer = fer.replace(this.p_config.followers_folder, "https://")
+    fer = fer.replace(".ttl", "/profile/card#me")
     this.followers = [... this.followers, fer]
   }
+
+
+  this.dontFollowYet = !this.followers.includes(this.config.webId)
+  console.log("dontFollowYet", this.dontFollowYet)
+
 
   this.p_config.following_uri = this.p_config.following_folder+"index.ttl#this"
   for await (const f_ing of solid.data[this.p_config.following_uri].as$items){

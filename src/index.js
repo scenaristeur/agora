@@ -1,6 +1,7 @@
 //GENERAL
 import './css/bootstrap/bootstrap.min.css';
 import './styles.css';
+import './views/utils.js';
 import './views/app-view.js';
 import './views/store-element.js'
 import './views/panel-element.js'

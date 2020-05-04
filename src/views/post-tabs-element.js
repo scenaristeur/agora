@@ -23,7 +23,10 @@ class PostTabsElement extends LitElement {
       title: {type: String},
       log: {type: String},
       debug: {type: Boolean},
-      friends: {type: Array}
+      friends: {type: Array},
+      followers: {type: Array},
+      groups: {type: Array},
+      confid: {type: String}
     };
   }
 
@@ -40,15 +43,18 @@ class PostTabsElement extends LitElement {
     this.config = {}
     this.share = {}
     this.friends = []
+    this.followers = []
+    this.groups = []
     this.confidentialite = [
       {level: "Public", selected: true, value: "public", description: "Everyone", icon:"fas fa-globe"},
       //  {level: "Not listed", value: "not_listed", description: "Not listed in public ?", icon: "fas fa-lock-open"},
       {level: "Me (test)", value: "me", description: "Only me", icon: "fas fa-lock"},
-      {level: "Friends (todo)", value: "friends", description: "Only your friends", icon: "fas fa-lock"},
+      {level: "Friends", value: "friends", description: "Only your friends", icon: "fas fa-lock"},
       {level: "Followers (todo)", value: "followers", description: "Only your followers", icon: "fas fa-lock"},
       {level: "Groups (todo)", value: "groups", description: "One of your groups", icon: "fas fa-lock-open"},
-      {level: "Direct (todo)", value: "direct", description: "Only listed users", icon: "fas fa-envelop"}
+    //  {level: "Direct (todo)", value: "direct", description: "Only listed users", icon: "fas fa-envelop"}
     ]
+    this.confid = "public"
     this.log = ""
     //  this.agoraNotesListUrl = "https://agora.solid.community/public/notes.ttl"
   }
@@ -188,77 +194,92 @@ class PostTabsElement extends LitElement {
     </select>
     <hr>
 
-    <!--  !! Only public / Agora posts are available for now, WIP !!
+    Confid : ${this.confid}
 
-    <select id="recipients" class="custom-select" multiple>
+    <select id="friends" ?hidden="${this.confid!='friends'}" class="custom-select" multiple>
     <option disabled>Select Multi Recipient</option>
 
     ${this.friends.map(f =>
       html `
       <option selected value="${f}">${f}</option>
       `)}
-      </select> -->
+      </select>
 
-      <!--  <option  value="#me">Personnal (Me)</option>
-      <option selected value="https://www.w3.org/ns/activitystreams#Public">Public (Agora)</option>-->
+      <select id="followers" ?hidden="${this.confid!='followers'}" class="custom-select" multiple>
+      <option disabled>Select Multi Recipient</option>
 
+      ${this.followers.map(f =>
+        html `
+        <option selected value="${f}">${f}</option>
+        `)}
+        </select>
 
-      </div>
+        <select id="groups" ?hidden="${this.confid!='groups'}" class="custom-select" multiple>
+        <option disabled>Select Multi Recipient</option>
 
-
-      <div class="buttons">
-      <div class="row">
-      <!--  <div class="col-4">
-      <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="agora_pub" name="agora_pub" checked>
-      <label class="text-primary" for="agora_pub">
-      Push to Agora
-      </label>
-      </div>
-      </div>-->
-      <div class="col-4">
-      Log : ${this.log}
-      </div>
-      <div class="col">
-      <button type="button" class="btn btn-primary" primary @click=${this.addNote}>
-      Send <i class="far fa-paper-plane"></i></button>
-      </div>
-      <!--
-      <button type="button" class="cancel btn btn-primary" @click="${this.toggleWrite}"><i class="fas fa-window-close"></i> </button>-->
-      </div>
-      </div>
+        ${this.groups.map(g =>
+          html `
+          <option value="${g}">${g}</option>
+          `)}
+          </select>
 
 
 
+        </div>
+
+
+        <div class="buttons">
+        <div class="row">
+        <!--  <div class="col-4">
+        <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="agora_pub" name="agora_pub" checked>
+        <label class="text-primary" for="agora_pub">
+        Push to Agora
+        </label>
+        </div>
+        </div>-->
+        <div class="col-4">
+        Log : ${this.log}
+        </div>
+        <div class="col">
+        <button type="button" class="btn btn-primary" primary @click=${this.addNote}>
+        Send <i class="far fa-paper-plane"></i></button>
+        </div>
+        <!--
+        <button type="button" class="cancel btn btn-primary" @click="${this.toggleWrite}"><i class="fas fa-window-close"></i> </button>-->
+        </div>
+        </div>
 
 
 
-      <!--
-      <div class="buttons">
 
-      <div class="row">
-      <div class="col-5">
-      <button type="button" class="btn btn-primary" primary @click=${this.addNote}><i class="far fa-paper-plane"></i></button>
-      <button type="button" class="cancel btn btn-primary" @click="${this.toggleWrite}"><i class="fas fa-window-close"></i> </button>
-      </div>
-      <div class="col">
 
-      </div>
-      </div>
-      </div>-->
-      </div>
-      `;
-    }
 
-    select(e){
+        <!--
+        <div class="buttons">
+
+        <div class="row">
+        <div class="col-5">
+        <button type="button" class="btn btn-primary" primary @click=${this.addNote}><i class="far fa-paper-plane"></i></button>
+        <button type="button" class="cancel btn btn-primary" @click="${this.toggleWrite}"><i class="fas fa-window-close"></i> </button>
+        </div>
+        <div class="col">
+
+        </div>
+        </div>
+        </div>-->
+        </div>
+        `;
+      }
+
+
+
+      /*  input(e){
       console.log(e.target.value)
-    }
-
-    input(e){
-      console.log(e.target.value)
-    }
+    }*/
 
     change(e){
+      this.confid = e.target.value
       console.log(e.target.value)
       console.log(this.config)
     }
@@ -342,6 +363,8 @@ class PostTabsElement extends LitElement {
       console.log("CONFIG CHANGED",config)
       this.config = config
       this.friends = this.config.friends || []
+      this.followers = this.config.followers || []
+      this.groups = this.config.groups || []
       //      this.requestUpdate()
     }
 
@@ -384,306 +407,336 @@ class PostTabsElement extends LitElement {
       var app = this
       console.log("CONFIG",this.config)
       console.log("OUTBOX", this.config.outbox)
-      /*  let recipient_select = this.shadowRoot.getElementById("recipients")
-      let recipients = Array(...recipient_select.options).reduce((acc, option) => {
-      if (option.selected === true) {
-      acc.push(option.value);
-    }
-    return acc;
-  }, []);*/
-
-  let confid = this.shadowRoot.getElementById("confid").value
-  console.log(confid)
-  let agora_pub = false
-  let recipients = []
-  switch (confid) {
-    case "public":
-  //  recipients = ["https://agora.solid.community/profile/card#me"]
-    agora_pub = true
-    break;
-    case "me":
-    recipients = [this.config.webId]
-    break;
-    default:
-    alert(confid, "non traité")
-  }
 
 
-  console.log("RECIPIENTS",recipients)
-  console.log(this.responses)
-  var title = this.shadowRoot.getElementById('title').value.trim();
-  var tags = this.shadowRoot.getElementById('tags').value.split(',');
-  //  var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
-  var inReplyTo = null;
-  if (this.shadowRoot.getElementById('reply') != null){
-    inReplyTo = this.shadowRoot.getElementById('reply').value.trim();
-  }
-  this.shadowRoot.getElementById('title').value = ""
-  this.shadowRoot.getElementById('tags').value = ""
-  this.storage = await solid.data.user.storage
 
-  // TREAT OBJECTS
-  let dateObj = new Date();
-  let date = dateObj.toISOString()
-  //    let to = act.object.target == "Public" ? "https://www.w3.org/ns/activitystreams#Public" : act.object.target;
+      let agora_pub = false
+      let recipients = []
+      switch (this.confid) {
+        case "public":
+        //  recipients = ["https://agora.solid.community/profile/card#me"]
+        agora_pub = true
+        break;
+        case "me":
+        recipients = [this.config.webId]
+        break;
+        case "friends":
+        let friends_select = this.shadowRoot.getElementById("friends")
+        recipients = Array(...friends_select.options).reduce((acc, option) => {
+          if (option.selected === true) {
+            acc.push(option.value);
+          }
+          return acc;
+        }, []);
+        console.log(recipients)
+        break;
+        case "followers":
+        let followers_select = this.shadowRoot.getElementById("followers")
+        recipients = Array(...followers_select.options).reduce((acc, option) => {
+          if (option.selected === true) {
+            acc.push(option.value);
+          }
+          return acc;
+        }, []);
+        console.log(recipients)
+        break;
+        case "groups":
+        let groups_select = this.shadowRoot.getElementById("groups")
+        recipients_group = Array(...followers_select.options).reduce((acc, option) => {
+          if (option.selected === true) {
+            acc.push(option.value);
+          }
+          return acc;
+        }, []);
+        console.log("must retrive each member of ", recipients_group)
+        break;
 
-  let objects = []
 
-  this.responses.forEach(async function(r){
-    //object create
 
-    let object_Id = uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
-    //    let object_uri = outbox+"objects/"+object_Id+"/index.ttl#this"
-    let object_file = app.config.outbox+"objects/"+object_Id+".ttl"
-    let object_uri = object_file+"#this"
-    switch (r.message.type) {
-      case "Note":
-      if(r.message.content.length >0){
-        objects.push({uri: object_uri, file: object_file})
-        console.log("CREATE NOTE WITH", r.message.content, object_uri)
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Note'))
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#name'].add(title)
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#content'].add(r.message.content)
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
 
-      }
-      break;
-      case "Image":
-      case "Video":
-      case "Audio":
-      case "Document":
-      // https://www.w3.org/wiki/SocialCG/ActivityPub/MediaUpload must normally be uploaded to recipient endpoint
-      if(r.message.content != undefined){
-        var file = r.message.content
-        var contentType = file.contentType
-        var newFilename = r.message.newFilename
-        var classe = r.message.type
-        /*
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#'+r.message.type))
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#name'].add(title)
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#content'].add(r.message.content)
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
-        */
-        // no need to create an Object.ttl, replce by file ?
-        let object_file = app.config.outbox+"objects/"+classe+"/"+newFilename
-        let object_uri = object_file // pas de #this
-        // var object_uri = app.storage+"public/spoggy/"+classe+"/"+newFilename
-        console.log("CREATE DOCUMENT WITH",r.message, object_uri)
-        await app.sendFile(object_file, file, contentType)
-        //   await  data[userActivity].as$object.add(namedNode(userMedia))
 
-        objects.push({uri: object_uri, file: object_file})
-      }
-      break;
-      case "Triple":
-      if(r.message.content.length > 0){
-        objects.push({uri: object_uri, file: object_file})
-        content = r.message.content
-        console.log("CREATE DOCUMENT WITH",r.message, object_uri)
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#'+r.message.type))
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#name'].add(title)
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
-        await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
-        //           await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#content'].add(r.message.content)
 
-        //write subject https://github.com/LDflex/LDflex/issues/53
-        r.message.content.forEach(async function(triple, i) {
-          //  console.log(triple)
-          let subject = object_file+"#"+triple.subject
-          let predicate = object_file+"#"+triple.predicate
-          let object = object_file+"#"+triple.object
-          //console.log(subject, predicate, object)
-          await solid.data[subject][predicate].add(namedNode(object))
-        });
+
+        default:
+        alert(this.confid + "non traité line 408")
       }
 
-      break;
-      default:
-      console.log(r.message.type , "non traite")
+
+      console.log("RECIPIENTS",recipients)
+      console.log(this.responses)
+      var title = this.shadowRoot.getElementById('title').value.trim();
+      var tags = this.shadowRoot.getElementById('tags').value.split(',');
+      //  var agora_pub = app.shadowRoot.getElementById('agora_pub').checked
+      var inReplyTo = null;
+      if (this.shadowRoot.getElementById('reply') != null){
+        inReplyTo = this.shadowRoot.getElementById('reply').value.trim();
+      }
+      this.shadowRoot.getElementById('title').value = ""
+      this.shadowRoot.getElementById('tags').value = ""
+      this.storage = await solid.data.user.storage
+
+      // TREAT OBJECTS
+      let dateObj = new Date();
+      let date = dateObj.toISOString()
+      //    let to = act.object.target == "Public" ? "https://www.w3.org/ns/activitystreams#Public" : act.object.target;
+
+      let objects = []
+
+      this.responses.forEach(async function(r){
+        //object create
+
+        let object_Id = uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+        //    let object_uri = outbox+"objects/"+object_Id+"/index.ttl#this"
+        let object_file = app.config.outbox+"objects/"+object_Id+".ttl"
+        let object_uri = object_file+"#this"
+        switch (r.message.type) {
+          case "Note":
+          if(r.message.content.length >0){
+            objects.push({uri: object_uri, file: object_file})
+            console.log("CREATE NOTE WITH", r.message.content, object_uri)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Note'))
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#name'].add(title)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#content'].add(r.message.content)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
+
+          }
+          break;
+          case "Image":
+          case "Video":
+          case "Audio":
+          case "Document":
+          // https://www.w3.org/wiki/SocialCG/ActivityPub/MediaUpload must normally be uploaded to recipient endpoint
+          if(r.message.content != undefined){
+            var file = r.message.content
+            var contentType = file.contentType
+            var newFilename = r.message.newFilename
+            var classe = r.message.type
+            /*
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#'+r.message.type))
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#name'].add(title)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#content'].add(r.message.content)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
+            */
+            // no need to create an Object.ttl, replce by file ?
+            let object_file = app.config.outbox+"objects/"+classe+"/"+newFilename
+            let object_uri = object_file // pas de #this
+            // var object_uri = app.storage+"public/spoggy/"+classe+"/"+newFilename
+            console.log("CREATE DOCUMENT WITH",r.message, object_uri)
+            await app.sendFile(object_file, file, contentType)
+            //   await  data[userActivity].as$object.add(namedNode(userMedia))
+
+            objects.push({uri: object_uri, file: object_file})
+          }
+          break;
+          case "Triple":
+          if(r.message.content.length > 0){
+            objects.push({uri: object_uri, file: object_file})
+            content = r.message.content
+            console.log("CREATE DOCUMENT WITH",r.message, object_uri)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#'+r.message.type))
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#name'].add(title)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+            await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
+            //           await solid.data[object_uri]['https://www.w3.org/ns/activitystreams#content'].add(r.message.content)
+
+            //write subject https://github.com/LDflex/LDflex/issues/53
+            r.message.content.forEach(async function(triple, i) {
+              //  console.log(triple)
+              let subject = object_file+"#"+triple.subject
+              let predicate = object_file+"#"+triple.predicate
+              let object = object_file+"#"+triple.object
+              //console.log(subject, predicate, object)
+              await solid.data[subject][predicate].add(namedNode(object))
+            });
+          }
+
+          break;
+          default:
+          console.log(r.message.type , "non traite")
+        }
+
+      })
+
+      this.responses = []
+      console.log("TODO : ACL FILES & REPLYTO")
+      console.log("OBJECTS",objects)
+
+
+
+      /*
+      if (to == "https://www.w3.org/ns/activitystreams#Public"){
+      console.log("Send to Agora")
+      to = "https://agora.solid.community/profile/card#me"
     }
+    */
 
-  })
+    //activity create
+    let activity_Id = uuidv4();
+    //      let activity_uri = outbox+"activities/"+activity_Id+"/index.ttl#this"
+    let activity_file = app.config.outbox+"activities/"+activity_Id+".ttl"
+    let activity_uri = activity_file+"#this"
 
-  this.responses = []
-  console.log("TODO : ACL FILES & REPLYTO")
-  console.log("OBJECTS",objects)
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#summary'].add(title)
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+    await solid.data[activity_uri].rdfs$label.add(title)
 
+    /*  if (recipients.length== 0){
+    await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(app.config.webId))
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(app.config.webId))
+  }*/
 
+  // ACL OBJECT
+  let recipientsWebIds = []
+  recipients.forEach((r, i) => {
+    recipientsWebIds.push('<'+r+'>')
+  });
+  let aclStringWebIds = recipientsWebIds.join(', ')
+  console.log("ACL STRING", aclStringWebIds)
 
-  /*
-  if (to == "https://www.w3.org/ns/activitystreams#Public"){
-  console.log("Send to Agora")
-  to = "https://agora.solid.community/profile/card#me"
-}
-*/
-
-//activity create
-let activity_Id = uuidv4();
-//      let activity_uri = outbox+"activities/"+activity_Id+"/index.ttl#this"
-let activity_file = app.config.outbox+"activities/"+activity_Id+".ttl"
-let activity_uri = activity_file+"#this"
-
-await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
-await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#summary'].add(title)
-await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
-await solid.data[activity_uri].rdfs$label.add(title)
-
-/*  if (recipients.length== 0){
-await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(app.config.webId))
-await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(app.config.webId))
-}*/
-
-// ACL OBJECT
-let recipientsWebIds = []
-recipients.forEach((r, i) => {
-  recipientsWebIds.push('<'+r+'>')
-});
-let aclStringWebIds = recipientsWebIds.join(', ')
-console.log("ACL STRING", aclStringWebIds)
-
-objects.forEach(async function(o, i) {
-  app.setAcl(o, aclStringWebIds, agora_pub)
-  await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#object'].add(namedNode(o.uri))
-  recipients.forEach(async function(to, i) {
-    if (o.uri.endsWith("#this")){
-      await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(to))
+  objects.forEach(async function(o, i) {
+    app.setAcl(o, aclStringWebIds, agora_pub)
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#object'].add(namedNode(o.uri))
+    recipients.forEach(async function(to, i) {
+      if (o.uri.endsWith("#this")){
+        await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode(to))
+      }
+    })
+    if (agora_pub == true){
+      await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
+      await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://www.w3.org/ns/activitystreams#Public"))
     }
-  })
+  });
+
+  this.log = activity_uri+ "DONE"
+  console.log("Activity OK",activity_uri)
+  let activity = {url: activity_uri, file: activity_file}
+  app.setAcl(activity, aclStringWebIds, agora_pub)
+
+
+
+
+
+  /* ACL pour plusieurs createFolders
+  @prefix : <#>.
+  @prefix n0: <http://www.w3.org/ns/auth/acl#>.
+  @prefix c: </profile/card#>.
+  @prefix c0: <https://spoggy-test2.solid.community/profile/card#>.
+  @prefix c1: <https://spoggy-test3.solid.community/profile/card#>.
+
+  :ControlReadWrite
+  a n0:Authorization;
+  n0:accessTo <fa8740cc-8eaf-4ae8-8489-b4d96783d224.ttl>;
+  n0:agent c:me;
+  n0:mode n0:Control, n0:Read, n0:Write.
+  :Read
+  a n0:Authorization;
+  n0:accessTo <fa8740cc-8eaf-4ae8-8489-b4d96783d224.ttl>;
+  n0:agent c0:me, c1:me;
+  n0:mode n0:Read.*/
+
+
+  /* ACL plusieurs readers & public
+  @prefix : <#>.
+  @prefix n0: <http://www.w3.org/ns/auth/acl#>.
+  @prefix c: </profile/card#>.
+  @prefix c0: <https://spoggy-test2.solid.community/profile/card#>.
+  @prefix c1: <https://spoggy-test3.solid.community/profile/card#>.
+  @prefix n1: <http://xmlns.com/foaf/0.1/>.
+
+  :ControlReadWrite
+  a n0:Authorization;
+  n0:accessTo <fa8740cc-8eaf-4ae8-8489-b4d96783d224.ttl>;
+  n0:agent c:me;
+  n0:mode n0:Control, n0:Read, n0:Write.
+  :Read
+  a n0:Authorization;
+  n0:accessTo <fa8740cc-8eaf-4ae8-8489-b4d96783d224.ttl>;
+  n0:agent c0:me, c1:me;
+  n0:agentClass n1:Agent;
+  n0:mode n0:Read.
+  */
+
+
+
+
+
   if (agora_pub == true){
-    await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
-    await solid.data[o.uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://www.w3.org/ns/activitystreams#Public"))
+    this.log = "Add Public to recipients"
+    console.log("PUBLIC",agora_pub)
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://www.w3.org/ns/activitystreams#Public"))
+    recipients.push("https://agora.solid.community/profile/card#me")
   }
-});
-
-this.log = activity_uri+ "DONE"
-console.log("Activity OK",activity_uri)
-let activity = {url: activity_uri, file: activity_file}
-app.setAcl(activity, aclStringWebIds, agora_pub)
 
 
 
 
+  recipients.forEach(async function(to, i) {
+    console.log("TO",to)
+    app.log = "notification to "+to
+    await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(to))
 
-/* ACL pour plusieurs createFolders
-@prefix : <#>.
-@prefix n0: <http://www.w3.org/ns/auth/acl#>.
-@prefix c: </profile/card#>.
-@prefix c0: <https://spoggy-test2.solid.community/profile/card#>.
-@prefix c1: <https://spoggy-test3.solid.community/profile/card#>.
+    // recipient notification
+    let notification_Id = uuidv4();
+    let pti = await solid.data[to].publicTypeIndex
+    console.log(pti)
 
-:ControlReadWrite
-a n0:Authorization;
-n0:accessTo <fa8740cc-8eaf-4ae8-8489-b4d96783d224.ttl>;
-n0:agent c:me;
-n0:mode n0:Control, n0:Read, n0:Write.
-:Read
-a n0:Authorization;
-n0:accessTo <fa8740cc-8eaf-4ae8-8489-b4d96783d224.ttl>;
-n0:agent c0:me, c1:me;
-n0:mode n0:Read.*/
+    let instanceTrouvee = false
 
-
-/* ACL plusieurs readers & public
-@prefix : <#>.
-@prefix n0: <http://www.w3.org/ns/auth/acl#>.
-@prefix c: </profile/card#>.
-@prefix c0: <https://spoggy-test2.solid.community/profile/card#>.
-@prefix c1: <https://spoggy-test3.solid.community/profile/card#>.
-@prefix n1: <http://xmlns.com/foaf/0.1/>.
-
-:ControlReadWrite
-a n0:Authorization;
-n0:accessTo <fa8740cc-8eaf-4ae8-8489-b4d96783d224.ttl>;
-n0:agent c:me;
-n0:mode n0:Control, n0:Read, n0:Write.
-:Read
-a n0:Authorization;
-n0:accessTo <fa8740cc-8eaf-4ae8-8489-b4d96783d224.ttl>;
-n0:agent c0:me, c1:me;
-n0:agentClass n1:Agent;
-n0:mode n0:Read.
-*/
-
-
-
-
-
-if (agora_pub == true){
-  this.log = "Add Public to recipients"
-  console.log("PUBLIC",agora_pub)
-  await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://agora.solid.community/profile/card#me"))
-  await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#to'].add(namedNode("https://www.w3.org/ns/activitystreams#Public"))
-  recipients.push("https://agora.solid.community/profile/card#me")
-}
-
-
-
-
-recipients.forEach(async function(to, i) {
-  console.log("TO",to)
-  app.log = "notification to "+to
-  await solid.data[activity_uri]['https://www.w3.org/ns/activitystreams#target'].add(namedNode(to))
-
-  // recipient notification
-  let notification_Id = uuidv4();
-  let pti = await solid.data[to].publicTypeIndex
-  console.log(pti)
-
-  let instanceTrouvee = false
-
-  for await (const subject of solid.data[pti].subjects){
-    let s = `${subject}`
-    //  console.log(s)
-    if(pti != `${subject}`){
-
+    for await (const subject of solid.data[pti].subjects){
+      let s = `${subject}`
       //  console.log(s)
-      if (`${subject}`.endsWith('#Agora')){
-        instanceTrouvee = true
-        console.log(s)
-        let instance  = await solid.data[`${subject}`].solid$instance
-        let ib = await solid.data[`${instance}`].as$inbox
-        let recip_inbox = `${ib}`
-        let notification_uri = recip_inbox+notification_Id+".ttl#this"
+      if(pti != `${subject}`){
 
-        console.log(notification_uri)
+        //  console.log(s)
+        if (`${subject}`.endsWith('#Agora')){
+          instanceTrouvee = true
+          console.log(s)
+          let instance  = await solid.data[`${subject}`].solid$instance
+          let ib = await solid.data[`${instance}`].as$inbox
+          let recip_inbox = `${ib}`
+          let notification_uri = recip_inbox+notification_Id+".ttl#this"
 
-        await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
-        await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
-        await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#summary'].add(title)
-        await solid.data[notification_uri].rdfs$label.add(title)
-        await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
-        await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#link'].add(namedNode(activity_uri))
-        app.log = notification_uri+ "DONE"
+          console.log(notification_uri)
 
-        //  var dateObj = new Date();
-        //  var messageId = "#Msg"+dateObj.getTime()
-        var month = ("0" + (dateObj.getUTCMonth() + 1)).slice(-2); //months from 1-12
-        var day = ("0" + dateObj.getUTCDate()).slice(-2);
-        var year = dateObj.getUTCFullYear();
-        var path = recip_inbox+[year, month, day, ""].join("/")
-        console.log(path)
+          await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#type'].add(namedNode('https://www.w3.org/ns/activitystreams#Create'))
+          await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#attributedTo'].add(namedNode(app.config.webId))
+          await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#summary'].add(title)
+          await solid.data[notification_uri].rdfs$label.add(title)
+          await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#published'].add(date)
+          await solid.data[notification_uri]['https://www.w3.org/ns/activitystreams#link'].add(namedNode(activity_uri))
+          app.log = notification_uri+ "DONE"
 
-        //  var url = path+"chat.ttl"+messageId
-        //  this._lastPost = url
-        //var date = dateObj.toISOString()
-        var index = path+"index.ttl#this"
-        console.log(date)
-        //  console.log(url)
-        console.log(index)
-        //  await solid.data[index]['https://www.w3.org/ns/activitystreams#published'].add(date)
-        await solid.data[index]['https://www.w3.org/ns/activitystreams#item'].add(namedNode(notification_uri))
+          //  var dateObj = new Date();
+          //  var messageId = "#Msg"+dateObj.getTime()
+          var month = ("0" + (dateObj.getUTCMonth() + 1)).slice(-2); //months from 1-12
+          var day = ("0" + dateObj.getUTCDate()).slice(-2);
+          var year = dateObj.getUTCFullYear();
+          var path = recip_inbox+[year, month, day, ""].join("/")
+          console.log(path)
 
+          //  var url = path+"chat.ttl"+messageId
+          //  this._lastPost = url
+          //var date = dateObj.toISOString()
+          var index = path+"index.ttl#this"
+          console.log(date)
+          //  console.log(url)
+          console.log(index)
+          //  await solid.data[index]['https://www.w3.org/ns/activitystreams#published'].add(date)
+          await solid.data[index]['https://www.w3.org/ns/activitystreams#item'].add(namedNode(notification_uri))
+
+        }
       }
     }
-  }
 
-  instanceTrouvee == false ? alert("No Agora Instance found in "+to+" Public Type Index ") : "";
-});
-this.log = "Send OK"
-this.toggleWrite()
-this.agent.send("App", {action: "showPanel", panel: "Flow"})
+    instanceTrouvee == false ? alert("No Agora Instance found in "+to+" Public Type Index ") : "";
+  });
+  this.log = "Send OK"
+  this.toggleWrite()
+  this.agent.send("App", {action: "showPanel", panel: "Flow"})
 }
 
 

@@ -17,7 +17,7 @@ class InboxView extends LitElement {
     this.name = "Inbox"
     this.debug = false
     this.config = {}
-    this.messages = ["message1", "message2"]
+    this.messages = []
   }
 
   render(){
@@ -95,13 +95,16 @@ class InboxView extends LitElement {
 
 
   async todayMessages(){
-    let messages = []
-    this.messages =  []
+    let messages = this.messages
+
     await solid.data.clearCache()
     for await (const message of solid.data[this.path].as$item){
       let m = `${message}`
-      messages = [... messages, m]
+      console.log(m)
+      !messages.includes(m) ? messages = [... messages, m] : "";
+      console.log(messages)
     }
+    this.messages =  []
     this.messages = messages
     console.log("Messages",this.messages)
   }

@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
+import { log, conf } from './utils.js'
 
 class MessageView extends LitElement {
 
@@ -14,7 +15,9 @@ class MessageView extends LitElement {
       summary: {type: String},
       published: {type: String},
       type: {type: String},
-      link: {type: String}
+      link: {type: String},
+      content: {type: String},
+      senderName: {type: String}
     };
   }
 
@@ -25,11 +28,13 @@ class MessageView extends LitElement {
     //  this.config = {}
     this.uri = ""
     this.attributedTo = ""
+    this.senderName = ""
     this.label = ""
     this.summary = ""
     this.published = ""
     this.type = ""
     this.link = ""
+    this.content = ""
   }
 
   render(){
@@ -44,15 +49,18 @@ class MessageView extends LitElement {
     </div>
 
     <div class="container-fluid">
-
-    message uri : ${this.uri}<br>
-    attributedTo : ${this.attributedTo}<br>
-    label : ${this.label}<br>
+    From: <a href="${this.attributedTo}" target="_blank">${this.senderName}</a><br>
     summary : ${this.summary}<br>
     published : ${this.published}<br>
-    type : ${this.type}<br>
-    link : ${this.link}<br>
 
+    content: ${this.content}<br>
+    <small>
+    <a href="${this.link}" target="_blank">activity link</a><br>
+    </small>
+    <!--  label : ${this.label}<br>
+    type : ${this.type}<br>
+    message uri : ${this.uri}<br>
+    -->
     </div>
     `;
   }
@@ -60,7 +68,7 @@ class MessageView extends LitElement {
   firstUpdated(){
     var app = this;
     this.agent = new HelloAgent(this.name);
-    console.log(this.agent)
+    //  console.log(this.agent)
     this.agent.receive = function(from, message) {
       //  console.log("messah",message)
       if (message.hasOwnProperty("action")){
@@ -81,6 +89,8 @@ class MessageView extends LitElement {
     console.log(this.uri)
     let at = await solid.data[this.uri].as$attributedTo
     this.attributedTo = `${at}`
+    let sn = await solid.data[`${at}`].vcard$fn || `${at}`.split("/")[2].split('.')[0];
+    this.senderName = `${sn}`
     let label = await solid.data[this.uri].rdfs$label
     this.label = `${label}`
     let su = await solid.data[this.uri].as$summary
@@ -91,7 +101,13 @@ class MessageView extends LitElement {
     this.type = `${ty}`
     let li = await solid.data[this.uri].as$link
     this.link = `${li}`
-  
+    let obj = await solid.data[this.link].as$object
+    this.object = `${obj}`
+    let cont = await solid.data[this.object].as$content
+    this.content = `${cont}`
+    log("BBOOO"+this.content)
+    let c = await conf(`${at}`)
+    console.log(c)
   }
 
   configChanged(config){

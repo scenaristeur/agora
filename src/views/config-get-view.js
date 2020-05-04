@@ -239,6 +239,9 @@ this.aclFollowers = `
         //  this.config.followers_uri = this.config.followers_folder+"index.ttl#this"
           for await (const f_er of solid.data[this.config.followers_folder].ldp$contains){
             let fer = `${f_er}`
+            fer = fer.replace(this.config.followers_folder, "https://")
+            fer = fer.replace(".ttl", "/profile/card#me")
+            console.log(fer)
             followers = [... followers, fer]
           }
           this.config.followers = followers
