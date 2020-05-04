@@ -91,8 +91,6 @@ class WebsocketElement extends LitElement {
         app.agent.send("Flux", {action: "websocketMessage", url : url})
       }
     };
-
-
   }
 
 }

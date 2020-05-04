@@ -81,10 +81,57 @@ class InboxView extends LitElement {
   configChanged(config){
     this.config = config
     console.log("INBOX CONFIG", this.config)
-    this.updateMessages()
+    console.log(this.config.inbox)
+    let d = new Date();
+    let month = ("0" + (d.getUTCMonth() + 1)).slice(-2); //months from 1-12
+    let day = ("0" + d.getUTCDate()).slice(-2);
+    let year = d.getUTCFullYear();
+
+    this.path = this.config.inbox+[year, month, day, "index.ttl#this"].join("/")
+    console.log(this.path)
+    this.subscribe()
+    this.todayMessages()
   }
-  
-  async updateMessages(){
+
+
+  async todayMessages(){
+    let messages = []
+    this.messages =  []
+    await solid.data.clearCache()
+    for await (const message of solid.data[this.path].as$item){
+      let m = `${message}`
+      messages = [... messages, m]
+    }
+    this.messages = messages
+    console.log("Messages",this.messages)
+  }
+
+
+  async subscribe(){
+    var app = this
+    var websocket = "wss://"+this.path.split('/')[2];
+
+    app.socket = new WebSocket(websocket);
+    app.socket.onopen = function() {
+
+      //      var now = d.toLocaleTimeString(app.lang)
+      this.send('sub '+app.path);
+      console.log("subscribe to INBOX",websocket, app.path)
+      //  app.agent.send('Messages',  {action:"info", info: now+"[souscription] "+url});
+    };
+    app.socket.onmessage = function(msg) {
+      console.log(msg)
+      if (msg.data && msg.data.slice(0, 3) === 'pub') {
+        //  app.notification("nouveau message Socialid")
+        //app.openLongChat()
+        console.log(msg.data)
+        app.todayMessages()
+        //  app.agent.send("Flux", {action: "websocketMessage", url : url})
+      }
+    };
+  }
+
+  async updateMessages1(){
     console.log(this.config.inbox)
     let messages = []
     this.messages =  []
@@ -92,12 +139,7 @@ class InboxView extends LitElement {
       let m = `${message}`
       messages = [... messages, m]
     }
-
     this.messages = messages
-
-
-
-
   }
 
 }
