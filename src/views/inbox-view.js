@@ -31,7 +31,6 @@ class InboxView extends LitElement {
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
     <style>
-
     .item {
       background: #FFF;
       border: 1px solid #666;
@@ -112,14 +111,22 @@ class InboxView extends LitElement {
     await solid.data.clearCache()
     for await (const message of solid.data[this.path].as$item){
       let m = `${message}`
-      console.log(m)
-      !messages.includes(m) ? messages = [... messages, m] : "";
-      console.log(messages)
+      //  console.log(m)
+      if(!messages.includes(m) ){
+        messages = [... messages, m]
+        await this.scroller.appendChild(this.sentinel);
+        this.addItem(this.messages.length+ " "+ m)
+      }else{
+        console.log(m, "existe déjà")
+      }
+
+
     }
+
     newMessages = messages.length - this.messages.length
     this.messages =  []
     this.messages = messages
-    console.log("Messages",this.messages, newMessages)
+    console.log("Messages All, new",this.messages, newMessages)
     return newMessages
   }
 
@@ -135,7 +142,7 @@ class InboxView extends LitElement {
       console.log(newMessages)
       loadedMessages += newMessages
       console.log("APRES",c, "LOADED", loadedMessages, this.messages.length, this.path)
-      this.addItem(i+ " "+this.messages.length+ " "+ this.path)
+
       await this.changeDate()
     }
 
@@ -204,14 +211,14 @@ class InboxView extends LitElement {
   async chargement(){
     if(this.loop > this.start){
       this.sentinel.innerHTML = "Loading "+this.loop.toLocaleDateString()
-      await this.loadItems(10);
-      console.log("CHARGEMENT 10 TERMINE")
+      await this.loadItems(5);
+      console.log("CHARGEMENT  TERMINE")
       // appendChild will move the existing element, so there is no need to
       // remove it first.
-      await this.scroller.appendChild(this.sentinel);
-      console.log("AJOUT SENTINEL TERMINE")
-      await this.loadItems(5);
-      console.log("CHARGEMENT 5 TERMINE")
+      //await this.scroller.appendChild(this.sentinel);
+    //  console.log("AJOUT SENTINEL TERMINE")
+    //  await this.loadItems(5);
+    //  console.log("CHARGEMENT 5 TERMINE")
     }else{
       this.sentinel.innerHTML = "No older message"
     }

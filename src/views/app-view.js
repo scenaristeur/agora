@@ -60,10 +60,10 @@ class AppView extends LitElement {
 
       <button class="btn btn-outline-info" ?hidden="${this.webId == null}" @click="${this.showInbox}">Inbox</button>
 
-    <!--  <button class="btn btn-outline-info" ?hidden="${this.webId == null}" @click="${this.showConfig}">Config</button>
--->
+      <!--  <button class="btn btn-outline-info" ?hidden="${this.webId == null}" @click="${this.showConfig}">Config</button>
+      -->
       <!--      <nav-element name="Nav">Loading Nav</nav-element>-->
-      v.a13
+      v.a14
       </header>
 
       <div class="container-fluid"  style="padding-left:0px;padding-right:0px">
@@ -79,9 +79,9 @@ class AppView extends LitElement {
       <!--
 
       HIDDEN TEMPORARY FOR DEV-->
-
-      <flux-element name="Flux" agoraPod="${this.agoraPod}" ?hidden="${this.panel != 'Flow'}">Loading Flux</flux-element>
-      <friends-view name="Friends" ?hidden="${this.panel != 'Organization'}">Loading Organization</friends-view>
+    <!--  <scroll-view root="https://agora.solid.community/public/agora/inbox/">Loading Scroll</scroll-view>
+  -->   <flux-element name="Flux" agoraPod="${this.agoraPod}" ?hidden="${this.panel != 'Flow'}">Loading Flux</flux-element>
+     <friends-view name="Friends" ?hidden="${this.panel != 'Organization'}">Loading Organization</friends-view>
       <post-element name="Post" .share="${this.share}" ?hidden="${this.panel != 'Compose'}">Loading Post</post-element>
       <config-get-view name="Config" webId="${this.webId}" ?hidden="${this.webId == null || this.panel != "Config"}">Loading Config for ${this.webId}</config-get-view>
       <profile-element ?hidden="${this.panel != "Profile"}" name="Profile">Loading Profil</profile-element>
@@ -179,7 +179,7 @@ class AppView extends LitElement {
 
     showInbox(){
       this.panel = "Inbox"
-    //  this.agent.send("Inbox", {action: "newConfig", config:{webId: this.webId}})
+      //  this.agent.send("Inbox", {action: "newConfig", config:{webId: this.webId}})
     }
 
     showFromAtt(e){
