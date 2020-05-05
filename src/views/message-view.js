@@ -86,7 +86,7 @@ class MessageView extends LitElement {
   }
 
   async init(){
-    console.log(this.uri)
+    //console.log(this.uri)
     let at = await solid.data[this.uri].as$attributedTo
     this.attributedTo = `${at}`
     let sn = await solid.data[`${at}`].vcard$fn || `${at}`.split("/")[2].split('.')[0];
@@ -105,9 +105,9 @@ class MessageView extends LitElement {
     this.object = `${obj}`
     let cont = await solid.data[this.object].as$content
     this.content = `${cont}`
-    log("BBOOO"+this.content)
+    //log("BBOOO"+this.content)
     let c = await conf(`${at}`)
-    console.log(c)
+    //console.log(c)
   }
 
   configChanged(config){

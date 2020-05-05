@@ -70,7 +70,7 @@ class ProfileElement extends LitElement {
     <br>  Your WebId : ${this.config.webId}<br>
     </p>
 
-    <div ?hidden="${this.config.webId != this.p_config.webId}"
+    <div ?hidden="${this.config.webId != this.p_config.webId}">
     <button class="brn btn-outline-primary btn-sm" @click="${this.edit}">Edit My Profile (WIP)</button>
     <button class="brn btn-outline-primary btn-sm" @click="${this.showConfig}">Configuration</button>
 

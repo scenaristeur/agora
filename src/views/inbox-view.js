@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit-element';
 import { HelloAgent } from '../agents/hello-agent.js';
+import * as SolidFileClient from "solid-file-client"
 
 class InboxView extends LitElement {
 
@@ -8,7 +9,9 @@ class InboxView extends LitElement {
       name: {type: String},
       debug: {type: Boolean},
       config: {type: Object},
-      messages: {type: Array}
+      messages: {type: Array},
+      loop: {type: Object},
+      start: {type: Object}
     };
   }
 
@@ -18,6 +21,9 @@ class InboxView extends LitElement {
     this.debug = false
     this.config = {}
     this.messages = []
+    this.loop = new Date()
+    this.start = new Date("04/15/2020");
+    this.fc = new SolidFileClient(solid.auth)
   }
 
   render(){
@@ -25,8 +31,24 @@ class InboxView extends LitElement {
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
     <style>
+
+    .item {
+      background: #FFF;
+      border: 1px solid #666;
+      /*  height: 100px;*/
+      display: flex;
+      align-items: center;
+      /*  justify-content: center;*/
+    }
+
+    #sentinel {
+      width: auto;
+      height: 30px;
+      background-color: red
+    }
+
     #scroller {
-      height: 550px;
+      height: 200px; /*550px;*/
       overflow-y: scroll;
     }
     </style>
@@ -39,9 +61,9 @@ class InboxView extends LitElement {
 
     <div class="container-fluid">
     Messages length : ${this.messages.length}
-
-
     <div class="col-12" id="scroller">
+    <div id="sentinel">Loading messages...</div>
+    </div>
     <ul class="list-group">
     ${this.messages.map((m, i) => html`
       <li class="list-group-item">
@@ -53,10 +75,104 @@ class InboxView extends LitElement {
 
     </div>
 
-
-
-    </div>
     `;
+  }
+
+  async configChanged(config){
+    this.config = config
+    console.log("INBOX CONFIG", this.config)
+    console.log(this.config.inbox)
+
+    let month = ("0" + (this.loop.getUTCMonth() + 1)).slice(-2); //months from 1-12
+    let day = ("0" + this.loop.getUTCDate()).slice(-2);
+    let year = this.loop.getUTCFullYear();
+
+    this.path = this.config.inbox+[year, month, day, "index.ttl#this"].join("/")
+
+    if( !(await this.fc.itemExists(this.path)) && this.loop > this.start ) {
+      await this.changeDate()
+    }
+
+
+    console.log(this.path)
+    await this.subscribe()
+    console.log("SUBSCRIBED")
+    //  await this.todayMessages()
+    //  console.log("TO DAY MESSAGES OK")
+    await this.initObserver()
+    console.log("INITOBSERVER OK")
+  }
+
+
+  async todayMessages(){
+    let newMessages = 0
+    let messages = this.messages
+
+
+    await solid.data.clearCache()
+    for await (const message of solid.data[this.path].as$item){
+      let m = `${message}`
+      console.log(m)
+      !messages.includes(m) ? messages = [... messages, m] : "";
+      console.log(messages)
+    }
+    newMessages = messages.length - this.messages.length
+    this.messages =  []
+    this.messages = messages
+    console.log("Messages",this.messages, newMessages)
+    return newMessages
+  }
+
+  async  loadItems(c) {
+    console.log("LOAD",c, this.messages.length, this.path)
+    let loadedMessages = 0
+    //  this.todayMessages()
+    for (let i=0;i < c; i++){
+      //  this.addItem(i)
+      console.log("AVANT",c, this.messages.length, this.path)
+
+      let newMessages = await this.todayMessages()
+      console.log(newMessages)
+      loadedMessages += newMessages
+      console.log("APRES",c, "LOADED", loadedMessages, this.messages.length, this.path)
+      this.addItem(i+ " "+this.messages.length+ " "+ this.path)
+      await this.changeDate()
+    }
+
+  }
+
+  async changeDate(){
+    var newDate = this.loop.setDate(this.loop.getDate() - 1);
+    this.loop = new Date(newDate);
+    let month = ("0" + (this.loop.getUTCMonth() + 1)).slice(-2); //months from 1-12
+    let day = ("0" + this.loop.getUTCDate()).slice(-2);
+    let year = this.loop.getUTCFullYear();
+
+    this.path = this.config.inbox+[year, month, day, "index.ttl#this"].join("/")
+    if( !(await this.fc.itemExists(this.path)) && this.loop > this.start ) {
+      console.log("TEST",this.path )
+      await this.changeDate()
+    }
+
+
+
+  }
+
+  addItem(i){
+    //console.log("add ",i)
+    /*var newItem = document.createElement('div');
+    newItem.classList.add('item');
+    newItem.textContent = i+' Item ' + this.counter++;
+    this.scroller.appendChild(newItem);*/
+
+    //  var newItem1 = document.createElement('notification-line-element');
+    var newItem1 = document.createElement('div');
+    newItem1.classList.add('item');
+    newItem1.textContent = i+' Item ' + this.counter++;
+    newItem1.setAttribute("url", i)
+    //  newItem1.setAttribute("name", "Notif_"+this.notifications.length)
+    this.scroller.appendChild(newItem1);
+
   }
 
   firstUpdated(){
@@ -76,38 +192,51 @@ class InboxView extends LitElement {
         }
       }
     };
+    this.scroller = this.shadowRoot.querySelector('#scroller');
+    this.sentinel = this.shadowRoot.querySelector('#sentinel');
+    this.counter = 1;
+    console.log(this.scroller, this.sentinel)
+
+    //this.init()
+
   }
 
-  configChanged(config){
-    this.config = config
-    console.log("INBOX CONFIG", this.config)
-    console.log(this.config.inbox)
-    let d = new Date();
-    let month = ("0" + (d.getUTCMonth() + 1)).slice(-2); //months from 1-12
-    let day = ("0" + d.getUTCDate()).slice(-2);
-    let year = d.getUTCFullYear();
-
-    this.path = this.config.inbox+[year, month, day, "index.ttl#this"].join("/")
-    console.log(this.path)
-    this.subscribe()
-    this.todayMessages()
-  }
-
-
-  async todayMessages(){
-    let messages = this.messages
-
-    await solid.data.clearCache()
-    for await (const message of solid.data[this.path].as$item){
-      let m = `${message}`
-      console.log(m)
-      !messages.includes(m) ? messages = [... messages, m] : "";
-      console.log(messages)
+  async chargement(){
+    if(this.loop > this.start){
+      this.sentinel.innerHTML = "Loading "+this.loop.toLocaleDateString()
+      await this.loadItems(10);
+      console.log("CHARGEMENT 10 TERMINE")
+      // appendChild will move the existing element, so there is no need to
+      // remove it first.
+      await this.scroller.appendChild(this.sentinel);
+      console.log("AJOUT SENTINEL TERMINE")
+      await this.loadItems(5);
+      console.log("CHARGEMENT 5 TERMINE")
+    }else{
+      this.sentinel.innerHTML = "No older message"
     }
-    this.messages =  []
-    this.messages = messages
-    console.log("Messages",this.messages)
   }
+
+
+
+  initObserver(){
+    let app = this
+    var intersectionObserver = new IntersectionObserver(entries => {
+      // If the browser is busy while scrolling happens, multiple entries can
+      // accumulate between invocations of this callback. As long as any one
+      // of the notifications reports the sentinel within the scrolling viewport,
+      // we add more content.
+      if (entries.some(entry => entry.intersectionRatio > 0)) {
+        app.chargement()
+        console.log("CHARGEMENT TERMINE")
+        //ChromeSamples.setStatus('Loaded up to item ' + counter);
+      }
+    });
+    intersectionObserver.observe(app.sentinel);
+  }
+
+
+
 
 
   async subscribe(){
