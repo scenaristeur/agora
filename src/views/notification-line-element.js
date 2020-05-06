@@ -23,15 +23,55 @@ class NotificationLineElement extends LitElement {
   render(){
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="css/fontawesome/css/all.css" rel="stylesheet">
+<!--    <link href="css/fontawesome/css/all.css" rel="stylesheet">-->
+<style>
+.chat_ib h5{ font-size:15px; color:#464646; margin:0 0 8px 0;}
+.chat_ib h5 span{ font-size:13px; float:right;}
+.chat_ib p{ font-size:14px; color:#989898; margin:auto}
+.chat_img {
+  float: left;
+  width: 11%;
+}
+.chat_ib {
+  float: left;
+  padding: 0 0 0 15px;
+  width: 88%;
+}
 
-    <div timestamp="${this.notification.timestamp}"
+.chat_people{ overflow:hidden; clear:both;}
+.chat_list {
+  border-bottom: 1px solid #c4c4c4;
+  margin: 0;
+  padding: 18px 16px 10px;
+}
+img{ max-width:100%;}
+</style>
+<div class="chat_list">
+    <div class="chat_people">
+            <div class="chat_img"
+            webId="${this.creator.webId}"
+            @click="${this.showProfile}">
+             <img class="rounded-circle" src="${this.creator.photo}" webId="${this.creator.webId}" alt="load pic"> </div>
+            <div class="chat_ib">
+              <h5>${this.creator.name}<span class="chat_date">${this.delay(this.notification.published)}</span></h5>
+              <!--<p>Test, which is a new approach to have all solutions
+                astrology under one roof.</p>-->
+                <p>
+                <activity-element name="${this.name+'_activity'}"
+                url="${this.notification.link}">Loading activity ${this.notification.link}...
+                </activity-element>
+                </p>
+            </div>
+          </div>
+        </div>
+
+
+
+
+  <!--  <div class="row" timestamp="${this.notification.timestamp}"
     url="${this.notification.url}">
-
-
-    <div class="row">
-    <div class="col-2">
-    ${this.creator.photo != "undefined"?
+    <div class="col-4">
+   ${this.creator.photo != "undefined"?
     html`<img class="rounded-circle ml-0" width="32px"
     src="//images.weserv.nl/?url=${this.creator.photo}&w=32&h=32"
     title="${this.creator.name}"
@@ -41,14 +81,13 @@ class NotificationLineElement extends LitElement {
     :html`<i class="fas fa-user-circle fa-2x"
     title="${this.creator.name}"
     webId="${this.creator.webId}"
-    @click="${this.showProfile}"></i>`
-  }
+    @click="${this.showProfile}"></i>`}
 
  <p class="text-muted small">${this.delay(this.notification.published)}</p>
-<!--   <p class="text-muted small">${this.notification.published}</p>-->
+
   </div>
 
-  <div class="col">
+  <div class="col-8">
   <small class="text-muted" webId="${this.notification.attributedTo}"
   @click="${this.showProfile}">
   ${this.creator.name}
@@ -58,9 +97,7 @@ class NotificationLineElement extends LitElement {
   </activity-element>
   </div>
   </div>
-
-
-  </div>
+-->
   `;
 }
 

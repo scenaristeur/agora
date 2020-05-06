@@ -25,16 +25,14 @@ class ObjectElement extends LitElement {
 
     return html`
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="css/fontawesome/css/all.css" rel="stylesheet">
-    <div class="row" >
-    <div class="col">
+    <style>
+    #content{ font-size:14px; color:#989898; margin:auto}
+    </style>
 
     ${this.object.ext == "jpg" ?
     html`<img src="${this.url}" style='height: auto; width: 75%; max-width: 300px; object-fit: contain' alt="${this.url}"/>`
     :html` ` }
-  <small> <div id="content">${this.object.content}</div></small>
-    </div>
-    </div>
+    <div id="content">${this.object.content}</div>
 
     `;
   }
@@ -111,7 +109,7 @@ class ObjectElement extends LitElement {
         this.linkify(`${this.object.content}`)
       }
     }else{
-    //  console.log(this.object.ext,this.url)
+      //  console.log(this.object.ext,this.url)
       this.requestUpdate()
     }
 

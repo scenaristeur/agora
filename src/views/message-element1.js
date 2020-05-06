@@ -26,12 +26,6 @@ class MessageElement extends LitElement {
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="css/fontawesome/css/all.css" rel="stylesheet">
 
-    <div ?hidden = "${!this.debug}">
-    Hello from<b>${this.name}</b><br>
-    debug : ${this.debug}<br>
-    uri: ${this.uri}<br>
-    message : ${JSON.stringify(this.message)}<br>
-    </div>
 
     <div class="container-fluid">
     <div class="row">
@@ -81,7 +75,20 @@ class MessageElement extends LitElement {
   }
 
   async init(){
-    this.message = await message(this.uri)
+    let activity = {}
+    let objects = []
+    let a_uri =  await solid.data[this.uri].as$link
+    activity.uri = `${a_uri}`
+    for await (const object of solid.data[`${a_uri}`].as$object){
+        let obj = {}
+      obj.uri = `${object}`
+    //  console.log(obj)
+   obj.content = await solid.data[obj.uri].as$content
+      objects = [...objects, `${object}`]
+    }
+  console.log(objects)
+
+    //this.message = await message(this.uri)
     //  console.log("Message",this.message)
   }
 

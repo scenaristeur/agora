@@ -3,10 +3,10 @@ import './css/bootstrap/bootstrap.min.css';
 import './styles.css';
 import './views/util_activity-pub.js';
 import './views/util_solid.js';
-import './views/message-element.js';
+//import './views/message-element.js';
 import './views/utils.js';
 import './views/app-view.js';
-import './views/scroll-view.js';
+
 import './views/store-element.js'
 import './views/panel-element.js'
 import './views/info-element.js';
@@ -16,6 +16,7 @@ import './views/login-element.js';
 
 // FLUX
 import './views/flux-element.js';
+//import './views/scroll-view.js';
 import './views/notification-line-element.js';
 import './views/activity-element.js';
 import './views/object-element.js';

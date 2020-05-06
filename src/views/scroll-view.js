@@ -93,7 +93,7 @@ class ScrollView extends LitElement {
     await solid.data.clearCache()
     if(this.loop > this.start ){
       this.sentinel.innerHTML = "Loading "+this.loop.toLocaleDateString()
-      for await (const message of solid.data[this.path].as$item){      
+      for await (const message of solid.data[this.path].as$item){
           let m = `${message}`
           if (!this.messages.includes(m)){
           this.addItem(m)
@@ -108,9 +108,9 @@ class ScrollView extends LitElement {
     this.moveScroller()
     //  var newItem1 = document.createElement('div');
 
-    var newItem1 = document.createElement('message-element');
+    var newItem1 = document.createElement('notification-line-element');
     newItem1.classList.add('item');
-    newItem1.setAttribute("uri", i)
+    newItem1.setAttribute("url", i)
     newItem1.setAttribute("name", "mess_"+this.messages.length)
     //  newItem1.append(newMess)
     //  newItem1.textContent = i+' Item '
