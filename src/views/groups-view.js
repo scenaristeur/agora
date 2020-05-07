@@ -121,11 +121,13 @@ class GroupsView extends LitElement {
 
   async updateGroups(){
     let groups = []
+      this.groups =  []
+  //  await solid.data.clearCache()
     for await (const group of solid.data[this.config.group_index].as$item){
       let g = `${group}`
       groups = [... groups, g]
     }
-    this.groups =  []
+
     this.groups = groups
     console.log("GROUPS",this.groups)
     this.requestUpdate()

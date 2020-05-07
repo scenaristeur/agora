@@ -36,7 +36,11 @@ class FluxElement extends LitElement {
       border: 1px solid #666;
       min-height: 100px;
       display: flex;
-      align-items: center;
+/*      align-items: center;*/
+      overflow:hidden;
+      clear:both;
+      margin-top: 5px;
+      padding: 3px;
     }
 
     #sentinel {
@@ -45,13 +49,16 @@ class FluxElement extends LitElement {
       background-color: red
     }
 
-    #scroller {
+    .chat_list {
+      border-bottom: 1px solid #c4c4c4;
+      margin: 0;
+      padding: 18px 16px 10px;
       height: 550px;
       overflow-y: scroll;
     }
     </style>
 
-    <div class="col-12" id="scroller">
+    <div class="chat_list" id="scroller">
     <div id="sentinel">Loading messages...</div>
     </div>
     ${this.messages.length} messages<br>

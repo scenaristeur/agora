@@ -6,6 +6,7 @@ import './views/util_solid.js';
 //import './views/message-element.js';
 import './views/utils.js';
 import './views/app-view.js';
+import './views/profile-pic-element.js'
 
 import './views/store-element.js'
 import './views/panel-element.js'

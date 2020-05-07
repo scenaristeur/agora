@@ -63,7 +63,7 @@ class AppView extends LitElement {
       <!--  <button class="btn btn-outline-info" ?hidden="${this.webId == null}" @click="${this.showConfig}">Config</button>
       -->
       <!--      <nav-element name="Nav">Loading Nav</nav-element>-->
-      v.a15  
+      v.a16  
       </header>
 
       <div class="container-fluid"  style="padding-left:0px;padding-right:0px">
