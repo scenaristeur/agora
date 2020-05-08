@@ -45,11 +45,13 @@
     "workbox-webpack-plugin": "^3.3.1"
   },
   "dependencies": {
+    "@polymer/paper-toast": "^3.0.1",
     "@solid/query-ldflex": "^2.10.0",
     "@webcomponents/webcomponentsjs": "^2.1.3",
     "bootstrap": "^4.4.1",
     "evejs": "github:scenaristeur/evejs",
     "lit-element": "^2.3.1",
+    "lit-toast": "^1.2.0",
     "rdf-namespaces": "^1.8.0",
     "solid-auth-client": "^2.4.1",
     "solid-file-client": "^1.0.5"

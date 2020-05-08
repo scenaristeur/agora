@@ -3,27 +3,11 @@ import './css/bootstrap/bootstrap.min.css';
 import './styles.css';
 
 //AGORA
-//GENERAL
-import './css/bootstrap/bootstrap.min.css';
-import './styles.css';
-
-
-//TOOLS
-import './tools/localstorage.js'
-//import './tools/solid-config.js'
-import './tools/toast-element.js'
-import './tools/login-element.js'
-//import 'lit-toast/lit-toast.js';
-import '@polymer/paper-toast/paper-toast.js';
-// NEW HOLACRACY
-import './components/app-view.js'
-import './components/config-view.js'
-import './components/organizations-view.js'
-import './components/roles-view.js'
-
+import './views/util_activity-pub.js';
+import './views/util_solid.js';
 //import './views/message-element.js';
 import './views/utils.js';
-//import './views/app-view.js';
+import './views/app-view.js';
 import './views/profile-pic-element.js'
 
 import './views/store-element.js'
@@ -31,7 +15,7 @@ import './views/panel-element.js'
 import './views/info-element.js';
 
 // SOLID
-//import './views/login-element.js';
+import './views/login-element.js';
 
 // FLUX
 import './views/flux-element.js';

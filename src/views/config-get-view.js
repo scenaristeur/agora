@@ -187,7 +187,7 @@ this.aclFollowers = `
 
       this.log = "Checking Instances"
       for await (const subject of solid.data[this.config.pti].subjects){
-        if(this.config.pti != `${subject}`)
+        if(this.config.pti != `${subject}`){
         /*let s = `${subject}`
         console.log(s)*/
         this.log = "Checking Agora Instance"
@@ -256,6 +256,7 @@ this.aclFollowers = `
 
         }
       }
+    }
       console.log("COOOOOOOOOOON",this.config)
       console.log(Object.values(this.config))
       if( Object.values(this.config).includes("undefined")){
