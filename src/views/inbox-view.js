@@ -81,25 +81,26 @@ class InboxView extends LitElement {
     this.config = config
     console.log("INBOX CONFIG", this.config)
     console.log(this.config.inbox)
+    if (this.config.inbox != undefined){
+      let month = ("0" + (this.loop.getUTCMonth() + 1)).slice(-2); //months from 1-12
+      let day = ("0" + this.loop.getUTCDate()).slice(-2);
+      let year = this.loop.getUTCFullYear();
 
-    let month = ("0" + (this.loop.getUTCMonth() + 1)).slice(-2); //months from 1-12
-    let day = ("0" + this.loop.getUTCDate()).slice(-2);
-    let year = this.loop.getUTCFullYear();
+      this.path = this.config.inbox+[year, month, day, "index.ttl#this"].join("/")
 
-    this.path = this.config.inbox+[year, month, day, "index.ttl#this"].join("/")
+      if( !(await this.fc.itemExists(this.path)) && this.loop > this.start ) {
+        await this.changeDate()
+      }
 
-    if( !(await this.fc.itemExists(this.path)) && this.loop > this.start ) {
-      await this.changeDate()
+
+      console.log(this.path)
+      await this.subscribe()
+      console.log("SUBSCRIBED")
+      //  await this.todayMessages()
+      //  console.log("TO DAY MESSAGES OK")
+      await this.initObserver()
+      console.log("INITOBSERVER OK")
     }
-
-
-    console.log(this.path)
-    await this.subscribe()
-    console.log("SUBSCRIBED")
-    //  await this.todayMessages()
-    //  console.log("TO DAY MESSAGES OK")
-    await this.initObserver()
-    console.log("INITOBSERVER OK")
   }
 
 
@@ -216,9 +217,9 @@ class InboxView extends LitElement {
       // appendChild will move the existing element, so there is no need to
       // remove it first.
       //await this.scroller.appendChild(this.sentinel);
-    //  console.log("AJOUT SENTINEL TERMINE")
-    //  await this.loadItems(5);
-    //  console.log("CHARGEMENT 5 TERMINE")
+      //  console.log("AJOUT SENTINEL TERMINE")
+      //  await this.loadItems(5);
+      //  console.log("CHARGEMENT 5 TERMINE")
     }else{
       this.sentinel.innerHTML = "No older message"
     }

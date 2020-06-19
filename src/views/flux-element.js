@@ -36,7 +36,7 @@ class FluxElement extends LitElement {
       border: 1px solid #666;
       min-height: 100px;
       display: flex;
-/*      align-items: center;*/
+      /*      align-items: center;*/
       overflow:hidden;
       clear:both;
       margin-top: 5px;
@@ -84,6 +84,7 @@ class FluxElement extends LitElement {
     let day = ("0" + this.loop.getUTCDate()).slice(-2);
     let year = this.loop.getUTCFullYear();
     this.path = this.root+[year, month, day, "index.ttl#this"].join("/")
+    console.log("PATH TODAY", this.path)
   }
 
   async checkNewMessage(url){
@@ -97,14 +98,19 @@ class FluxElement extends LitElement {
   }
 
   async loadMessages(){
+    console.log("PATH", this.path)
     await solid.data.clearCache()
     if(this.loop > this.start ){
       this.sentinel.innerHTML = "Loading "+this.loop.toLocaleDateString()
-      for await (const message of solid.data[this.path].as$item){
-        let m = `${message}`
-        if (!this.messages.includes(m)){
-          this.addItem(m)
+      if( await this.fc.itemExists(this.path)) {
+        for await (const message of solid.data[this.path].as$item){
+          let m = `${message}`
+          if (!this.messages.includes(m)){
+            this.addItem(m)
+          }
         }
+      }else{
+        console.log(this.path +"n'existe pas")
       }
     }else{
       this.sentinel.innerHTML = "No message before "+this.start.toLocaleDateString()
